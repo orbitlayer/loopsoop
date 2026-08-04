@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { Mail } from "lucide-react";
-import { footerColumns, site } from "@/lib/data";
+import { site } from "@/lib/data";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
-import { Button } from "@/components/ui/Button";
 import {
   DiscordIcon,
   InstagramIcon,
@@ -19,24 +18,27 @@ const socialLinks = [
   { label: "Email", href: `mailto:${site.email}`, Icon: Mail },
 ];
 
+const footerNav = [
+  { label: "Home", href: "/" },
+  { label: "Our Editing", href: "/our-editing" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
     <footer className="on-dark mt-auto bg-dark text-white">
-      <Container className="py-16 md:py-20">
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-12">
+      <Container className="py-14 md:py-16">
+        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
           {/* Brand */}
-          <div className="sm:col-span-2 lg:col-span-4">
+          <div>
             <Logo onDark />
-            <p className="mt-6 max-w-xs text-sm leading-relaxed text-dark-muted">
-              We edit videos.
-              <br />
-              You tell stories.
-              <br />
-              We elevate them.
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-dark-muted">
+              We edit videos. You tell stories. We elevate them.
             </p>
-            <div className="mt-7 flex items-center gap-3">
+            <div className="mt-6 flex items-center gap-3">
               {socialLinks.map(({ label, href, Icon }) => (
                 <a
                   key={label}
@@ -52,40 +54,25 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Link columns */}
-          {footerColumns.map((col) => (
-            <div key={col.title} className="lg:col-span-2">
-              <h3 className="text-sm font-semibold text-white">{col.title}</h3>
-              <ul className="mt-5 space-y-3">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-dark-muted transition-colors hover:text-white"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-
-          {/* CTA */}
-          <div className="lg:col-span-2">
-            <h3 className="text-sm font-semibold text-white">
-              Let&apos;s Work Together
-            </h3>
-            <p className="mt-5 text-sm leading-relaxed text-dark-muted">
-              Have a project in mind? Let&apos;s create something amazing together.
-            </p>
-            <Button href="/contact" variant="invert" className="mt-5">
-              Start Your Project
-            </Button>
-          </div>
+          {/* Nav */}
+          <nav
+            aria-label="Footer"
+            className="flex flex-col gap-3 text-sm md:items-end"
+          >
+            {footerNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-dark-muted transition-colors hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
         </div>
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-7 text-xs text-dark-muted sm:flex-row sm:items-center">
+        {/* Bottom bar */}
+        <div className="mt-12 flex flex-col items-start gap-3 border-t border-white/10 pt-7 text-xs text-dark-muted sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} LOOPSOOP. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="transition-colors hover:text-white">

@@ -263,35 +263,3 @@ export const faqs = [
     a: "Yes. Every project includes multiple revision rounds so the final edit matches your vision perfectly.",
   },
 ];
-
-/* Footer */
-export const footerColumns = [
-  {
-    title: "Company",
-    links: [
-      { label: "Home", href: "/" },
-      { label: "Our Editing", href: "/our-editing" },
-      { label: "About Us", href: "/about" },
-      { label: "Contact Us", href: "/contact" },
-    ],
-  },
-  {
-    title: "Services",
-    links: [
-      { label: "Documentary", href: "/our-work?category=documentary" },
-      { label: "Commercial", href: "/our-work?category=commercial" },
-      { label: "Corporate", href: "/our-work?category=corporate" },
-      { label: "Social Media", href: "/our-work?category=social-media" },
-      { label: "Short Form", href: "/our-work?category=short-form" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "FAQs", href: "/contact#faq" },
-      { label: "Process", href: "/about#process" },
-      { label: "Pricing Guide", href: "/contact" },
-      { label: "Blog (Coming Soon)", href: "#" },
-    ],
-  },
-];
