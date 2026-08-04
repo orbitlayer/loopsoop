@@ -26,12 +26,6 @@ const exploreLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
-const contactLinks = [
-  { label: site.email, href: `mailto:${site.email}` },
-  { label: site.discord, href: site.discordHref, external: true },
-  { label: "Remote · Worldwide", href: null },
-];
-
 export function Footer() {
   const year = new Date().getFullYear();
 
@@ -54,9 +48,9 @@ export function Footer() {
         </div>
 
         {/* Columns */}
-        <div className="grid gap-10 py-12 md:grid-cols-12 md:gap-8">
+        <div className="flex flex-col gap-10 py-12 md:flex-row md:items-start md:justify-between">
           {/* Brand */}
-          <div className="md:col-span-5">
+          <div>
             <Logo onDark />
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-dark-muted">
               We edit videos. You tell stories. We elevate them.
@@ -78,7 +72,7 @@ export function Footer() {
           </div>
 
           {/* Explore */}
-          <nav aria-label="Footer" className="md:col-span-3">
+          <nav aria-label="Footer" className="md:text-right">
             <h3 className="text-sm font-semibold text-white">Explore</h3>
             <ul className="mt-5 space-y-3">
               {exploreLinks.map((item) => (
@@ -93,29 +87,6 @@ export function Footer() {
               ))}
             </ul>
           </nav>
-
-          {/* Get in touch */}
-          <div className="md:col-span-4">
-            <h3 className="text-sm font-semibold text-white">Get in touch</h3>
-            <ul className="mt-5 space-y-3">
-              {contactLinks.map((item) => (
-                <li key={item.label}>
-                  {item.href ? (
-                    <a
-                      href={item.href}
-                      target={item.external ? "_blank" : undefined}
-                      rel={item.external ? "noopener noreferrer" : undefined}
-                      className="text-sm text-dark-muted transition-colors hover:text-white"
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <span className="text-sm text-dark-muted">{item.label}</span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
 
         {/* Bottom bar */}
