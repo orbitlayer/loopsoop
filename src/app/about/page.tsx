@@ -104,8 +104,8 @@ export default function AboutPage() {
                   </div>
                   <div className="relative aspect-square overflow-hidden rounded-[20px]">
                     <MediaPlaceholder seed={2} />
-                    <span className="absolute inset-0 flex items-center justify-center text-white">
-                      <LoopMark className="h-10 w-auto" />
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <LoopMark className="h-9 w-auto invert" />
                     </span>
                   </div>
                   <div className="aspect-[4/3] overflow-hidden rounded-[20px]">
