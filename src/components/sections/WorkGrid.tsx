@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { categoryNameToSlug, projects, workFilters } from "@/lib/data";
@@ -17,25 +17,25 @@ export function WorkGrid({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const scrollerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<string>(initialCategory);
+
+  // Filter-bar order is fixed to the category the visitor ARRIVED with (a deep
+  // link from Our Editing). Captured once at mount, so selecting a different
+  // filter while already on Our Work highlights it in place and does NOT
+  // reorder the bar.
+  const [arrivalCategory] = useState<string>(initialCategory);
+  const orderedFilters =
+    arrivalCategory === "All Work"
+      ? workFilters
+      : [arrivalCategory, ...workFilters.filter((f) => f !== arrivalCategory)];
 
   const filtered =
     active === "All Work"
       ? projects
       : projects.filter((p) => p.filter === active);
 
-  // The active filter is always rendered first, so a deep-linked category
-  // (e.g. arriving from Our Editing) appears at the front of the bar and is
-  // immediately visible without scrolling.
-  const orderedFilters =
-    active === "All Work"
-      ? workFilters
-      : [active, ...workFilters.filter((f) => f !== active)];
-
   const handleFilter = (name: string) => {
     setActive(name);
-    scrollerRef.current?.scrollTo({ left: 0, behavior: "smooth" });
     // Reflect the active filter in the URL (?category=slug) without adding a
     // history entry — Back returns to the previous page (e.g. Our Editing),
     // and the filtered view stays shareable / deep-linkable.
@@ -49,16 +49,12 @@ export function WorkGrid({
     <section className={cn("pb-8", className)}>
       <Container>
         {/* Filters */}
-        <div
-          ref={scrollerRef}
-          className="no-scrollbar -mx-6 flex gap-2 overflow-x-auto border-b border-line px-6 pb-4 md:mx-0 md:px-0"
-        >
+        <div className="no-scrollbar -mx-6 flex gap-2 overflow-x-auto border-b border-line px-6 pb-4 md:mx-0 md:px-0">
           {orderedFilters.map((f) => {
             const isActive = active === f;
             return (
-              <motion.button
+              <button
                 key={f}
-                layout
                 type="button"
                 onClick={() => handleFilter(f)}
                 aria-pressed={isActive}
@@ -77,7 +73,7 @@ export function WorkGrid({
                   />
                 )}
                 <span className="relative z-10">{f}</span>
-              </motion.button>
+              </button>
             );
           })}
         </div>
