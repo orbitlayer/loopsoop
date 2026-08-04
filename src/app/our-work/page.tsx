@@ -33,7 +33,6 @@ export default async function OurWorkPage({
         }
         subtitle="From raw footage to real impact. Here's a look at some of the projects we've crafted."
         seed={24}
-        play
       />
 
       <WorkGrid initialCategory={initialCategory} />
