@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { categoryNameToSlug, projects, workFilters } from "@/lib/data";
@@ -10,11 +10,14 @@ import { ProjectCard } from "@/components/sections/ProjectCard";
 
 export function WorkGrid({
   initialCategory = "All Work",
+  className,
 }: {
   initialCategory?: string;
+  className?: string;
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<string>(initialCategory);
 
   const filtered =
@@ -22,11 +25,20 @@ export function WorkGrid({
       ? projects
       : projects.filter((p) => p.filter === active);
 
-  // Reflect the active filter in the URL (?category=slug) without adding a
-  // history entry — so Back returns to the previous page (e.g. Our Editing),
-  // and the filtered view stays shareable / deep-linkable.
+  // The active filter is always rendered first, so a deep-linked category
+  // (e.g. arriving from Our Editing) appears at the front of the bar and is
+  // immediately visible without scrolling.
+  const orderedFilters =
+    active === "All Work"
+      ? workFilters
+      : [active, ...workFilters.filter((f) => f !== active)];
+
   const handleFilter = (name: string) => {
     setActive(name);
+    scrollerRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+    // Reflect the active filter in the URL (?category=slug) without adding a
+    // history entry — Back returns to the previous page (e.g. Our Editing),
+    // and the filtered view stays shareable / deep-linkable.
     const slug = name === "All Work" ? null : categoryNameToSlug(name);
     router.replace(slug ? `${pathname}?category=${slug}` : pathname, {
       scroll: false,
@@ -34,15 +46,19 @@ export function WorkGrid({
   };
 
   return (
-    <section className="pb-8">
+    <section className={cn("pb-8", className)}>
       <Container>
         {/* Filters */}
-        <div className="no-scrollbar -mx-6 flex gap-7 overflow-x-auto border-b border-line px-6 pb-4 md:mx-0 md:px-0">
-          {workFilters.map((f) => {
+        <div
+          ref={scrollerRef}
+          className="no-scrollbar -mx-6 flex gap-7 overflow-x-auto border-b border-line px-6 pb-4 md:mx-0 md:px-0"
+        >
+          {orderedFilters.map((f) => {
             const isActive = active === f;
             return (
-              <button
+              <motion.button
                 key={f}
+                layout
                 type="button"
                 onClick={() => handleFilter(f)}
                 aria-pressed={isActive}
@@ -58,7 +74,7 @@ export function WorkGrid({
                     className="absolute -bottom-[17px] left-0 h-px w-full bg-ink"
                   />
                 )}
-              </button>
+              </motion.button>
             );
           })}
         </div>

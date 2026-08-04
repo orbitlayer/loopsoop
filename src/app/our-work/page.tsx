@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { categorySlugToName, statsWork } from "@/lib/data";
-import { PageHero } from "@/components/sections/PageHero";
 import { WorkGrid } from "@/components/sections/WorkGrid";
 import { StatsBand } from "@/components/sections/StatsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -22,20 +21,7 @@ export default async function OurWorkPage({
 
   return (
     <>
-      <PageHero
-        label="Our Work"
-        title={
-          <>
-            Stories We&apos;ve
-            <br />
-            Brought to <span className="text-faint">Life.</span>
-          </>
-        }
-        subtitle="From raw footage to real impact. Here's a look at some of the projects we've crafted."
-        seed={24}
-      />
-
-      <WorkGrid initialCategory={initialCategory} />
+      <WorkGrid initialCategory={initialCategory} className="pt-32 md:pt-36" />
 
       <section className="py-16 md:py-20">
         <StatsBand stats={statsWork} />
