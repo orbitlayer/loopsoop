@@ -6,7 +6,7 @@ import { projectTypes } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
 const field =
-  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-sm text-white placeholder:text-white/40 transition-colors focus:border-white/30 focus:outline-none";
+  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-sm text-white placeholder:text-white/60 transition-colors focus:border-white/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -55,8 +55,8 @@ export function ContactForm() {
           Message sent.
         </h3>
         <p className="mt-3 max-w-sm text-sm text-dark-muted">
-          Thanks for reaching out — we&apos;ll get back to you within 24 hours.
-          Check your inbox for a confirmation.
+          Thanks for reaching out — we&apos;ve received your message and will get
+          back to you within 24 hours.
         </p>
         <button
           type="button"
@@ -86,7 +86,7 @@ export function ContactForm() {
           required
           defaultValue=""
           aria-label="Project Type"
-          className={cn(field, "appearance-none pr-10 text-white/70 [&:valid]:text-white")}
+          className={cn(field, "appearance-none pr-10 [&:invalid]:text-white/70")}
         >
           <option value="" disabled hidden>
             Project Type
@@ -121,12 +121,12 @@ export function ContactForm() {
             <span className="block text-white/90">
               {fileName ?? "Upload Reference (Optional)"}
             </span>
-            <span className="block text-xs text-white/40">
+            <span className="block text-xs text-white/60">
               Drag &amp; drop or click to upload
             </span>
           </span>
         </span>
-        <span className="hidden text-xs text-white/40 sm:block">
+        <span className="hidden text-xs text-white/60 sm:block">
           PNG, JPG, MP4 · max 50MB
         </span>
       </button>
@@ -139,7 +139,10 @@ export function ContactForm() {
       />
 
       {status === "error" && (
-        <p className="text-sm text-red-300">
+        <p
+          role="alert"
+          className="rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white/80"
+        >
           Something went wrong. Please try again or email us directly.
         </p>
       )}

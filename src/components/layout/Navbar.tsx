@@ -40,6 +40,16 @@ export function Navbar() {
     };
   }, [open]);
 
+  // Close the mobile menu on Escape
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   return (
     <header
       className={cn(
@@ -82,9 +92,10 @@ export function Navbar() {
 
         <button
           type="button"
-          className="-mr-1 flex h-10 w-10 items-center justify-center lg:hidden"
+          className="-mr-1 flex h-11 w-11 items-center justify-center lg:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
+          aria-controls="mobile-menu"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -93,7 +104,9 @@ export function Navbar() {
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <motion.nav
+            id="mobile-menu"
+            aria-label="Mobile"
             className="lg:hidden"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -120,7 +133,7 @@ export function Navbar() {
                 Let&apos;s Work Together
               </Button>
             </Container>
-          </motion.div>
+          </motion.nav>
         )}
       </AnimatePresence>
     </header>

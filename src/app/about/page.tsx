@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Mail } from "lucide-react";
-import { process, statsMain, team, values } from "@/lib/data";
+import { processSteps, site, statsMain, team, values } from "@/lib/data";
 import { Icon, InstagramIcon, LinkedinIcon } from "@/lib/icons";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
@@ -17,6 +16,7 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "Loopsoop transforms raw footage into cinematic, engaging and high-performing content. Meet the team and the philosophy behind the edits.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {
@@ -84,20 +84,20 @@ export default function AboutPage() {
             <Reveal delay={0.1}>
               <div className="grid h-full grid-cols-2 gap-4">
                 <div className="flex flex-col gap-4">
-                  <div className="aspect-[4/3] overflow-hidden rounded-[18px]">
+                  <div className="aspect-[4/3] overflow-hidden rounded-[20px]">
                     <MediaPlaceholder seed={13} />
                   </div>
-                  <div className="relative aspect-square overflow-hidden rounded-[18px]">
+                  <div className="relative aspect-square overflow-hidden rounded-[20px]">
                     <MediaPlaceholder seed={2} />
                     <span className="absolute inset-0 flex items-center justify-center text-white">
                       <LoopMark className="h-10 w-auto" />
                     </span>
                   </div>
-                  <div className="aspect-[4/3] overflow-hidden rounded-[18px]">
+                  <div className="aspect-[4/3] overflow-hidden rounded-[20px]">
                     <MediaPlaceholder seed={47} />
                   </div>
                 </div>
-                <div className="overflow-hidden rounded-[18px]">
+                <div className="overflow-hidden rounded-[20px]">
                   <MediaPlaceholder seed={61} className="min-h-full" />
                 </div>
               </div>
@@ -117,11 +117,11 @@ export default function AboutPage() {
           </Reveal>
 
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {process.map((step, i) => (
+            {processSteps.map((step, i) => (
               <Reveal
                 key={step.n}
                 delay={i * 0.07}
-                className="flex flex-col rounded-[18px] border border-line bg-surface p-6"
+                className="flex flex-col rounded-[20px] border border-line bg-surface p-6"
               >
                 <Icon name={step.icon} className="h-6 w-6 text-ink" strokeWidth={1.25} />
                 <div className="mt-6 flex items-center gap-2">
@@ -161,7 +161,7 @@ export default function AboutPage() {
             <div className="mt-12 grid grid-cols-2 gap-5 lg:grid-cols-4">
               {team.map((m, i) => (
                 <Reveal key={m.name} delay={i * 0.08}>
-                  <div className="group relative aspect-[3/4] overflow-hidden rounded-[18px] bg-dark-surface">
+                  <div className="group relative aspect-[3/4] overflow-hidden rounded-[20px] bg-dark-surface">
                     <MediaPlaceholder
                       seed={m.seed}
                       className="transition-transform duration-500 group-hover:scale-105"
@@ -172,16 +172,32 @@ export default function AboutPage() {
                         {m.name}
                       </h3>
                       <p className="text-xs text-white/60">{m.role}</p>
-                      <div className="mt-3 flex items-center gap-2 text-white/60">
-                        <Link href="#" aria-label={`${m.name} on LinkedIn`} className="hover:text-white">
+                      <div className="mt-3 -ml-1.5 flex items-center gap-0.5 text-white/60">
+                        <a
+                          href={site.socials.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${m.name} on LinkedIn`}
+                          className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-white/10 hover:text-white"
+                        >
                           <LinkedinIcon className="h-4 w-4" />
-                        </Link>
-                        <Link href="#" aria-label={`${m.name} on Instagram`} className="hover:text-white">
+                        </a>
+                        <a
+                          href={site.socials.instagram}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${m.name} on Instagram`}
+                          className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-white/10 hover:text-white"
+                        >
                           <InstagramIcon className="h-4 w-4" />
-                        </Link>
-                        <Link href="#" aria-label={`Email ${m.name}`} className="hover:text-white">
+                        </a>
+                        <a
+                          href={`mailto:${site.email}`}
+                          aria-label={`Email ${m.name}`}
+                          className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-white/10 hover:text-white"
+                        >
                           <Mail className="h-4 w-4" strokeWidth={1.5} />
-                        </Link>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -193,7 +209,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-24">
+      <section className="py-20 md:py-28">
         <CtaBand
           dark
           label="Let's Create Impact Together"

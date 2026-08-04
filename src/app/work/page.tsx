@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Our Work",
   description:
     "From raw footage to real impact — explore a curated collection of video edits crafted for brands, creators, startups and businesses.",
+  alternates: { canonical: "/work" },
 };
 
 export default function WorkPage() {

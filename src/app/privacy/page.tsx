@@ -6,6 +6,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "How Loopsoop collects, uses and protects your information.",
+  alternates: { canonical: "/privacy" },
 };
 
 const sections = [

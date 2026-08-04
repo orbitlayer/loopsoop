@@ -6,6 +6,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description: "The terms that govern your use of the Loopsoop website and services.",
+  alternates: { canonical: "/terms" },
 };
 
 const sections = [

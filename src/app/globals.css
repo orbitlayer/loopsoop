@@ -15,7 +15,7 @@
   /* Ink */
   --ink: #111111; /* primary text */
   --muted: #6b6b6b; /* supporting text */
-  --faint: #b3b3ae; /* muted headline lines */
+  --faint: #8a8a85; /* muted headline lines — AA-safe for large display text */
   --line: #eaeaea; /* hairline borders */
 
   /* Dark sections */

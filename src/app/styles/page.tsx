@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Editing Styles",
   description:
     "Every story is different. Explore Loopsoop's editing styles — cinematic, dynamic, minimal, emotional, modern and documentary — tailored to your audience and brand.",
+  alternates: { canonical: "/styles" },
 };
 
 const checklist = [
@@ -53,7 +54,7 @@ export default function StylesPage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {styles.map((s, i) => (
               <Reveal key={s.name} delay={(i % 3) * 0.08}>
-                <article className="group relative aspect-[4/5] overflow-hidden rounded-[24px] border border-line/50 bg-dark">
+                <article className="group relative aspect-[4/5] overflow-hidden rounded-[20px] border border-line/50 bg-dark">
                   <MediaPlaceholder
                     seed={s.seed}
                     className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
@@ -89,7 +90,7 @@ export default function StylesPage() {
             <h2 className="text-center font-display text-2xl font-medium text-white md:text-3xl">
               What You Get With <span className="text-dark-faint">Every Style</span>
             </h2>
-            <div className="mt-12 grid grid-cols-2 gap-y-10 md:grid-cols-5">
+            <div className="mt-12 grid grid-cols-2 gap-y-10 sm:grid-cols-3 md:grid-cols-5">
               {styleIncludes.map((f, i) => (
                 <Reveal
                   key={f.title}
@@ -117,7 +118,7 @@ export default function StylesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-24">
+      <section className="py-20 md:py-28">
         <CtaBand
           title={
             <>

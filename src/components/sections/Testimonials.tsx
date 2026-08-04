@@ -61,7 +61,7 @@ export function Testimonials() {
           {testimonials.map((t) => (
             <article
               key={t.name}
-              className="group w-[85%] shrink-0 snap-start overflow-hidden rounded-[24px] border border-line bg-surface sm:w-[46%] lg:w-[calc((100%-3rem)/3)]"
+              className="group w-[85%] shrink-0 snap-start overflow-hidden rounded-[20px] border border-line bg-surface sm:w-[46%] lg:w-[calc((100%-3rem)/3)]"
             >
               <div className="relative aspect-[16/10] overflow-hidden">
                 <MediaPlaceholder seed={t.seed} vignette className="transition-transform duration-500 group-hover:scale-[1.04]" />

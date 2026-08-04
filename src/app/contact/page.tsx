@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: "Contact",
   description:
     "Have a project in mind? Tell Loopsoop about your vision and we'll handle the editing from concept to final delivery. We usually respond within 24 hours.",
+  alternates: { canonical: "/contact" },
 };
 
 const contactItems = [

@@ -25,9 +25,9 @@ export function Footer() {
   return (
     <footer className="on-dark mt-auto bg-dark text-white">
       <Container className="py-16 md:py-20">
-        <div className="grid gap-12 lg:grid-cols-12">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-12">
           {/* Brand */}
-          <div className="lg:col-span-4">
+          <div className="sm:col-span-2 lg:col-span-4">
             <Logo onDark />
             <p className="mt-6 max-w-xs text-sm leading-relaxed text-dark-muted">
               We edit videos.
@@ -44,7 +44,7 @@ export function Footer() {
                   aria-label={label}
                   target={href.startsWith("http") ? "_blank" : undefined}
                   rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/70 transition-colors hover:border-white hover:text-white"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white/70 transition-colors hover:border-white hover:text-white"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
@@ -85,7 +85,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-7 text-xs text-dark-faint sm:flex-row sm:items-center">
+        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-7 text-xs text-dark-muted sm:flex-row sm:items-center">
           <p>© {year} LOOPSOOP. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="transition-colors hover:text-white">

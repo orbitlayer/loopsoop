@@ -2,12 +2,21 @@ import type { MetadataRoute } from "next";
 import { site } from "@/lib/data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ["", "/work", "/styles", "/clients", "/about", "/contact"];
+  const routes: { path: string; priority: number }[] = [
+    { path: "", priority: 1 },
+    { path: "/work", priority: 0.8 },
+    { path: "/styles", priority: 0.8 },
+    { path: "/clients", priority: 0.8 },
+    { path: "/about", priority: 0.8 },
+    { path: "/contact", priority: 0.8 },
+    { path: "/privacy", priority: 0.3 },
+    { path: "/terms", priority: 0.3 },
+  ];
   const now = new Date();
-  return routes.map((route) => ({
-    url: `${site.url}${route}`,
+  return routes.map(({ path, priority }) => ({
+    url: `${site.url}${path}`,
     lastModified: now,
     changeFrequency: "monthly",
-    priority: route === "" ? 1 : 0.8,
+    priority,
   }));
 }

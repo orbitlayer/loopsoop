@@ -37,6 +37,7 @@ import {
   Upload,
   WandSparkles,
   X,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
 
@@ -79,6 +80,7 @@ export const iconMap: Record<string, LucideIcon> = {
   upload: Upload,
   "wand-sparkles": WandSparkles,
   x: X,
+  zap: Zap,
 };
 
 export function Icon({

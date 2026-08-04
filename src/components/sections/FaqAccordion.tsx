@@ -17,8 +17,10 @@ export function FaqAccordion() {
           <div key={item.q}>
             <button
               type="button"
+              id={`faq-trigger-${i}`}
               onClick={() => setOpen(isOpen ? null : i)}
               aria-expanded={isOpen}
+              aria-controls={`faq-panel-${i}`}
               className="flex w-full items-center justify-between gap-6 py-5 text-left"
             >
               <span className="text-base font-medium text-ink md:text-lg">
@@ -36,6 +38,9 @@ export function FaqAccordion() {
             <AnimatePresence initial={false}>
               {isOpen && (
                 <motion.div
+                  id={`faq-panel-${i}`}
+                  role="region"
+                  aria-labelledby={`faq-trigger-${i}`}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}

@@ -4,6 +4,7 @@ import "./globals.css";
 import { site } from "@/lib/data";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { MotionProvider } from "@/components/providers/MotionProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -38,15 +39,10 @@ export const metadata: Metadata = {
     type: "website",
     url: site.url,
     siteName: site.name,
-    title: `${site.name} — Premium Video Editing & Production`,
-    description: site.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — Premium Video Editing & Production`,
-    description: site.description,
   },
-  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -56,9 +52,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${interTight.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-bg">
-        <Navbar />
-        <main className="flex flex-1 flex-col">{children}</main>
-        <Footer />
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-white"
+        >
+          Skip to content
+        </a>
+        <MotionProvider>
+          <Navbar />
+          <main id="main" className="flex flex-1 flex-col">
+            {children}
+          </main>
+          <Footer />
+        </MotionProvider>
       </body>
     </html>
   );

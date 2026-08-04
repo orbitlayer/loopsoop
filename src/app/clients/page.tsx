@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "Past Clients",
   description:
     "We've partnered with creators, startups, brands and businesses to produce videos that drive attention, engagement and results. See our client work and testimonials.",
+  alternates: { canonical: "/clients" },
 };
 
 export default function ClientsPage() {

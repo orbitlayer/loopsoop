@@ -200,7 +200,7 @@ export const values = [
 ];
 
 /* About / process */
-export const process = [
+export const processSteps = [
   { n: "01", icon: "message-circle", title: "Discover", description: "We understand your goals, vision and target audience." },
   { n: "02", icon: "folder", title: "Plan", description: "We plan the flow, style and structure for maximum impact." },
   { n: "03", icon: "scissors", title: "Edit", description: "Our editors bring the story to life with creativity." },

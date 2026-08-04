@@ -37,7 +37,7 @@ export function PageHero({
             <SectionLabel className="mb-5">{label}</SectionLabel>
           </Reveal>
           <Reveal delay={0.05}>
-            <h1 className="font-display text-[2.75rem] font-medium leading-[1.02] tracking-tight sm:text-6xl">
+            <h1 className="font-display text-4xl font-medium leading-[1.02] tracking-tight sm:text-6xl">
               {title}
             </h1>
           </Reveal>

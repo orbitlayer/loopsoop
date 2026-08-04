@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   categories,
   projects,
@@ -20,6 +21,10 @@ import { CtaBand } from "@/components/sections/CtaBand";
 
 const featured = projects.filter((p) => p.featured);
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function HomePage() {
   return (
     <>
@@ -34,7 +39,7 @@ export default function HomePage() {
                 </SectionLabel>
               </Reveal>
               <Reveal delay={0.05}>
-                <h1 className="font-display text-5xl font-medium leading-[1.0] tracking-tight sm:text-6xl md:text-7xl">
+                <h1 className="font-display text-5xl font-medium leading-[1.0] tracking-tight sm:text-6xl md:text-7xl lg:text-6xl xl:text-7xl">
                   Crafted Edits.
                   <br />
                   <span className="text-faint">Real Impact.</span>
@@ -52,7 +57,7 @@ export default function HomePage() {
             </div>
 
             <Reveal delay={0.1}>
-              <div className="group relative aspect-[16/11] overflow-hidden rounded-[22px]">
+              <div className="group relative aspect-[16/11] overflow-hidden rounded-[20px]">
                 <MediaPlaceholder seed={9} play playSize="lg" vignette />
                 <div className="absolute bottom-5 right-6 text-right text-white">
                   <div className="font-display text-sm font-medium">
@@ -105,7 +110,7 @@ export default function HomePage() {
       </section>
 
       {/* --------------------------------------------------- Featured projects */}
-      <section className="py-20 md:py-24">
+      <section className="py-20 md:py-28">
         <Container>
           <SectionHeading
             label="Our Work"
@@ -142,7 +147,7 @@ export default function HomePage() {
                   delay={i * 0.06}
                   className="flex flex-col items-center gap-3 text-center"
                 >
-                  <div className="h-[72px] w-[72px] overflow-hidden rounded-full border border-line/60">
+                  <div className="aspect-square w-full max-w-[72px] overflow-hidden rounded-full border border-line/60">
                     <MediaPlaceholder seed={(i + 2) * 13} />
                   </div>
                   <span className="text-xs leading-tight text-muted">{name}</span>
