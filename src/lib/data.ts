@@ -13,6 +13,9 @@ export const site = {
   email: "hello@loopsoop.in",
   phone: "+91 98765 43210",
   phoneHref: "+919876543210",
+  // WhatsApp number in international format, digits only (no +, spaces or dashes).
+  // ⚠️ Placeholder — replace with the real business WhatsApp number.
+  whatsapp: "919876543210",
   hours: "Mon – Sat, 10AM – 8PM IST",
   discord: "discord.gg/loopsoop",
   discordHref: "https://discord.gg/loopsoop",
@@ -24,6 +27,13 @@ export const site = {
     discord: "https://discord.gg/loopsoop",
   },
 } as const;
+
+/* WhatsApp is the primary contact / quotation channel. */
+export const WHATSAPP_DEFAULT_MESSAGE =
+  "Hi LOOPSOOP! I'd like a quote for a video editing project.";
+
+export const whatsappUrl = (message: string = WHATSAPP_DEFAULT_MESSAGE) =>
+  `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`;
 
 /* Visible primary navigation.
    Hidden-but-live routes (kept functional, intentionally not listed here):

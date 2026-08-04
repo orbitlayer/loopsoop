@@ -5,6 +5,7 @@ import { site } from "@/lib/data";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MotionProvider } from "@/components/providers/MotionProvider";
+import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </main>
           <Footer />
         </MotionProvider>
+        <WhatsAppFloat />
       </body>
     </html>
   );
