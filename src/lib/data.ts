@@ -4,7 +4,7 @@
 /* ------------------------------------------------------------------ */
 
 export const site = {
-  name: "LOOPSOOP",
+  name: "Loopsoop",
   tagline: "Edit. Connect. Elevate.",
   domain: "loopsoop.in",
   url: "https://loopsoop.in",

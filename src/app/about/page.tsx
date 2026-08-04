@@ -24,6 +24,7 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
+        centered
         label="About Loopsoop"
         title={
           <>
@@ -36,7 +37,6 @@ export default function AboutPage() {
         }
         subtitle="Loopsoop is the creative division of OrbitLayer — a studio dedicated to premium Video Editing and Graphic Design that helps brands communicate, engage and grow."
         action={<Button href="/contact">Let&apos;s Work Together</Button>}
-        seed={28}
       />
 
       {/* Stats */}

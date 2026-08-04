@@ -21,8 +21,8 @@ export default function OpengraphImage() {
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ display: "flex", fontSize: 128, fontWeight: 700, letterSpacing: 18 }}>
-          LOOPSOOP
+        <div style={{ display: "flex", fontSize: 132, fontWeight: 700, letterSpacing: -2 }}>
+          Loopsoop
         </div>
         <div
           style={{
