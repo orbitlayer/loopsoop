@@ -30,7 +30,7 @@ export const site = {
    - /our-work    → the portfolio "engine" (reached via Our Editing categories)
    - /clients     → Past Clients (re-enable later by adding it back) */
 export const nav = [
-  { label: "Portfolio", href: "/" },
+  { label: "Home", href: "/" },
   { label: "Our Editing", href: "/our-editing" },
   { label: "About", href: "/about" },
 ] as const;
@@ -269,7 +269,7 @@ export const footerColumns = [
   {
     title: "Company",
     links: [
-      { label: "Portfolio", href: "/" },
+      { label: "Home", href: "/" },
       { label: "Our Editing", href: "/our-editing" },
       { label: "About Us", href: "/about" },
       { label: "Contact Us", href: "/contact" },
