@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
-import { Check } from "lucide-react";
-import { styleIncludes, styles } from "@/lib/data";
+import Link from "next/link";
+import { ArrowRight, Check } from "lucide-react";
+import { editingCategories, styleIncludes } from "@/lib/data";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/lib/icons";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { Button, ArrowLink } from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBand } from "@/components/sections/CtaBand";
 
 export const metadata: Metadata = {
-  title: "Editing Styles",
+  title: "Our Editing",
   description:
-    "Every story is different. Explore Loopsoop's editing styles — cinematic, dynamic, minimal, emotional, modern and documentary — tailored to your audience and brand.",
-  alternates: { canonical: "/styles" },
+    "Explore Loopsoop's editing by category — documentary, commercial, corporate, emotional, luxury, social media and more. Pick a category to see the matching work.",
+  alternates: { canonical: "/our-editing" },
 };
 
 const checklist = [
@@ -23,11 +24,11 @@ const checklist = [
   "Custom approach for your brand",
 ];
 
-export default function StylesPage() {
+export default function OurEditingPage() {
   return (
     <>
       <PageHero
-        label="Editing Styles"
+        label="Our Editing"
         title={
           <>
             Edit. Elevate.
@@ -35,48 +36,54 @@ export default function StylesPage() {
             Tell Stories <span className="text-faint">Your Way.</span>
           </>
         }
-        subtitle="Every story is different. That's why we offer multiple editing styles to match your vision, audience and purpose."
+        subtitle="Every story is different. Pick an editing category to explore the work — each one opens the matching projects in our portfolio."
         action={<Button href="/contact">Let&apos;s Work Together</Button>}
         seed={38}
       />
 
-      {/* Styles grid */}
+      {/* Category grid — each card deep-links into the filtered portfolio */}
       <section className="py-16 md:py-20">
         <Container>
           <Reveal className="mb-14 text-center">
-            <h2 className="font-display text-2xl font-medium md:text-3xl">
-              Find the <span className="font-semibold">perfect style</span> for
-              your next project.
+            <h2 className="font-display text-3xl font-medium md:text-[2.6rem]">
+              Find the right <span className="text-faint">edit for your project.</span>
             </h2>
             <span className="mx-auto mt-5 block h-px w-14 bg-ink/30" />
           </Reveal>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {styles.map((s, i) => (
-              <Reveal key={s.name} delay={(i % 3) * 0.08}>
-                <article className="group relative aspect-[4/5] overflow-hidden rounded-[20px] border border-line/50 bg-dark">
+            {editingCategories.map((c, i) => (
+              <Reveal key={c.slug} delay={(i % 3) * 0.08}>
+                <Link
+                  href={`/our-work?category=${c.slug}`}
+                  aria-label={`View ${c.name} projects`}
+                  className="group relative block aspect-[4/5] overflow-hidden rounded-[20px] border border-line/50 bg-dark"
+                >
                   <MediaPlaceholder
-                    seed={s.seed}
+                    seed={c.seed}
                     className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
                   <span className="absolute left-6 top-6 font-display text-sm text-white/60">
-                    {s.n}
+                    {String(i + 1).padStart(2, "0")}
                   </span>
                   <div className="absolute inset-x-0 bottom-0 p-6">
                     <h3 className="font-display text-2xl font-medium text-white">
-                      {s.name}
+                      {c.name}
                     </h3>
                     <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/70">
-                      {s.description}
+                      {c.description}
                     </p>
-                    <div className="mt-5">
-                      <ArrowLink href="/work" onDark>
-                        View Example
-                      </ArrowLink>
-                    </div>
+                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white">
+                      View Projects
+                      <ArrowRight
+                        className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                        strokeWidth={2}
+                        aria-hidden
+                      />
+                    </span>
                   </div>
-                </article>
+                </Link>
               </Reveal>
             ))}
           </div>
@@ -88,7 +95,7 @@ export default function StylesPage() {
         <Container>
           <Reveal className="on-dark overflow-hidden rounded-[24px] bg-dark px-6 py-14 md:px-10">
             <h2 className="text-center font-display text-2xl font-medium text-white md:text-3xl">
-              What You Get With <span className="text-dark-faint">Every Style</span>
+              What You Get With <span className="text-dark-faint">Every Edit</span>
             </h2>
             <div className="mt-12 grid grid-cols-2 gap-y-10 sm:grid-cols-3 md:grid-cols-5">
               {styleIncludes.map((f, i) => (

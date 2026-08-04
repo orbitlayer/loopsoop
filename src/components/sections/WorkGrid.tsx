@@ -1,19 +1,37 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { projects, workFilters } from "@/lib/data";
+import { categoryNameToSlug, projects, workFilters } from "@/lib/data";
 import { cn } from "@/lib/cn";
 import { Container } from "@/components/ui/Container";
 import { ProjectCard } from "@/components/sections/ProjectCard";
 
-export function WorkGrid() {
-  const [active, setActive] = useState<string>("All Work");
+export function WorkGrid({
+  initialCategory = "All Work",
+}: {
+  initialCategory?: string;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [active, setActive] = useState<string>(initialCategory);
 
   const filtered =
     active === "All Work"
       ? projects
       : projects.filter((p) => p.filter === active);
+
+  // Reflect the active filter in the URL (?category=slug) without adding a
+  // history entry — so Back returns to the previous page (e.g. Our Editing),
+  // and the filtered view stays shareable / deep-linkable.
+  const handleFilter = (name: string) => {
+    setActive(name);
+    const slug = name === "All Work" ? null : categoryNameToSlug(name);
+    router.replace(slug ? `${pathname}?category=${slug}` : pathname, {
+      scroll: false,
+    });
+  };
 
   return (
     <section className="pb-8">
@@ -26,7 +44,8 @@ export function WorkGrid() {
               <button
                 key={f}
                 type="button"
-                onClick={() => setActive(f)}
+                onClick={() => handleFilter(f)}
+                aria-pressed={isActive}
                 className={cn(
                   "relative shrink-0 pb-1 text-sm transition-colors",
                   isActive ? "text-ink" : "text-muted hover:text-ink",
@@ -45,25 +64,31 @@ export function WorkGrid() {
         </div>
 
         {/* Grid */}
-        <motion.div
-          layout
-          className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          <AnimatePresence mode="popLayout">
-            {filtered.map((p) => (
-              <motion.div
-                key={p.id}
-                layout
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <ProjectCard project={p} showArrow />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        {filtered.length > 0 ? (
+          <motion.div
+            layout
+            className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            <AnimatePresence mode="popLayout">
+              {filtered.map((p) => (
+                <motion.div
+                  key={p.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <ProjectCard project={p} showArrow />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        ) : (
+          <p className="mt-16 text-center text-muted">
+            No projects in this category yet — check back soon.
+          </p>
+        )}
       </Container>
     </section>
   );

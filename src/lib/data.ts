@@ -25,11 +25,13 @@ export const site = {
   },
 } as const;
 
+/* Visible primary navigation.
+   Hidden-but-live routes (kept functional, intentionally not listed here):
+   - /our-work    → the portfolio "engine" (reached via Our Editing categories)
+   - /clients     → Past Clients (re-enable later by adding it back) */
 export const nav = [
   { label: "Portfolio", href: "/" },
-  { label: "Our Work", href: "/work" },
-  { label: "Editing Styles", href: "/styles" },
-  { label: "Past Clients", href: "/clients" },
+  { label: "Our Editing", href: "/our-editing" },
   { label: "About", href: "/about" },
 ] as const;
 
@@ -76,36 +78,61 @@ export type Project = {
   id: string;
   title: string;
   category: string; // display label
-  filter: string; // matches a filter chip on /work
+  filter: string; // matches a filter chip on /our-work (an editingCategories name)
   seed: number; // deterministic placeholder variation
   featured?: boolean;
 };
 
 export const projects: Project[] = [
-  { id: "boat-airdopes", title: "boAt Airdopes 141", category: "Product Ad", filter: "Commercials", seed: 3, featured: true },
-  { id: "finance-simplified", title: "Finance Simplified", category: "YouTube Video", filter: "YouTube Videos", seed: 12, featured: true },
-  { id: "puma-ignite", title: "PUMA Ignite Campaign", category: "Commercial", filter: "Commercials", seed: 21, featured: true },
-  { id: "karan-ananya", title: "Karan & Ananya", category: "Wedding Film", filter: "Weddings", seed: 33, featured: true },
-  { id: "luxury-redefined", title: "Luxury Redefined", category: "Real Estate Video", filter: "Real Estate", seed: 44, featured: true },
+  { id: "boat-airdopes", title: "boAt Airdopes 141", category: "Product Ad", filter: "Commercial", seed: 3, featured: true },
+  { id: "finance-simplified", title: "Finance Simplified", category: "YouTube Video", filter: "Educational", seed: 12, featured: true },
+  { id: "puma-ignite", title: "PUMA Ignite Campaign", category: "Commercial", filter: "Commercial", seed: 21, featured: true },
+  { id: "karan-ananya", title: "Karan & Ananya", category: "Wedding Film", filter: "Emotional", seed: 33, featured: true },
+  { id: "luxury-redefined", title: "Luxury Redefined", category: "Real Estate Video", filter: "Luxury", seed: 44, featured: true },
   { id: "true-north", title: "True North", category: "Travel Documentary", filter: "Documentary", seed: 51, featured: true },
-  { id: "coca-cola-zero", title: "Coca-Cola Zero", category: "Commercial", filter: "Commercials", seed: 63 },
+  { id: "coca-cola-zero", title: "Coca-Cola Zero", category: "Commercial", filter: "Commercial", seed: 63 },
   { id: "nexgen-app", title: "NexGen App Launch", category: "Product Video", filter: "Corporate", seed: 72 },
-  { id: "ride-beyond", title: "Ride Beyond", category: "Brand Film", filter: "Corporate", seed: 84 },
-  { id: "minimalist-skincare", title: "Minimalist Skincare", category: "Product Ad", filter: "Commercials", seed: 91 },
-  { id: "no-limits", title: "No Limits", category: "Fitness Campaign", filter: "Short Form Content", seed: 7 },
+  { id: "ride-beyond", title: "Ride Beyond", category: "Brand Film", filter: "Fast Pace", seed: 84 },
+  { id: "minimalist-skincare", title: "Minimalist Skincare", category: "Product Ad", filter: "Social Media", seed: 91 },
+  { id: "no-limits", title: "No Limits", category: "Fitness Campaign", filter: "Short Form", seed: 7 },
   { id: "urban-frames", title: "Urban Frames", category: "Cinematic Reel", filter: "Documentary", seed: 18 },
 ];
 
-export const workFilters = [
+/* Unified editing categories.
+   One taxonomy shown as cards on Our Editing, used as the Our Work filter
+   chips, and referenced by ?category=<slug> deep links. Every project's
+   `filter` matches one of these `name`s. Add/rename here to update everywhere. */
+export type EditingCategory = {
+  slug: string;
+  name: string;
+  description: string;
+  seed: number;
+};
+
+export const editingCategories: EditingCategory[] = [
+  { slug: "documentary", name: "Documentary", description: "Natural, raw and real edits that keep the story authentic.", seed: 51 },
+  { slug: "commercial", name: "Commercial", description: "Punchy, high-converting ads and brand films that sell.", seed: 21 },
+  { slug: "corporate", name: "Corporate", description: "Polished, professional edits for brands and businesses.", seed: 72 },
+  { slug: "emotional", name: "Emotional", description: "Heartfelt storytelling with soulful music and cinematic flow.", seed: 33 },
+  { slug: "fast-pace", name: "Fast Pace", description: "High-energy cuts, quick transitions and impactful beats.", seed: 84 },
+  { slug: "luxury", name: "Luxury", description: "Elegant, refined edits with a premium, high-end feel.", seed: 44 },
+  { slug: "educational", name: "Educational", description: "Clear, engaging edits that make complex ideas easy to follow.", seed: 12 },
+  { slug: "social-media", name: "Social Media", description: "Scroll-stopping edits optimised for reach and engagement.", seed: 91 },
+  { slug: "short-form", name: "Short Form", description: "Snappy reels and shorts built for vertical, bite-sized viewing.", seed: 7 },
+];
+
+/* Translate between a ?category= slug and its display name. */
+export const categorySlugToName = (slug?: string | null): string | null =>
+  editingCategories.find((c) => c.slug === slug)?.name ?? null;
+
+export const categoryNameToSlug = (name: string): string | null =>
+  editingCategories.find((c) => c.name === name)?.slug ?? null;
+
+/* Filter chips on Our Work: "All Work" + every category. */
+export const workFilters: string[] = [
   "All Work",
-  "Commercials",
-  "YouTube Videos",
-  "Short Form Content",
-  "Corporate",
-  "Documentary",
-  "Weddings",
-  "Real Estate",
-] as const;
+  ...editingCategories.map((c) => c.name),
+];
 
 /* Editing styles — compact list (home) */
 export const stylesShort = [
@@ -115,18 +142,6 @@ export const stylesShort = [
   "Moody & Dark",
   "Smooth & Elegant",
   "Colorful & Vibrant",
-];
-
-/* Editing styles — full cards (styles page) */
-export type Style = { n: string; name: string; description: string; seed: number };
-
-export const styles: Style[] = [
-  { n: "01", name: "Cinematic", description: "Film-like edits with color grading, smooth transitions and emotional tone.", seed: 5 },
-  { n: "02", name: "Dynamic", description: "High energy cuts, fast pace, punchy transitions and impactful beats.", seed: 84 },
-  { n: "03", name: "Minimal", description: "Clean, simple and elegant edits that focus on your product.", seed: 91 },
-  { n: "04", name: "Emotional", description: "Heartfelt storytelling with soulful music and smooth, cinematic flow.", seed: 33 },
-  { n: "05", name: "Modern", description: "Sleek, trendy and tech-focused edits with modern typography and effects.", seed: 72 },
-  { n: "06", name: "Documentary", description: "Natural, raw and real edits that keep the story authentic.", seed: 51 },
 ];
 
 export const styleIncludes = [
@@ -254,21 +269,20 @@ export const footerColumns = [
   {
     title: "Company",
     links: [
+      { label: "Portfolio", href: "/" },
+      { label: "Our Editing", href: "/our-editing" },
       { label: "About Us", href: "/about" },
-      { label: "Our Work", href: "/work" },
-      { label: "Editing Styles", href: "/styles" },
-      { label: "Past Clients", href: "/clients" },
       { label: "Contact Us", href: "/contact" },
     ],
   },
   {
     title: "Services",
     links: [
-      { label: "YouTube Videos", href: "/work" },
-      { label: "Short Form Content", href: "/work" },
-      { label: "Commercials", href: "/work" },
-      { label: "Corporate Videos", href: "/work" },
-      { label: "Documentary", href: "/work" },
+      { label: "Documentary", href: "/our-work?category=documentary" },
+      { label: "Commercial", href: "/our-work?category=commercial" },
+      { label: "Corporate", href: "/our-work?category=corporate" },
+      { label: "Social Media", href: "/our-work?category=social-media" },
+      { label: "Short Form", href: "/our-work?category=short-form" },
     ],
   },
   {

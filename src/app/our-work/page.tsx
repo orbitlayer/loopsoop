@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { statsWork } from "@/lib/data";
+import { categorySlugToName, statsWork } from "@/lib/data";
 import { PageHero } from "@/components/sections/PageHero";
 import { WorkGrid } from "@/components/sections/WorkGrid";
 import { StatsBand } from "@/components/sections/StatsBand";
@@ -9,10 +9,17 @@ export const metadata: Metadata = {
   title: "Our Work",
   description:
     "From raw footage to real impact — explore a curated collection of video edits crafted for brands, creators, startups and businesses.",
-  alternates: { canonical: "/work" },
+  alternates: { canonical: "/our-work" },
 };
 
-export default function WorkPage() {
+export default async function OurWorkPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const { category } = await searchParams;
+  const initialCategory = categorySlugToName(category) ?? "All Work";
+
   return (
     <>
       <PageHero
@@ -29,13 +36,13 @@ export default function WorkPage() {
         play
       />
 
-      <WorkGrid />
+      <WorkGrid initialCategory={initialCategory} />
 
       <section className="py-16 md:py-20">
         <StatsBand stats={statsWork} />
       </section>
 
-      <section className="pb-24">
+      <section className="py-20 md:py-28">
         <CtaBand
           title="Let's Create Something Amazing Together."
           aside={
