@@ -22,18 +22,21 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — Premium Video Editing & Production`,
+    default:
+      "Loopsoop | Video Editing & Graphic Design | A Creative Division of OrbitLayer",
     template: `%s — ${site.name}`,
   },
   description: site.description,
   keywords: [
     "video editing",
-    "video production",
+    "graphic design",
+    "brand design",
     "post production",
     "cinematic editing",
     "youtube editing",
-    "commercial editing",
-    "LOOPSOOP",
+    "creative studio",
+    "Loopsoop",
+    "OrbitLayer",
   ],
   authors: [{ name: site.name }],
   openGraph: {

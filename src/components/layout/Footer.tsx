@@ -115,8 +115,19 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-14 flex flex-col items-start gap-3 border-t border-white/10 pt-7 text-xs text-dark-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {year} LOOPSOOP. All rights reserved.</p>
+          <p>
+            © {year} Loopsoop. A Creative Division of {site.parent.name}. All
+            Rights Reserved.
+          </p>
           <div className="flex items-center gap-6">
+            <a
+              href={site.parent.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-white"
+            >
+              Visit {site.parent.name} →
+            </a>
             <Link href="/privacy" className="transition-colors hover:text-white">
               Privacy Policy
             </Link>

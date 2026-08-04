@@ -9,7 +9,7 @@ export const site = {
   domain: "loopsoop.in",
   url: "https://loopsoop.in",
   description:
-    "Loopsoop is a premium video editing production company delivering high-end edits for creators, brands and businesses.",
+    "Loopsoop is the creative division of OrbitLayer, providing premium Video Editing and Graphic Design services for creators, startups, agencies, and businesses.",
   email: "hello@loopsoop.in",
   phone: "+91 98765 43210",
   phoneHref: "+919876543210",
@@ -20,6 +20,12 @@ export const site = {
   discord: "discord.gg/loopsoop",
   discordHref: "https://discord.gg/loopsoop",
   location: "Remote First",
+  // Loopsoop is the creative division of its parent company, OrbitLayer.
+  parent: {
+    name: "OrbitLayer",
+    url: "https://orbitlayer.in",
+    relationship: "A Creative Division of OrbitLayer",
+  },
   socials: {
     instagram: "https://instagram.com/loopsoop",
     youtube: "https://youtube.com/@loopsoop",

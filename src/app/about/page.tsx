@@ -11,6 +11,7 @@ import { LoopMark } from "@/components/ui/Logo";
 import { PageHero } from "@/components/sections/PageHero";
 import { StatsBand } from "@/components/sections/StatsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { OrbitLayerCard } from "@/components/sections/OrbitLayerCard";
 
 export const metadata: Metadata = {
   title: "About",
@@ -26,14 +27,14 @@ export default function AboutPage() {
         label="About Loopsoop"
         title={
           <>
-            We Edit Videos.
+            We Craft Visuals.
             <br />
             You Tell Stories.
             <br />
             We <span className="text-faint">Elevate</span> Them.
           </>
         }
-        subtitle="At Loopsoop, we believe great editing isn't just about cutting clips — it's about creating emotion, building connection and leaving a lasting impact."
+        subtitle="Loopsoop is the creative division of OrbitLayer — a studio dedicated to premium Video Editing and Graphic Design that helps brands communicate, engage and grow."
         action={<Button href="/contact">Let&apos;s Work Together</Button>}
         seed={28}
       />
@@ -51,14 +52,28 @@ export default function AboutPage() {
               <Reveal>
                 <SectionLabel className="mb-4">Our Mission</SectionLabel>
                 <h2 className="font-display text-3xl font-medium leading-[1.1] md:text-[2.6rem]">
-                  Empowering Creators{" "}
-                  <span className="text-faint">Through Exceptional Editing.</span>
+                  Empowering Brands{" "}
+                  <span className="text-faint">Through Creative Excellence.</span>
                 </h2>
-                <p className="mt-6 max-w-md text-muted">
-                  We partner with creators, brands and businesses to turn raw
-                  footage into content that performs. Our goal is simple: make
-                  every second count.
-                </p>
+                <div className="mt-6 max-w-md space-y-4 text-muted">
+                  <p>
+                    Loopsoop is the creative division of OrbitLayer, dedicated to
+                    delivering premium Video Editing and Graphic Design services
+                    for creators, startups, and growing businesses.
+                  </p>
+                  <p>
+                    While OrbitLayer specializes in Web Development, AI
+                    Automation, Campaign Design, and Performance Marketing,
+                    Loopsoop focuses entirely on creative execution—crafting
+                    high-quality visual content that helps brands communicate,
+                    engage, and grow.
+                  </p>
+                  <p>
+                    Together, we provide businesses with both technical
+                    innovation and creative excellence under one trusted
+                    ecosystem.
+                  </p>
+                </div>
               </Reveal>
 
               <div className="mt-10 space-y-7">
@@ -206,6 +221,11 @@ export default function AboutPage() {
             </div>
           </Reveal>
         </Container>
+      </section>
+
+      {/* OrbitLayer ecosystem */}
+      <section className="py-8 md:py-12">
+        <OrbitLayerCard />
       </section>
 
       {/* CTA */}

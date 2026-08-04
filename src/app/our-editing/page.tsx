@@ -36,7 +36,7 @@ export default function OurEditingPage() {
             Tell Stories <span className="text-faint">Your Way.</span>
           </>
         }
-        subtitle="Every story is different. Pick an editing category to explore the work — each one opens the matching projects in our portfolio."
+        subtitle="Premium Video Editing and Graphic Design, crafted for your brand. Pick a style to explore the work — each one opens the matching projects in our portfolio."
         action={<Button href="/contact">Let&apos;s Work Together</Button>}
         seed={38}
       />

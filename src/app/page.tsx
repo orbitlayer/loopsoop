@@ -12,6 +12,7 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { ArrowLink } from "@/components/ui/Button";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { ParentBadge } from "@/components/ui/ParentBadge";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { SectionHeading } from "@/components/sections/SectionHeading";
 import { ProjectCard } from "@/components/sections/ProjectCard";
@@ -34,21 +35,24 @@ export default function HomePage() {
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
             <div>
               <Reveal>
+                <ParentBadge className="mb-5" />
+              </Reveal>
+              <Reveal delay={0.04}>
                 <SectionLabel className="mb-5">
-                  Video Editing &amp; Production
+                  Video Editing &amp; Graphic Design
                 </SectionLabel>
               </Reveal>
-              <Reveal delay={0.05}>
+              <Reveal delay={0.08}>
                 <h1 className="font-display text-5xl font-medium leading-[1.0] tracking-tight sm:text-6xl md:text-7xl lg:text-6xl xl:text-7xl">
                   Crafted Edits.
                   <br />
                   <span className="text-faint">Real Impact.</span>
                 </h1>
               </Reveal>
-              <Reveal delay={0.12}>
+              <Reveal delay={0.14}>
                 <p className="mt-6 max-w-md text-base leading-relaxed text-muted md:text-lg">
-                  We turn raw footage into powerful stories that connect, engage
-                  and deliver results.
+                  Professional Video Editing &amp; Graphic Design for Creators,
+                  Brands &amp; Businesses.
                 </p>
               </Reveal>
               <Reveal delay={0.18} className="mt-8">
