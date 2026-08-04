@@ -152,12 +152,12 @@ export const workFilters: string[] = [
 
 /* Editing styles — compact list (home) */
 export const stylesShort = [
-  "Cinematic",
-  "Clean & Minimal",
-  "High Energy",
-  "Moody & Dark",
-  "Smooth & Elegant",
-  "Colorful & Vibrant",
+  { name: "Cinematic", icon: "film" },
+  { name: "Clean & Minimal", icon: "feather" },
+  { name: "High Energy", icon: "zap" },
+  { name: "Moody & Dark", icon: "moon" },
+  { name: "Smooth & Elegant", icon: "gem" },
+  { name: "Colorful & Vibrant", icon: "palette" },
 ];
 
 export const styleIncludes = [

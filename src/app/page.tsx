@@ -141,16 +141,21 @@ export default function HomePage() {
             </Reveal>
 
             <div className="grid grid-cols-3 gap-x-4 gap-y-8 sm:grid-cols-6">
-              {stylesShort.map((name, i) => (
+              {stylesShort.map((style, i) => (
                 <Reveal
-                  key={name}
+                  key={style.name}
                   delay={i * 0.06}
                   className="flex flex-col items-center gap-3 text-center"
                 >
-                  <div className="aspect-square w-full max-w-[72px] overflow-hidden rounded-full border border-line/60">
+                  <div className="relative aspect-square w-full max-w-[72px] overflow-hidden rounded-full border border-line/60">
                     <MediaPlaceholder seed={(i + 2) * 13} />
+                    <span className="absolute inset-0 flex items-center justify-center text-white">
+                      <Icon name={style.icon} className="h-6 w-6" strokeWidth={1.5} />
+                    </span>
                   </div>
-                  <span className="text-xs leading-tight text-muted">{name}</span>
+                  <span className="text-xs leading-tight text-muted">
+                    {style.name}
+                  </span>
                 </Reveal>
               ))}
             </div>
