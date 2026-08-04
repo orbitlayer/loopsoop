@@ -28,6 +28,7 @@ export default function OurEditingPage() {
   return (
     <>
       <PageHero
+        centered
         label="Our Editing"
         title={
           <>
@@ -38,7 +39,6 @@ export default function OurEditingPage() {
         }
         subtitle="Premium Video Editing and Graphic Design, crafted for your brand. Pick a style to explore the work — each one opens the matching projects in our portfolio."
         action={<Button href="/contact">Let&apos;s Work Together</Button>}
-        seed={38}
       />
 
       {/* Category grid — each card deep-links into the filtered portfolio */}

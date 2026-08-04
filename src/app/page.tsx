@@ -30,48 +30,32 @@ export default function HomePage() {
   return (
     <>
       {/* ---------------------------------------------------------------- Hero */}
-      <section className="pb-14 pt-32 md:pt-40">
+      <section className="pb-16 pt-32 md:pb-20 md:pt-44">
         <Container>
-          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-            <div>
-              <Reveal>
-                <ParentBadge className="mb-5" />
-              </Reveal>
-              <Reveal delay={0.04}>
-                <SectionLabel className="mb-5">
-                  Video Editing &amp; Graphic Design
-                </SectionLabel>
-              </Reveal>
-              <Reveal delay={0.08}>
-                <h1 className="font-display text-5xl font-medium leading-[1.0] tracking-tight sm:text-6xl md:text-7xl lg:text-6xl xl:text-7xl">
-                  Crafted Edits.
-                  <br />
-                  <span className="text-faint">Real Impact.</span>
-                </h1>
-              </Reveal>
-              <Reveal delay={0.14}>
-                <p className="mt-6 max-w-md text-base leading-relaxed text-muted md:text-lg">
-                  Professional Video Editing &amp; Graphic Design for Creators,
-                  Brands &amp; Businesses.
-                </p>
-              </Reveal>
-              <Reveal delay={0.18} className="mt-8">
-                <ArrowLink href="/our-work">Explore Our Work</ArrowLink>
-              </Reveal>
-            </div>
-
-            <Reveal delay={0.1}>
-              <div className="group relative aspect-[16/11] overflow-hidden rounded-[20px]">
-                <MediaPlaceholder seed={9} play playSize="lg" vignette />
-                <div className="absolute bottom-5 right-6 text-right text-white">
-                  <div className="font-display text-sm font-medium">
-                    Showreel 2024
-                  </div>
-                  <div className="mt-1 flex items-center justify-end gap-2 text-xs text-white/70">
-                    Watch Now <span className="h-px w-8 bg-white/50" />
-                  </div>
-                </div>
-              </div>
+          <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+            <Reveal>
+              <ParentBadge className="mb-6" />
+            </Reveal>
+            <Reveal delay={0.04}>
+              <SectionLabel className="mb-5">
+                Video Editing &amp; Graphic Design
+              </SectionLabel>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <h1 className="font-display text-5xl font-medium leading-[1.0] tracking-tight sm:text-6xl md:text-7xl">
+                Crafted Edits.
+                <br />
+                <span className="text-faint">Real Impact.</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={0.14}>
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-muted md:text-lg">
+                Professional Video Editing &amp; Graphic Design for Creators,
+                Brands &amp; Businesses.
+              </p>
+            </Reveal>
+            <Reveal delay={0.18} className="mt-8">
+              <ArrowLink href="/our-work">Explore Our Work</ArrowLink>
             </Reveal>
           </div>
         </Container>

@@ -1,11 +1,11 @@
-import { cn } from "@/lib/cn";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 
-/* Shared inner-page hero: label + large headline + copy on the left,
-   a large edge-bleeding cinematic image on the right (lg+). */
+/* Shared inner-page hero.
+   Default: label + headline + copy on the left, a large edge-bleeding image
+   on the right (lg+). `centered`: a clean, image-free centered hero. */
 export function PageHero({
   label,
   title,
@@ -14,6 +14,7 @@ export function PageHero({
   extra,
   seed = 24,
   play = false,
+  centered = false,
 }: {
   label: string;
   title: React.ReactNode;
@@ -22,7 +23,42 @@ export function PageHero({
   extra?: React.ReactNode;
   seed?: number;
   play?: boolean;
+  centered?: boolean;
 }) {
+  if (centered) {
+    return (
+      <section className="pb-16 pt-32 md:pb-20 md:pt-44">
+        <Container>
+          <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+            <Reveal>
+              <SectionLabel className="mb-5">{label}</SectionLabel>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <h1 className="font-display text-4xl font-medium leading-[1.02] tracking-tight sm:text-6xl">
+                {title}
+              </h1>
+            </Reveal>
+            <Reveal delay={0.12}>
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-muted md:text-lg">
+                {subtitle}
+              </p>
+            </Reveal>
+            {action && (
+              <Reveal delay={0.18} className="mt-8">
+                {action}
+              </Reveal>
+            )}
+            {extra && (
+              <Reveal delay={0.24} className="mt-8">
+                {extra}
+              </Reveal>
+            )}
+          </div>
+        </Container>
+      </section>
+    );
+  }
+
   return (
     <section className="relative overflow-hidden pb-16 pt-32 md:pb-20 md:pt-40 lg:min-h-[600px]">
       {/* Edge-bleed image (desktop) */}
