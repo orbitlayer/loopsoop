@@ -10,7 +10,7 @@ import { cn } from "@/lib/cn";
 import { Icon } from "@/lib/icons";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { ArrowLink } from "@/components/ui/Button";
+import { Button, ArrowLink } from "@/components/ui/Button";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ParentBadge } from "@/components/ui/ParentBadge";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
@@ -55,7 +55,7 @@ export default function HomePage() {
               </p>
             </Reveal>
             <Reveal delay={0.18} className="mt-8">
-              <ArrowLink href="/our-work">Explore Our Work</ArrowLink>
+              <Button href="/our-work">Explore Our Work</Button>
             </Reveal>
           </div>
         </Container>
