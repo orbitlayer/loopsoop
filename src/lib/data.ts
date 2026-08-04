@@ -89,23 +89,29 @@ export type Project = {
   title: string;
   category: string; // display label
   filter: string; // matches a filter chip on /our-work (an editingCategories name)
-  seed: number; // deterministic placeholder variation
+  seed: number; // deterministic placeholder variation (fallback when no youtubeId)
+  youtubeId?: string; // YouTube video ID — powers the thumbnail + modal player
   featured?: boolean;
 };
 
+// ⚠️ youtubeId values below are PLACEHOLDERS (same demo video for every card).
+// Replace each with the real YouTube video ID for that project — it's the part
+// after "v=" in a watch URL, e.g. https://youtu.be/dQw4w9WgXcQ → "dQw4w9WgXcQ".
+const DEMO_VIDEO = "aqz-KE-bpKQ";
+
 export const projects: Project[] = [
-  { id: "boat-airdopes", title: "boAt Airdopes 141", category: "Product Ad", filter: "Commercial", seed: 3, featured: true },
-  { id: "finance-simplified", title: "Finance Simplified", category: "YouTube Video", filter: "Educational", seed: 12, featured: true },
-  { id: "puma-ignite", title: "PUMA Ignite Campaign", category: "Commercial", filter: "Commercial", seed: 21, featured: true },
-  { id: "karan-ananya", title: "Karan & Ananya", category: "Wedding Film", filter: "Emotional", seed: 33, featured: true },
-  { id: "luxury-redefined", title: "Luxury Redefined", category: "Real Estate Video", filter: "Luxury", seed: 44, featured: true },
-  { id: "true-north", title: "True North", category: "Travel Documentary", filter: "Documentary", seed: 51, featured: true },
-  { id: "coca-cola-zero", title: "Coca-Cola Zero", category: "Commercial", filter: "Commercial", seed: 63 },
-  { id: "nexgen-app", title: "NexGen App Launch", category: "Product Video", filter: "Corporate", seed: 72 },
-  { id: "ride-beyond", title: "Ride Beyond", category: "Brand Film", filter: "Fast Pace", seed: 84 },
-  { id: "minimalist-skincare", title: "Minimalist Skincare", category: "Product Ad", filter: "Social Media", seed: 91 },
-  { id: "no-limits", title: "No Limits", category: "Fitness Campaign", filter: "Short Form", seed: 7 },
-  { id: "urban-frames", title: "Urban Frames", category: "Cinematic Reel", filter: "Documentary", seed: 18 },
+  { id: "boat-airdopes", title: "boAt Airdopes 141", category: "Product Ad", filter: "Commercial", seed: 3, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "finance-simplified", title: "Finance Simplified", category: "YouTube Video", filter: "Educational", seed: 12, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "puma-ignite", title: "PUMA Ignite Campaign", category: "Commercial", filter: "Commercial", seed: 21, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "karan-ananya", title: "Karan & Ananya", category: "Wedding Film", filter: "Emotional", seed: 33, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "luxury-redefined", title: "Luxury Redefined", category: "Real Estate Video", filter: "Luxury", seed: 44, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "true-north", title: "True North", category: "Travel Documentary", filter: "Documentary", seed: 51, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "coca-cola-zero", title: "Coca-Cola Zero", category: "Commercial", filter: "Commercial", seed: 63, youtubeId: DEMO_VIDEO },
+  { id: "nexgen-app", title: "NexGen App Launch", category: "Product Video", filter: "Corporate", seed: 72, youtubeId: DEMO_VIDEO },
+  { id: "ride-beyond", title: "Ride Beyond", category: "Brand Film", filter: "Fast Pace", seed: 84, youtubeId: DEMO_VIDEO },
+  { id: "minimalist-skincare", title: "Minimalist Skincare", category: "Product Ad", filter: "Social Media", seed: 91, youtubeId: DEMO_VIDEO },
+  { id: "no-limits", title: "No Limits", category: "Fitness Campaign", filter: "Short Form", seed: 7, youtubeId: DEMO_VIDEO },
+  { id: "urban-frames", title: "Urban Frames", category: "Cinematic Reel", filter: "Documentary", seed: 18, youtubeId: DEMO_VIDEO },
 ];
 
 /* Unified editing categories.

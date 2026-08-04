@@ -2,8 +2,9 @@ import { Play } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 /*
- * Self-contained, on-brand media block (monochrome). Swap for <Image> later:
- * each usage passes a `seed` so the grid gets subtle deterministic variation.
+ * Media block. If `src` is provided it renders that image (e.g. a YouTube
+ * thumbnail); otherwise it renders a self-contained, on-brand monochrome
+ * placeholder that varies deterministically by `seed`.
  */
 export function MediaPlaceholder({
   seed = 0,
@@ -11,6 +12,8 @@ export function MediaPlaceholder({
   vignette = false,
   play = false,
   playSize = "md",
+  src,
+  alt,
   children,
 }: {
   seed?: number;
@@ -18,6 +21,8 @@ export function MediaPlaceholder({
   vignette?: boolean;
   play?: boolean;
   playSize?: "sm" | "md" | "lg";
+  src?: string;
+  alt?: string;
   children?: React.ReactNode;
 }) {
   const hx = (seed * 41) % 100;
@@ -29,13 +34,31 @@ export function MediaPlaceholder({
   }[playSize];
 
   return (
-    <div className={cn("media h-full w-full", className)}>
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `radial-gradient(55% 55% at ${hx}% ${hy}%, rgba(255,255,255,0.08), transparent 70%)`,
-        }}
-      />
+    <div
+      className={cn(
+        src
+          ? "relative h-full w-full overflow-hidden bg-black"
+          : "media h-full w-full",
+        className,
+      )}
+    >
+      {src ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={src}
+          alt={alt ?? ""}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      ) : (
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `radial-gradient(55% 55% at ${hx}% ${hy}%, rgba(255,255,255,0.08), transparent 70%)`,
+          }}
+        />
+      )}
       {vignette && (
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
       )}
