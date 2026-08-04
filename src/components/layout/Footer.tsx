@@ -19,11 +19,20 @@ const socialLinks = [
   { label: "Email", href: `mailto:${site.email}`, Icon: Mail },
 ];
 
+// "Company" renamed to "Explore" — these are the site's main pages.
 const exploreLinks = [
   { label: "Home", href: "/" },
   { label: "Our Editing", href: "/our-editing" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "About Us", href: "/about" },
+  { label: "Contact Us", href: "/contact" },
+];
+
+const serviceLinks = [
+  { label: "Documentary", href: "/our-work?category=documentary" },
+  { label: "Commercial", href: "/our-work?category=commercial" },
+  { label: "Corporate", href: "/our-work?category=corporate" },
+  { label: "Social Media", href: "/our-work?category=social-media" },
+  { label: "Short Form", href: "/our-work?category=short-form" },
 ];
 
 export function Footer() {
@@ -32,25 +41,9 @@ export function Footer() {
   return (
     <footer className="on-dark mt-auto bg-dark text-white">
       <Container className="py-16 md:py-20">
-        {/* CTA */}
-        <div className="flex flex-col gap-8 border-b border-white/10 pb-12 md:flex-row md:items-end md:justify-between">
-          <div>
-            <span className="text-[0.72rem] font-medium uppercase tracking-[0.2em] text-dark-muted">
-              Let&apos;s Work Together
-            </span>
-            <h2 className="mt-4 max-w-xl font-display text-3xl font-medium leading-[1.1] md:text-[2.5rem]">
-              Let&apos;s create something extraordinary.
-            </h2>
-          </div>
-          <Button href="/contact" variant="invert" className="shrink-0">
-            Start Your Project
-          </Button>
-        </div>
-
-        {/* Columns */}
-        <div className="flex flex-col gap-10 py-12 md:flex-row md:items-start md:justify-between">
+        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-12 md:gap-8">
           {/* Brand */}
-          <div>
+          <div className="sm:col-span-2 md:col-span-4">
             <Logo onDark />
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-dark-muted">
               We edit videos. You tell stories. We elevate them.
@@ -72,7 +65,7 @@ export function Footer() {
           </div>
 
           {/* Explore */}
-          <nav aria-label="Footer" className="md:text-right">
+          <nav aria-label="Explore" className="md:col-span-2">
             <h3 className="text-sm font-semibold text-white">Explore</h3>
             <ul className="mt-5 space-y-3">
               {exploreLinks.map((item) => (
@@ -87,10 +80,41 @@ export function Footer() {
               ))}
             </ul>
           </nav>
+
+          {/* Services */}
+          <nav aria-label="Services" className="md:col-span-3">
+            <h3 className="text-sm font-semibold text-white">Services</h3>
+            <ul className="mt-5 space-y-3">
+              {serviceLinks.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-dark-muted transition-colors hover:text-white"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Let's Work Together */}
+          <div className="sm:col-span-2 md:col-span-3">
+            <h3 className="text-sm font-semibold text-white">
+              Let&apos;s Work Together
+            </h3>
+            <p className="mt-5 text-sm leading-relaxed text-dark-muted">
+              Have a project in mind? Let&apos;s create something amazing
+              together.
+            </p>
+            <Button href="/contact" variant="invert" className="mt-6">
+              Start Your Project
+            </Button>
+          </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col items-start gap-3 border-t border-white/10 pt-7 text-xs text-dark-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col items-start gap-3 border-t border-white/10 pt-7 text-xs text-dark-muted sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} LOOPSOOP. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="transition-colors hover:text-white">
