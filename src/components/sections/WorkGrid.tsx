@@ -51,7 +51,7 @@ export function WorkGrid({
         {/* Filters */}
         <div
           ref={scrollerRef}
-          className="no-scrollbar -mx-6 flex gap-7 overflow-x-auto border-b border-line px-6 pb-4 md:mx-0 md:px-0"
+          className="no-scrollbar -mx-6 flex gap-2 overflow-x-auto border-b border-line px-6 pb-4 md:mx-0 md:px-0"
         >
           {orderedFilters.map((f) => {
             const isActive = active === f;
@@ -63,17 +63,20 @@ export function WorkGrid({
                 onClick={() => handleFilter(f)}
                 aria-pressed={isActive}
                 className={cn(
-                  "relative shrink-0 pb-1 text-sm transition-colors",
-                  isActive ? "text-ink" : "text-muted hover:text-ink",
+                  "relative shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  isActive
+                    ? "text-white"
+                    : "text-muted hover:bg-subtle hover:text-ink",
                 )}
               >
-                {f}
                 {isActive && (
                   <motion.span
-                    layoutId="work-filter-underline"
-                    className="absolute -bottom-[17px] left-0 h-px w-full bg-ink"
+                    layoutId="work-filter-pill"
+                    className="absolute inset-0 rounded-full bg-ink"
+                    transition={{ type: "spring", stiffness: 400, damping: 34 }}
                   />
                 )}
+                <span className="relative z-10">{f}</span>
               </motion.button>
             );
           })}
