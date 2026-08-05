@@ -38,7 +38,7 @@ export function ProjectCard({
 
   const media = (
     <>
-      <div className="relative aspect-[16/10] overflow-hidden">
+      <div className="relative aspect-video overflow-hidden">
         <MediaPlaceholder
           seed={project.seed}
           src={thumb}
