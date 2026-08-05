@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
+// "Meet The Team" section is hidden for now — set to true to re-enable it.
+const SHOW_TEAM = false;
+
 export default function AboutPage() {
   return (
     <>
@@ -155,7 +158,8 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* Team */}
+      {/* Team — hidden (set SHOW_TEAM = true near the top of this file to re-enable) */}
+      {SHOW_TEAM && (
       <section className="py-12 md:py-16">
         <Container>
           <Reveal className="on-dark overflow-hidden rounded-[24px] bg-dark px-6 py-14 md:px-10 md:py-16">
@@ -223,6 +227,7 @@ export default function AboutPage() {
           </Reveal>
         </Container>
       </section>
+      )}
 
       {/* OrbitLayer ecosystem */}
       <section className="py-8 md:py-12">
