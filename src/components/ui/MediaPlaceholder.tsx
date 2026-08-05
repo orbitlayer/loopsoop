@@ -14,6 +14,7 @@ export function MediaPlaceholder({
   playSize = "md",
   src,
   alt,
+  imgClassName,
   children,
 }: {
   seed?: number;
@@ -23,6 +24,7 @@ export function MediaPlaceholder({
   playSize?: "sm" | "md" | "lg";
   src?: string;
   alt?: string;
+  imgClassName?: string;
   children?: React.ReactNode;
 }) {
   const hx = (seed * 41) % 100;
@@ -49,7 +51,10 @@ export function MediaPlaceholder({
           alt={alt ?? ""}
           loading="lazy"
           decoding="async"
-          className="absolute inset-0 h-full w-full object-cover"
+          className={cn(
+            "absolute inset-0 h-full w-full object-cover",
+            imgClassName,
+          )}
         />
       ) : (
         <div

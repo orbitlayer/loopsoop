@@ -112,6 +112,7 @@ export default function AboutPage() {
                   <MediaPlaceholder
                     seed={61}
                     src="/about/large-right.webp"
+                    imgClassName="object-[center_78%]"
                     className="min-h-full"
                   />
                 </div>
