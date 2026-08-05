@@ -110,7 +110,7 @@ export const projects: Project[] = [
   { id: "boat-airdopes", title: "boAt Airdopes 141", category: "Product Ad", filter: "Commercial", type: "long", seed: 3, youtubeId: DEMO_VIDEO, featured: true },
   { id: "finance-simplified", title: "Finance Simplified", category: "YouTube Video", filter: "Educational", type: "long", seed: 12, youtubeId: DEMO_VIDEO, featured: true },
   { id: "puma-ignite", title: "PUMA Ignite Campaign", category: "Commercial", filter: "Commercial", type: "long", seed: 21, youtubeId: DEMO_VIDEO, featured: true },
-  { id: "karan-ananya", title: "Karan & Ananya", category: "Wedding Film", filter: "Emotional", type: "long", seed: 33, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "clutch-montage", title: "Clutch Moments", category: "Gaming Montage", filter: "Gaming", type: "long", seed: 33, youtubeId: DEMO_VIDEO, featured: true },
   { id: "luxury-redefined", title: "Luxury Redefined", category: "Real Estate Video", filter: "Luxury", type: "long", seed: 44, youtubeId: DEMO_VIDEO, featured: true },
   { id: "true-north", title: "True North", category: "Travel Documentary", filter: "Documentary", type: "long", seed: 51, youtubeId: DEMO_VIDEO, featured: true },
   { id: "nexgen-app", title: "NexGen App Launch", category: "Product Video", filter: "Corporate", type: "long", seed: 72, youtubeId: DEMO_VIDEO },
@@ -130,17 +130,18 @@ export type EditingCategory = {
   name: string;
   description: string;
   seed: number;
+  image: string; // category-card cover image (public/categories/<slug>.webp)
 };
 
 export const editingCategories: EditingCategory[] = [
-  { slug: "documentary", name: "Documentary", description: "Natural, raw and real edits that keep the story authentic.", seed: 51 },
-  { slug: "commercial", name: "Commercial", description: "Punchy, high-converting ads and brand films that sell.", seed: 21 },
-  { slug: "corporate", name: "Corporate", description: "Polished, professional edits for brands and businesses.", seed: 72 },
-  { slug: "emotional", name: "Emotional", description: "Heartfelt storytelling with soulful music and cinematic flow.", seed: 33 },
-  { slug: "fast-pace", name: "Fast Pace", description: "High-energy cuts, quick transitions and impactful beats.", seed: 84 },
-  { slug: "luxury", name: "Luxury", description: "Elegant, refined edits with a premium, high-end feel.", seed: 44 },
-  { slug: "educational", name: "Educational", description: "Clear, engaging edits that make complex ideas easy to follow.", seed: 12 },
-  { slug: "social-media", name: "Social Media", description: "Scroll-stopping edits optimised for reach and engagement.", seed: 91 },
+  { slug: "documentary", name: "Documentary", description: "Natural, raw and real edits that keep the story authentic.", seed: 51, image: "/categories/documentary.webp" },
+  { slug: "commercial", name: "Commercial", description: "Punchy, high-converting ads and brand films that sell.", seed: 21, image: "/categories/commercial.webp" },
+  { slug: "corporate", name: "Corporate", description: "Polished, professional edits for brands and businesses.", seed: 72, image: "/categories/corporate.webp" },
+  { slug: "gaming", name: "Gaming", description: "High-energy gaming edits — montages, highlights and stream moments that hit hard.", seed: 33, image: "/categories/gaming.webp" },
+  { slug: "fast-pace", name: "Fast Pace", description: "High-energy cuts, quick transitions and impactful beats.", seed: 84, image: "/categories/fast-pace.webp" },
+  { slug: "luxury", name: "Luxury", description: "Elegant, refined edits with a premium, high-end feel.", seed: 44, image: "/categories/luxury.webp" },
+  { slug: "educational", name: "Educational", description: "Clear, engaging edits that make complex ideas easy to follow.", seed: 12, image: "/categories/educational.webp" },
+  { slug: "social-media", name: "Social Media", description: "Scroll-stopping edits optimised for reach and engagement.", seed: 91, image: "/categories/social-media.webp" },
 ];
 
 /* Translate between a ?category= slug and its display name. */

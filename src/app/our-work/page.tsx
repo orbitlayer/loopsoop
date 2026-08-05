@@ -61,6 +61,8 @@ export default function OurWorkPage() {
                 >
                   <MediaPlaceholder
                     seed={c.seed}
+                    src={c.image}
+                    alt={c.name}
                     className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
