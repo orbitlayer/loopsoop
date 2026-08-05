@@ -22,17 +22,17 @@ const socialLinks = [
 // "Company" renamed to "Explore" — these are the site's main pages.
 const exploreLinks = [
   { label: "Home", href: "/" },
-  { label: "Our Editing", href: "/our-editing" },
+  { label: "Our Work", href: "/our-work" },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
 ];
 
 const serviceLinks = [
-  { label: "Documentary", href: "/our-work?category=documentary" },
-  { label: "Commercial", href: "/our-work?category=commercial" },
-  { label: "Corporate", href: "/our-work?category=corporate" },
-  { label: "Social Media", href: "/our-work?category=social-media" },
-  { label: "Educational", href: "/our-work?category=educational" },
+  { label: "Documentary", href: "/portfolio?category=documentary" },
+  { label: "Commercial", href: "/portfolio?category=commercial" },
+  { label: "Corporate", href: "/portfolio?category=corporate" },
+  { label: "Social Media", href: "/portfolio?category=social-media" },
+  { label: "Educational", href: "/portfolio?category=educational" },
 ];
 
 export function Footer() {

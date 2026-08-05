@@ -4,8 +4,8 @@ import { site } from "@/lib/data";
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes: { path: string; priority: number }[] = [
     { path: "", priority: 1 },
-    { path: "/our-editing", priority: 0.8 },
     { path: "/our-work", priority: 0.8 },
+    { path: "/portfolio", priority: 0.8 },
     { path: "/about", priority: 0.8 },
     { path: "/contact", priority: 0.8 },
     { path: "/privacy", priority: 0.3 },

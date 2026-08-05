@@ -43,11 +43,11 @@ export const whatsappUrl = (message: string = WHATSAPP_DEFAULT_MESSAGE) =>
 
 /* Visible primary navigation.
    Hidden-but-live routes (kept functional, intentionally not listed here):
-   - /our-work    → the portfolio "engine" (reached via Our Editing categories)
+   - /portfolio   → the gallery "engine" (reached via the Our Work categories)
    - /clients     → Past Clients (re-enable later by adding it back) */
 export const nav = [
   { label: "Home", href: "/" },
-  { label: "Our Editing", href: "/our-editing" },
+  { label: "Our Work", href: "/our-work" },
   { label: "About", href: "/about" },
 ] as const;
 

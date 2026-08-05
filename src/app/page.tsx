@@ -55,7 +55,7 @@ export default function HomePage() {
               </p>
             </Reveal>
             <Reveal delay={0.18} className="mt-8">
-              <Button href="/our-work">Explore Our Work</Button>
+              <Button href="/portfolio">Explore Our Work</Button>
             </Reveal>
           </div>
         </Container>
@@ -103,7 +103,7 @@ export default function HomePage() {
           <SectionHeading
             label="Our Work"
             title="Featured Projects"
-            action={<ArrowLink href="/our-work">View All Projects</ArrowLink>}
+            action={<ArrowLink href="/portfolio">View All Projects</ArrowLink>}
           />
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((p, i) => (
