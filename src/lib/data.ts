@@ -95,6 +95,7 @@ export type Project = {
   title: string;
   category: string; // display label
   filter: string; // matches a filter chip on /our-work (an editingCategories name)
+  type: "long" | "short"; // long-form (16:9) or short-form (9:16) — drives the subsection
   seed: number; // deterministic placeholder variation (fallback when no youtubeId)
   youtubeId?: string; // YouTube video ID — powers the thumbnail + modal player
   featured?: boolean;
@@ -106,18 +107,18 @@ export type Project = {
 const DEMO_VIDEO = "aqz-KE-bpKQ";
 
 export const projects: Project[] = [
-  { id: "boat-airdopes", title: "boAt Airdopes 141", category: "Product Ad", filter: "Commercial", seed: 3, youtubeId: DEMO_VIDEO, featured: true },
-  { id: "finance-simplified", title: "Finance Simplified", category: "YouTube Video", filter: "Educational", seed: 12, youtubeId: DEMO_VIDEO, featured: true },
-  { id: "puma-ignite", title: "PUMA Ignite Campaign", category: "Commercial", filter: "Commercial", seed: 21, youtubeId: DEMO_VIDEO, featured: true },
-  { id: "karan-ananya", title: "Karan & Ananya", category: "Wedding Film", filter: "Emotional", seed: 33, youtubeId: DEMO_VIDEO, featured: true },
-  { id: "luxury-redefined", title: "Luxury Redefined", category: "Real Estate Video", filter: "Luxury", seed: 44, youtubeId: DEMO_VIDEO, featured: true },
-  { id: "true-north", title: "True North", category: "Travel Documentary", filter: "Documentary", seed: 51, youtubeId: DEMO_VIDEO, featured: true },
-  { id: "coca-cola-zero", title: "Coca-Cola Zero", category: "Commercial", filter: "Commercial", seed: 63, youtubeId: DEMO_VIDEO },
-  { id: "nexgen-app", title: "NexGen App Launch", category: "Product Video", filter: "Corporate", seed: 72, youtubeId: DEMO_VIDEO },
-  { id: "ride-beyond", title: "Ride Beyond", category: "Brand Film", filter: "Fast Pace", seed: 84, youtubeId: DEMO_VIDEO },
-  { id: "minimalist-skincare", title: "Minimalist Skincare", category: "Product Ad", filter: "Social Media", seed: 91, youtubeId: DEMO_VIDEO },
-  { id: "no-limits", title: "No Limits", category: "Fitness Campaign", filter: "Short Form", seed: 7, youtubeId: DEMO_VIDEO },
-  { id: "urban-frames", title: "Urban Frames", category: "Cinematic Reel", filter: "Documentary", seed: 18, youtubeId: DEMO_VIDEO },
+  { id: "boat-airdopes", title: "boAt Airdopes 141", category: "Product Ad", filter: "Commercial", type: "long", seed: 3, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "finance-simplified", title: "Finance Simplified", category: "YouTube Video", filter: "Educational", type: "long", seed: 12, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "puma-ignite", title: "PUMA Ignite Campaign", category: "Commercial", filter: "Commercial", type: "long", seed: 21, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "karan-ananya", title: "Karan & Ananya", category: "Wedding Film", filter: "Emotional", type: "long", seed: 33, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "luxury-redefined", title: "Luxury Redefined", category: "Real Estate Video", filter: "Luxury", type: "long", seed: 44, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "true-north", title: "True North", category: "Travel Documentary", filter: "Documentary", type: "long", seed: 51, youtubeId: DEMO_VIDEO, featured: true },
+  { id: "nexgen-app", title: "NexGen App Launch", category: "Product Video", filter: "Corporate", type: "long", seed: 72, youtubeId: DEMO_VIDEO },
+  { id: "ride-beyond", title: "Ride Beyond", category: "Brand Film", filter: "Fast Pace", type: "long", seed: 84, youtubeId: DEMO_VIDEO },
+  { id: "coca-cola-zero", title: "Coca-Cola Zero", category: "Commercial Reel", filter: "Commercial", type: "short", seed: 63, youtubeId: DEMO_VIDEO },
+  { id: "urban-frames", title: "Urban Frames", category: "Cinematic Reel", filter: "Documentary", type: "short", seed: 18, youtubeId: DEMO_VIDEO },
+  { id: "minimalist-skincare", title: "Minimalist Skincare", category: "Product Reel", filter: "Social Media", type: "short", seed: 91, youtubeId: DEMO_VIDEO },
+  { id: "no-limits", title: "No Limits", category: "Fitness Reel", filter: "Social Media", type: "short", seed: 7, youtubeId: DEMO_VIDEO },
 ];
 
 /* Unified editing categories.
@@ -140,7 +141,6 @@ export const editingCategories: EditingCategory[] = [
   { slug: "luxury", name: "Luxury", description: "Elegant, refined edits with a premium, high-end feel.", seed: 44 },
   { slug: "educational", name: "Educational", description: "Clear, engaging edits that make complex ideas easy to follow.", seed: 12 },
   { slug: "social-media", name: "Social Media", description: "Scroll-stopping edits optimised for reach and engagement.", seed: 91 },
-  { slug: "short-form", name: "Short Form", description: "Snappy reels and shorts built for vertical, bite-sized viewing.", seed: 7 },
 ];
 
 /* Translate between a ?category= slug and its display name. */

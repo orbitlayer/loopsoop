@@ -10,14 +10,17 @@ import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 export function ProjectCard({
   project,
   showArrow = false,
+  orientation = "landscape",
   className,
 }: {
   project: Project;
   showArrow?: boolean;
+  orientation?: "landscape" | "portrait";
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const hasVideo = Boolean(project.youtubeId);
+  const portrait = orientation === "portrait";
   const thumb = hasVideo
     ? `https://i.ytimg.com/vi/${project.youtubeId}/hqdefault.jpg`
     : undefined;
@@ -38,22 +41,45 @@ export function ProjectCard({
 
   const media = (
     <>
-      <div className="relative aspect-video overflow-hidden">
+      <div
+        className={cn(
+          "relative overflow-hidden",
+          portrait ? "aspect-[9/16]" : "aspect-video",
+        )}
+      >
         <MediaPlaceholder
           seed={project.seed}
           src={thumb}
           alt={hasVideo ? `${project.title} — play video` : undefined}
           vignette
           play={hasVideo}
+          playSize={portrait ? "sm" : "md"}
           className="transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
         />
       </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5">
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3",
+          portrait ? "p-4" : "p-5",
+        )}
+      >
         <div>
-          <h3 className="font-display text-lg font-medium leading-tight text-white">
+          <h3
+            className={cn(
+              "font-display font-medium leading-tight text-white",
+              portrait ? "text-base" : "text-lg",
+            )}
+          >
             {project.title}
           </h3>
-          <p className="mt-1 text-sm text-white/60">{project.category}</p>
+          <p
+            className={cn(
+              "mt-1 text-white/60",
+              portrait ? "text-xs" : "text-sm",
+            )}
+          >
+            {project.category}
+          </p>
         </div>
         {showArrow && !hasVideo && (
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white/70 transition-colors duration-300 group-hover:text-white">
@@ -101,7 +127,10 @@ export function ProjectCard({
             aria-label={`${project.title} — video`}
           >
             <motion.div
-              className="relative w-full max-w-4xl"
+              className={cn(
+                "relative w-full",
+                portrait ? "max-w-[400px]" : "max-w-4xl",
+              )}
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
@@ -116,7 +145,12 @@ export function ProjectCard({
               >
                 <X className="h-5 w-5" />
               </button>
-              <div className="aspect-video overflow-hidden rounded-xl bg-black shadow-2xl">
+              <div
+                className={cn(
+                  "overflow-hidden rounded-xl bg-black shadow-2xl",
+                  portrait ? "aspect-[9/16]" : "aspect-video",
+                )}
+              >
                 <iframe
                   src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
                   title={project.title}

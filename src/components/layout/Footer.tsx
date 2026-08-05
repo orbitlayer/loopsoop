@@ -32,7 +32,7 @@ const serviceLinks = [
   { label: "Commercial", href: "/our-work?category=commercial" },
   { label: "Corporate", href: "/our-work?category=corporate" },
   { label: "Social Media", href: "/our-work?category=social-media" },
-  { label: "Short Form", href: "/our-work?category=short-form" },
+  { label: "Educational", href: "/our-work?category=educational" },
 ];
 
 export function Footer() {
