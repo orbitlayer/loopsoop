@@ -7,7 +7,6 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
-import { LoopMark } from "@/components/ui/Logo";
 import { PageHero } from "@/components/sections/PageHero";
 import { StatsBand } from "@/components/sections/StatsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -100,20 +99,21 @@ export default function AboutPage() {
               <div className="grid h-full grid-cols-2 gap-4">
                 <div className="flex flex-col gap-4">
                   <div className="aspect-[4/3] overflow-hidden rounded-[20px]">
-                    <MediaPlaceholder seed={13} />
+                    <MediaPlaceholder seed={13} src="/about/top-left.webp" />
                   </div>
-                  <div className="relative aspect-square overflow-hidden rounded-[20px]">
-                    <MediaPlaceholder seed={2} />
-                    <span className="absolute inset-0 flex items-center justify-center">
-                      <LoopMark className="h-9 w-auto invert" />
-                    </span>
+                  <div className="aspect-square overflow-hidden rounded-[20px]">
+                    <MediaPlaceholder seed={2} src="/about/middle-left.webp" />
                   </div>
                   <div className="aspect-[4/3] overflow-hidden rounded-[20px]">
-                    <MediaPlaceholder seed={47} />
+                    <MediaPlaceholder seed={47} src="/about/bottom-left.webp" />
                   </div>
                 </div>
                 <div className="overflow-hidden rounded-[20px]">
-                  <MediaPlaceholder seed={61} className="min-h-full" />
+                  <MediaPlaceholder
+                    seed={61}
+                    src="/about/large-right.webp"
+                    className="min-h-full"
+                  />
                 </div>
               </div>
             </Reveal>
