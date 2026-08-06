@@ -30,6 +30,7 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
+        centered
         label="Contact Us"
         title={
           <>
@@ -61,9 +62,6 @@ export default function ContactPage() {
             </p>
           </div>
         }
-        seed={34}
-        image="/contact/hero.webp"
-        imageAlt="Loopsoop video editing studio workstation"
       />
 
       {/* WhatsApp — the only contact / quote channel */}
