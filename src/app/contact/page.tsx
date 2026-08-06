@@ -42,12 +42,16 @@ export default function ContactPage() {
         extra={
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2">
-              {[15, 41, 66].map((s) => (
+              {[
+                "/about/top-left.webp",
+                "/about/middle-left.webp",
+                "/about/bottom-left.webp",
+              ].map((src) => (
                 <span
-                  key={s}
+                  key={src}
                   className="h-8 w-8 overflow-hidden rounded-full border-2 border-bg"
                 >
-                  <MediaPlaceholder seed={s} />
+                  <MediaPlaceholder src={src} alt="" />
                 </span>
               ))}
             </div>
@@ -58,6 +62,8 @@ export default function ContactPage() {
           </div>
         }
         seed={34}
+        image="/contact/hero.webp"
+        imageAlt="Loopsoop video editing studio workstation"
       />
 
       {/* WhatsApp — the only contact / quote channel */}

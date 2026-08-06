@@ -11,11 +11,10 @@ export const site = {
   description:
     "Loopsoop is the creative division of OrbitLayer, providing premium Video Editing and Graphic Design services for creators, startups, agencies, and businesses.",
   email: "hello@loopsoop.in",
-  phone: "+91 98765 43210",
-  phoneHref: "+919876543210",
+  phone: "+91 98351 06943",
+  phoneHref: "+919835106943",
   // WhatsApp number in international format, digits only (no +, spaces or dashes).
-  // ⚠️ Placeholder — replace with the real business WhatsApp number.
-  whatsapp: "919876543210",
+  whatsapp: "919835106943",
   hours: "Mon – Sat, 10AM – 8PM IST",
   discord: "discord.gg/loopsoop",
   discordHref: "https://discord.gg/loopsoop",
@@ -55,27 +54,22 @@ export const nav = [
    `style` maps to a small set of typographic treatments in <BrandMark>. */
 export type Brand = { name: string; style?: "serif" | "italic" | "wide" | "black" };
 
-export const trustedHome: Brand[] = [
-  { name: "boAt", style: "black" },
-  { name: "PUMA", style: "italic" },
-  { name: "PHILIPS", style: "wide" },
-  { name: "zomato", style: "italic" },
-  { name: "AJIO", style: "wide" },
-  { name: "slice" },
-  { name: "unacademy" },
-  { name: "Groww", style: "black" },
+/* Same trusted-brand roster is shown on both Home and Contact. */
+const trustedBrands: Brand[] = [
+  { name: "OrbitLayer", style: "black" },
+  { name: "Mr Nefgamer", style: "italic" },
+  { name: "Xtra Gaming", style: "wide" },
+  { name: "Meesho", style: "italic" },
+  { name: "Xstart", style: "black" },
+  { name: "Optimal Reality", style: "serif" },
+  { name: "Nova Studios", style: "wide" },
+  { name: "Pixelforge", style: "black" },
+  { name: "Vortex Media", style: "italic" },
 ];
 
-export const trustedClients: Brand[] = [
-  { name: "boAt", style: "black" },
-  { name: "PUMA", style: "italic" },
-  { name: "Coca-Cola", style: "serif" },
-  { name: "ZEE5", style: "black" },
-  { name: "slice" },
-  { name: "AMP", style: "wide" },
-  { name: "JBL", style: "black" },
-  { name: "Meesho", style: "italic" },
-];
+export const trustedHome: Brand[] = trustedBrands;
+
+export const trustedClients: Brand[] = trustedBrands;
 
 /* Portfolio categories (home) */
 export type Category = { label: string; icon: string };

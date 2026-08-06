@@ -55,7 +55,7 @@ export default function HomePage() {
               </p>
             </Reveal>
             <Reveal delay={0.18} className="mt-8">
-              <Button href="/portfolio">Explore Our Work</Button>
+              <Button href="/our-work">Explore Our Work</Button>
             </Reveal>
           </div>
         </Container>

@@ -15,6 +15,8 @@ export function PageHero({
   seed = 24,
   play = false,
   centered = false,
+  image,
+  imageAlt,
 }: {
   label: string;
   title: React.ReactNode;
@@ -24,6 +26,8 @@ export function PageHero({
   seed?: number;
   play?: boolean;
   centered?: boolean;
+  image?: string;
+  imageAlt?: string;
 }) {
   if (centered) {
     return (
@@ -63,7 +67,14 @@ export function PageHero({
     <section className="relative overflow-hidden pb-16 pt-32 md:pb-20 md:pt-40 lg:min-h-[600px]">
       {/* Edge-bleed image (desktop) */}
       <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-[48%] lg:block">
-        <MediaPlaceholder seed={seed} play={play} playSize="lg" className="group h-full" />
+        <MediaPlaceholder
+          seed={seed}
+          src={image}
+          alt={imageAlt}
+          play={play}
+          playSize="lg"
+          className="group h-full"
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/25 to-transparent" />
       </div>
 
@@ -97,7 +108,14 @@ export function PageHero({
         {/* Contained image (mobile / tablet) */}
         <Reveal delay={0.1} className="mt-10 lg:hidden">
           <div className="relative aspect-[16/11] overflow-hidden rounded-[20px]">
-            <MediaPlaceholder seed={seed} play={play} playSize="md" className="group" />
+            <MediaPlaceholder
+              seed={seed}
+              src={image}
+              alt={imageAlt}
+              play={play}
+              playSize="md"
+              className="group"
+            />
           </div>
         </Reveal>
       </Container>
