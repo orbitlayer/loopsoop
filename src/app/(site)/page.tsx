@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
-import {
-  categories,
-  projects,
-  statsMain,
-  stylesShort,
-  trustedHome,
-} from "@/lib/data";
+import { categories, statsMain, stylesShort, trustedHome } from "@/lib/data";
+import { getFeaturedProjects } from "@/lib/portfolio";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/lib/icons";
 import { Container } from "@/components/ui/Container";
@@ -20,13 +15,16 @@ import { LogoRow } from "@/components/sections/LogoStrip";
 import { StatsBand } from "@/components/sections/StatsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
 
-const featured = projects.filter((p) => p.featured);
-
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-export default function HomePage() {
+// Always fresh so featured items managed in the admin panel appear immediately.
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const featured = await getFeaturedProjects();
+
   return (
     <>
       {/* ---------------------------------------------------------------- Hero */}

@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Inter_Tight, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/data";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { MotionProvider } from "@/components/providers/MotionProvider";
-import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -56,28 +52,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Minimal root: <html>/<body>, fonts, global styles and site-wide metadata.
+  // The public chrome (nav/footer) lives in (site)/layout.tsx; the admin app
+  // has its own chrome in (admin)/layout.tsx.
   return (
     <html
       lang="en"
       className={`${inter.variable} ${interTight.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-bg">
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-white"
-        >
-          Skip to content
-        </a>
-        <MotionProvider>
-          <Navbar />
-          <main id="main" className="flex flex-1 flex-col">
-            {children}
-          </main>
-          <Footer />
-        </MotionProvider>
-        <WhatsAppFloat />
-      </body>
+      <body className="flex min-h-full flex-col bg-bg">{children}</body>
     </html>
   );
 }

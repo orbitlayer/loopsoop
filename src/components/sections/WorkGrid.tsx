@@ -3,12 +3,7 @@
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  categoryNameToSlug,
-  projects,
-  workFilters,
-  type Project,
-} from "@/lib/data";
+import { categoryNameToSlug, workFilters, type Project } from "@/lib/data";
 import { cn } from "@/lib/cn";
 import { Container } from "@/components/ui/Container";
 import { ProjectCard } from "@/components/sections/ProjectCard";
@@ -63,9 +58,13 @@ function Subsection({
 export function WorkGrid({
   initialCategory = "All Work",
   className,
+  projects = [],
+  loadError = false,
 }: {
   initialCategory?: string;
   className?: string;
+  projects?: Project[];
+  loadError?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -129,7 +128,16 @@ export function WorkGrid({
         </div>
 
         {/* Long-form + Short-form subsections (each hidden when empty) */}
-        {isEmpty ? (
+        {loadError ? (
+          <div className="mt-16 text-center">
+            <p className="text-muted">
+              Unable to load portfolio projects right now.
+            </p>
+            <p className="mt-1 text-sm text-faint">
+              Please refresh the page or try again shortly.
+            </p>
+          </div>
+        ) : isEmpty ? (
           <p className="mt-16 text-center text-muted">
             No projects in this category yet — check back soon.
           </p>
