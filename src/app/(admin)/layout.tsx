@@ -6,16 +6,20 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false, nocache: true },
 };
 
-/* Admin shell — dark, self-contained, no public nav/footer. Rendered inside the
-   minimal root <html>/<body>; the wrapper covers the body background. */
+/* Admin shell — layered near-black with a soft top glow. Self-contained, no
+   public nav/footer. Rendered inside the minimal root <html>/<body>. */
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#0b0b0d] text-neutral-100 [color-scheme:dark]">
-      {children}
+    <div className="relative min-h-screen bg-[#08080a] text-neutral-200 [color-scheme:dark]">
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 bg-[radial-gradient(70%_55%_at_50%_-10%,rgba(255,255,255,0.06),transparent_70%)]"
+      />
+      <div className="relative">{children}</div>
     </div>
   );
 }
