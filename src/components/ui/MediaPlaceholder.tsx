@@ -1,10 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import { Play } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 /*
- * Media block. If `src` is provided it renders that image (e.g. a YouTube
- * thumbnail); otherwise it renders a self-contained, on-brand monochrome
- * placeholder that varies deterministically by `seed`.
+ * Media block. If `src` is provided it renders that image (e.g. a YouTube or
+ * Google Drive thumbnail); if the image fails to load, or no `src` is given, it
+ * falls back to a self-contained on-brand monochrome placeholder that varies
+ * deterministically by `seed` — so a missing thumbnail never shows a broken icon.
  */
 export function MediaPlaceholder({
   seed = 0,
@@ -27,6 +31,9 @@ export function MediaPlaceholder({
   imgClassName?: string;
   children?: React.ReactNode;
 }) {
+  const [errored, setErrored] = useState(false);
+  const showImg = Boolean(src) && !errored;
+
   const hx = (seed * 41) % 100;
   const hy = (seed * 67) % 100;
   const playDims = {
@@ -38,19 +45,20 @@ export function MediaPlaceholder({
   return (
     <div
       className={cn(
-        src
+        showImg
           ? "relative h-full w-full overflow-hidden bg-black"
           : "media h-full w-full",
         className,
       )}
     >
-      {src ? (
+      {showImg ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}
           alt={alt ?? ""}
           loading="lazy"
           decoding="async"
+          onError={() => setErrored(true)}
           className={cn(
             "absolute inset-0 h-full w-full object-cover",
             imgClassName,

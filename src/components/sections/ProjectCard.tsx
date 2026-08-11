@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, X } from "lucide-react";
 import type { Project } from "@/lib/data";
 import { cn } from "@/lib/cn";
+import { videoThumbnail, videoEmbedUrl } from "@/lib/video";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 
 export function ProjectCard({
@@ -19,11 +20,10 @@ export function ProjectCard({
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
-  const hasVideo = Boolean(project.youtubeId);
+  const embedUrl = videoEmbedUrl(project);
+  const hasVideo = Boolean(embedUrl);
   const portrait = orientation === "portrait";
-  const thumb = hasVideo
-    ? `https://i.ytimg.com/vi/${project.youtubeId}/hqdefault.jpg`
-    : undefined;
+  const thumb = videoThumbnail(project);
 
   // Close on Escape + lock body scroll while the player is open.
   useEffect(() => {
@@ -152,7 +152,7 @@ export function ProjectCard({
                 )}
               >
                 <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+                  src={embedUrl}
                   title={project.title}
                   allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                   allowFullScreen

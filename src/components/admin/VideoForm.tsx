@@ -1,13 +1,36 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { extractYouTubeId, youtubeThumb, youtubeWatchUrl } from "@/lib/youtube";
+import {
+  extractDriveId,
+  driveThumbnail,
+  isValidVideoUrl,
+  VIDEO_PROVIDERS,
+  type VideoProvider,
+} from "@/lib/video";
+import { Button, Field, SelectInput, Switch, TextInput } from "./ui";
 import type { AdminCategory, PortfolioItem, VideoType } from "./types";
 
-/* Add / edit a portfolio video. Handles its own Supabase insert/update; calls
-   onSaved() so the dashboard can refetch. RLS ensures only admins can write. */
+type ItemWrite = {
+  category_id: string;
+  title: string;
+  subtitle: string | null;
+  video_provider: VideoProvider;
+  video_type: VideoType;
+  sort_order: number;
+  is_active: boolean;
+  is_featured: boolean;
+  video_url: string;
+  youtube_id: string | null;
+  youtube_url: string | null;
+  thumbnail_url: string | null;
+};
+
+/* Add / edit a portfolio video (YouTube or Google Drive). Handles its own
+   Supabase insert/update; calls onSaved() so the dashboard refetches. RLS
+   ensures only admins can write. */
 export function VideoForm({
   categories,
   item,
@@ -26,11 +49,19 @@ export function VideoForm({
   onSaved: () => void;
 }) {
   const editing = Boolean(item);
+  const [provider, setProvider] = useState<VideoProvider>(
+    item?.video_provider ?? "youtube",
+  );
   const [title, setTitle] = useState(item?.title ?? "");
-  const [url, setUrl] = useState(item?.youtube_url ?? "");
+  const [url, setUrl] = useState(item?.video_url ?? item?.youtube_url ?? "");
+  const [thumb, setThumb] = useState(item?.thumbnail_url ?? "");
   const [subtitle, setSubtitle] = useState(item?.subtitle ?? "");
-  const [categoryId, setCategoryId] = useState(item?.category_id ?? defaultCategoryId);
-  const [videoType, setVideoType] = useState<VideoType>(item?.video_type ?? defaultType);
+  const [categoryId, setCategoryId] = useState(
+    item?.category_id ?? defaultCategoryId,
+  );
+  const [videoType, setVideoType] = useState<VideoType>(
+    item?.video_type ?? defaultType,
+  );
   const [order, setOrder] = useState<number>(item?.sort_order ?? nextSortOrder);
   const [isActive, setIsActive] = useState(item?.is_active ?? true);
   const [isFeatured, setIsFeatured] = useState(item?.is_featured ?? false);
@@ -45,7 +76,15 @@ export function VideoForm({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const previewId = extractYouTubeId(url);
+  const isDrive = provider === "google_drive";
+  const ytId = extractYouTubeId(url);
+  const drId = extractDriveId(url);
+  const urlValid = isDrive ? Boolean(drId) : Boolean(ytId);
+  const previewThumb = isDrive
+    ? thumb.trim() || (drId ? driveThumbnail(drId) : undefined)
+    : ytId
+      ? youtubeThumb(ytId)
+      : undefined;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -55,26 +94,34 @@ export function VideoForm({
       setError("Please enter a title.");
       return;
     }
-    const youtubeId = extractYouTubeId(url);
-    if (!youtubeId) {
+    if (!isValidVideoUrl(provider, url)) {
       setError(
-        "Enter a valid YouTube URL (watch, youtu.be, embed or shorts link).",
+        isDrive
+          ? "Enter a valid Google Drive link (…/file/d/FILE_ID/view)."
+          : "Enter a valid YouTube URL (watch, youtu.be, embed or shorts link).",
       );
       return;
     }
 
     setPending(true);
     const supabase = createClient();
-    const payload = {
+
+    const ytUrl = ytId ? youtubeWatchUrl(ytId) : null;
+    const payload: ItemWrite = {
       category_id: categoryId,
       title: title.trim(),
       subtitle: subtitle.trim() || null,
-      youtube_id: youtubeId,
-      youtube_url: youtubeWatchUrl(youtubeId),
+      video_provider: provider,
       video_type: videoType,
       sort_order: Number.isFinite(order) ? order : nextSortOrder,
       is_active: isActive,
       is_featured: isFeatured,
+      video_url: isDrive
+        ? `https://drive.google.com/file/d/${drId}/view`
+        : ytUrl!,
+      youtube_id: isDrive ? null : ytId,
+      youtube_url: isDrive ? null : ytUrl,
+      thumbnail_url: isDrive ? thumb.trim() || null : null,
     };
 
     const { error: dbError } = editing
@@ -111,103 +158,136 @@ export function VideoForm({
           {editing ? "Edit video" : "Add video"}
         </h2>
         <p className="mt-0.5 text-sm text-neutral-500">
-          Paste a YouTube link — the thumbnail and player are generated for you.
+          Paste a link — the thumbnail and player are generated for you.
         </p>
 
         <div className="mt-5 space-y-4">
           <Field label="Title">
-            <input
+            <TextInput
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Documentary Editing Sample 01"
-              className={inputCls}
               autoFocus
             />
           </Field>
 
-          <Field label="YouTube URL">
-            <input
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Field label="Video source">
+              <SelectInput
+                value={provider}
+                onChange={(e) => setProvider(e.target.value as VideoProvider)}
+              >
+                {VIDEO_PROVIDERS.map((p) => (
+                  <option key={p.value} value={p.value}>
+                    {p.label}
+                  </option>
+                ))}
+              </SelectInput>
+            </Field>
+            <Field label="Type">
+              <SelectInput
+                value={videoType}
+                onChange={(e) => setVideoType(e.target.value as VideoType)}
+              >
+                <option value="long">Long Form</option>
+                <option value="short">Short Form</option>
+              </SelectInput>
+            </Field>
+          </div>
+
+          <Field
+            label={isDrive ? "Google Drive URL" : "YouTube URL"}
+            hint={
+              isDrive
+                ? "Share the file as “Anyone with the link can view” so it plays on the site."
+                : undefined
+            }
+          >
+            <TextInput
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://www.youtube.com/watch?v=…"
-              className={inputCls}
+              placeholder={
+                isDrive
+                  ? "https://drive.google.com/file/d/FILE_ID/view"
+                  : "https://www.youtube.com/watch?v=…"
+              }
             />
             {url.trim() && (
               <div className="mt-2.5">
-                {previewId ? (
+                {urlValid ? (
                   <div className="flex items-center gap-2.5 rounded-lg border border-emerald-500/20 bg-emerald-500/[0.06] p-2">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={youtubeThumb(previewId)}
-                      alt=""
-                      className="h-10 w-[71px] rounded object-cover"
-                    />
+                    {previewThumb && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={previewThumb}
+                        alt=""
+                        onError={(e) => (e.currentTarget.style.display = "none")}
+                        className="h-10 w-[71px] rounded bg-black/40 object-cover"
+                      />
+                    )}
                     <span className="text-xs text-emerald-300">
-                      Valid video
-                      <span className="ml-1 text-emerald-500/70">{previewId}</span>
+                      Valid {isDrive ? "Drive file" : "video"}
+                      <span className="ml-1 text-emerald-500/70">
+                        {isDrive ? drId : ytId}
+                      </span>
                     </span>
                   </div>
                 ) : (
                   <p className="text-xs text-amber-400">
-                    Not a recognizable YouTube link yet.
+                    Not a recognizable {isDrive ? "Google Drive" : "YouTube"} link
+                    yet.
                   </p>
                 )}
               </div>
             )}
           </Field>
 
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="Type">
-              <SelectWrap>
-                <select
-                  value={videoType}
-                  onChange={(e) => setVideoType(e.target.value as VideoType)}
-                  className={selectCls}
-                >
-                  <option value="long">Long Form</option>
-                  <option value="short">Short Form</option>
-                </select>
-              </SelectWrap>
-            </Field>
-            <Field label="Category">
-              <SelectWrap>
-                <select
-                  value={categoryId}
-                  onChange={(e) => setCategoryId(e.target.value)}
-                  className={selectCls}
-                >
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </SelectWrap>
-            </Field>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="Subtitle (optional)">
-              <input
-                value={subtitle}
-                onChange={(e) => setSubtitle(e.target.value)}
-                placeholder="e.g. Travel Documentary"
-                className={inputCls}
+          {isDrive && (
+            <Field
+              label="Thumbnail URL (optional)"
+              hint="Leave blank to auto-generate from the Drive file."
+            >
+              <TextInput
+                value={thumb}
+                onChange={(e) => setThumb(e.target.value)}
+                placeholder="https://…/thumbnail.jpg"
               />
             </Field>
+          )}
+
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Category">
+              <SelectInput
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+              >
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </SelectInput>
+            </Field>
             <Field label="Order">
-              <input
+              <TextInput
                 type="number"
                 value={order}
                 onChange={(e) => setOrder(parseInt(e.target.value, 10))}
-                className={inputCls}
               />
             </Field>
           </div>
 
-          <div className="flex flex-wrap gap-3 pt-1">
-            <Toggle label="Published" checked={isActive} onChange={setIsActive} />
-            <Toggle
+          <Field label="Subtitle (optional)">
+            <TextInput
+              value={subtitle}
+              onChange={(e) => setSubtitle(e.target.value)}
+              placeholder="e.g. Travel Documentary"
+            />
+          </Field>
+
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-lg border border-white/10 bg-black/20 px-4 py-3">
+            <Switch label="Published" checked={isActive} onChange={setIsActive} />
+            <Switch
               label="Featured on home"
               checked={isFeatured}
               onChange={setIsFeatured}
@@ -225,87 +305,14 @@ export function VideoForm({
         )}
 
         <div className="mt-6 flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg border border-white/15 px-4 py-2 text-sm text-neutral-300 transition-colors hover:bg-white/5"
-          >
+          <Button type="button" variant="ghost" onClick={onClose}>
             Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={pending}
-            className="rounded-lg bg-white px-5 py-2 text-sm font-semibold text-black transition-opacity hover:opacity-90 disabled:opacity-60"
-          >
+          </Button>
+          <Button type="submit" disabled={pending}>
             {pending ? "Saving…" : editing ? "Save changes" : "Add video"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>
-  );
-}
-
-const inputCls =
-  "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-neutral-600 focus:border-white/40 focus:ring-2 focus:ring-white/10";
-
-const selectCls =
-  "w-full cursor-pointer appearance-none rounded-lg border border-white/10 bg-black/30 px-3 py-2.5 pr-9 text-sm text-white outline-none transition-colors focus:border-white/40 focus:ring-2 focus:ring-white/10";
-
-function SelectWrap({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative">
-      {children}
-      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-1.5 block text-xs font-medium text-neutral-400">
-        {label}
-      </span>
-      {children}
-    </label>
-  );
-}
-
-function Toggle({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (v: boolean) => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={() => onChange(!checked)}
-      role="switch"
-      aria-checked={checked}
-      className="flex items-center gap-2 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-neutral-300 transition-colors hover:border-white/20"
-    >
-      <span
-        className={`relative h-5 w-9 rounded-full transition-colors ${
-          checked ? "bg-emerald-500/80" : "bg-white/15"
-        }`}
-      >
-        <span
-          className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform ${
-            checked ? "translate-x-4" : "translate-x-0.5"
-          }`}
-        />
-      </span>
-      {label}
-    </button>
   );
 }

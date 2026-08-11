@@ -1,6 +1,7 @@
 import "server-only";
 import { createPublicClient, hasSupabaseEnv } from "@/lib/supabase/public";
 import { projects as staticProjects, type Project } from "@/lib/data";
+import { extractDriveId, type VideoProvider } from "@/lib/video";
 
 /*
  * Data-access layer for the PUBLIC site. Reads published portfolio items from
@@ -13,7 +14,10 @@ type PortfolioRow = {
   id: string;
   title: string;
   subtitle: string | null;
-  youtube_id: string;
+  youtube_id: string | null;
+  video_provider: VideoProvider | null;
+  video_url: string | null;
+  thumbnail_url: string | null;
   video_type: "long" | "short";
   is_featured: boolean;
   sort_order: number;
@@ -21,18 +25,25 @@ type PortfolioRow = {
 };
 
 const SELECT =
-  "id,title,subtitle,youtube_id,video_type,is_featured,sort_order,categories(name,slug)";
+  "id,title,subtitle,youtube_id,video_provider,video_url,thumbnail_url,video_type,is_featured,sort_order,categories(name,slug)";
 
 function rowToProject(r: PortfolioRow): Project {
   const categoryName = r.categories?.name ?? "";
+  const provider: VideoProvider = r.video_provider ?? "youtube";
   return {
     id: r.id,
     title: r.title,
     category: r.subtitle?.trim() || categoryName, // small label under the title
     filter: categoryName, // matches the Our Work / portfolio filter chips
     type: r.video_type,
-    seed: 0, // real YouTube thumbnail is always present, so seed is unused
-    youtubeId: r.youtube_id,
+    seed: 0, // real thumbnail is normally present, so seed is unused
+    provider,
+    youtubeId: r.youtube_id ?? undefined,
+    driveId:
+      provider === "google_drive"
+        ? extractDriveId(r.video_url) ?? undefined
+        : undefined,
+    thumbnailUrl: r.thumbnail_url ?? undefined,
     featured: r.is_featured,
   };
 }

@@ -15,8 +15,10 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { adminPath } from "@/lib/admin-nav";
-import { youtubeThumb, youtubeWatchUrl } from "@/lib/youtube";
+import { extractDriveId, videoThumbnail } from "@/lib/video";
+import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { VideoForm } from "./VideoForm";
+import { Button, IconButton, SmallButton, Switch } from "./ui";
 import {
   ITEM_COLUMNS,
   type AdminCategory,
@@ -146,11 +148,9 @@ export function DashboardClient({
           </span>
         </div>
 
-        <div className="px-4 pb-2">
-          <p className="px-2 text-[0.65rem] font-medium uppercase tracking-[0.15em] text-neutral-600">
-            Categories
-          </p>
-        </div>
+        <p className="px-6 pb-2 text-[0.65rem] font-medium uppercase tracking-[0.15em] text-neutral-600">
+          Categories
+        </p>
         <nav className="flex-1 space-y-0.5 overflow-y-auto px-3">
           {categories.map((c) => {
             const active = c.id === categoryId;
@@ -158,7 +158,7 @@ export function DashboardClient({
               <button
                 key={c.id}
                 onClick={() => setCategoryId(c.id)}
-                className={`group flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors ${
+                className={`group flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/30 ${
                   active
                     ? "bg-white/[0.08] font-medium text-white"
                     : "text-neutral-400 hover:bg-white/[0.04] hover:text-neutral-200"
@@ -181,7 +181,7 @@ export function DashboardClient({
           </div>
           <button
             onClick={logout}
-            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-neutral-400 transition-colors hover:bg-white/[0.04] hover:text-white"
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-neutral-400 outline-none transition-colors hover:bg-white/[0.04] hover:text-white focus-visible:ring-2 focus-visible:ring-white/30"
           >
             <LogOut className="h-4 w-4" /> Logout
           </button>
@@ -199,14 +199,10 @@ export function DashboardClient({
               Admin
             </span>
           </div>
-          <button
-            onClick={logout}
-            className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-xs text-neutral-300 transition-colors hover:bg-white/5"
-          >
+          <SmallButton variant="ghost" onClick={logout}>
             <LogOut className="h-3.5 w-3.5" /> Logout
-          </button>
+          </SmallButton>
         </div>
-        {/* Mobile category pills */}
         <div className="no-scrollbar flex gap-2 overflow-x-auto px-4 pb-3">
           {categories.map((c) => {
             const active = c.id === categoryId;
@@ -230,7 +226,7 @@ export function DashboardClient({
       {/* -------------------------------------------------------- Main area */}
       <main className="mx-auto max-w-4xl px-4 py-8 sm:px-8 sm:py-10">
         <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-neutral-300">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-neutral-300">
             <Clapperboard className="h-5 w-5" strokeWidth={1.5} />
           </span>
           <div>
@@ -340,14 +336,11 @@ function Section({
           <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[0.65rem] font-medium text-neutral-400">
             {items.length}
           </span>
-          <span className="text-xs text-neutral-600">{hint}</span>
+          <span className="hidden text-xs text-neutral-600 sm:inline">{hint}</span>
         </h2>
-        <button
-          onClick={onAdd}
-          className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-black transition-transform hover:scale-[1.03] active:scale-95"
-        >
+        <SmallButton onClick={onAdd}>
           <Plus className="h-3.5 w-3.5" strokeWidth={2.5} /> Add
-        </button>
+        </SmallButton>
       </div>
 
       {loading ? (
@@ -362,7 +355,7 @@ function Section({
       ) : items.length === 0 ? (
         <button
           onClick={onAdd}
-          className="flex w-full flex-col items-center gap-1 rounded-2xl border border-dashed border-white/10 px-4 py-9 text-center transition-colors hover:border-white/25 hover:bg-white/[0.02]"
+          className="flex w-full flex-col items-center gap-1 rounded-2xl border border-dashed border-white/10 px-4 py-9 text-center outline-none transition-colors hover:border-white/25 hover:bg-white/[0.02] focus-visible:ring-2 focus-visible:ring-white/30"
         >
           <span className="text-sm text-neutral-400">
             No {title.toLowerCase()} videos yet
@@ -374,75 +367,17 @@ function Section({
       ) : (
         <ul className="space-y-2.5">
           {items.map((item, i) => (
-            <li
+            <Row
               key={item.id}
-              className={`group flex items-center gap-3.5 rounded-2xl border border-white/[0.07] bg-white/[0.02] p-3 transition-colors hover:border-white/15 hover:bg-white/[0.035] ${
-                item.is_active ? "" : "opacity-60"
-              }`}
-            >
-              <div className="relative aspect-video h-14 shrink-0 overflow-hidden rounded-lg bg-neutral-800 ring-1 ring-white/10">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={youtubeThumb(item.youtube_id)}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-                {item.is_featured && (
-                  <span className="absolute left-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-black/70 text-amber-300">
-                    <Star className="h-2.5 w-2.5" fill="currentColor" strokeWidth={0} />
-                  </span>
-                )}
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-white">
-                  {item.title}
-                </p>
-                <div className="mt-1 flex items-center gap-2 text-xs text-neutral-500">
-                  {item.subtitle && (
-                    <span className="truncate">{item.subtitle}</span>
-                  )}
-                  <a
-                    href={item.youtube_url || youtubeWatchUrl(item.youtube_id)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-neutral-500 transition-colors hover:text-white"
-                  >
-                    <ExternalLink className="h-3 w-3" /> open
-                  </a>
-                </div>
-              </div>
-
-              {/* Publish toggle (green = published, grey = draft) */}
-              <Switch
-                checked={item.is_active}
-                disabled={busyId === item.id}
-                onChange={() => onToggle(item)}
-              />
-
-              <div className="flex shrink-0 items-center gap-0.5">
-                <IconBtn
-                  label="Move up"
-                  disabled={i === 0 || busyId === item.id}
-                  onClick={() => onMove(item, "up")}
-                >
-                  <ChevronUp className="h-4 w-4" />
-                </IconBtn>
-                <IconBtn
-                  label="Move down"
-                  disabled={i === items.length - 1 || busyId === item.id}
-                  onClick={() => onMove(item, "down")}
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </IconBtn>
-                <IconBtn label="Edit" onClick={() => onEdit(item)}>
-                  <Pencil className="h-4 w-4" />
-                </IconBtn>
-                <IconBtn label="Delete" onClick={() => onDelete(item)} danger>
-                  <Trash2 className="h-4 w-4" />
-                </IconBtn>
-              </div>
-            </li>
+              item={item}
+              index={i}
+              total={items.length}
+              busy={busyId === item.id}
+              onEdit={() => onEdit(item)}
+              onDelete={() => onDelete(item)}
+              onToggle={() => onToggle(item)}
+              onMove={(dir) => onMove(item, dir)}
+            />
           ))}
         </ul>
       )}
@@ -450,67 +385,99 @@ function Section({
   );
 }
 
-function Switch({
-  checked,
-  disabled,
-  onChange,
+function Row({
+  item,
+  index,
+  total,
+  busy,
+  onEdit,
+  onDelete,
+  onToggle,
+  onMove,
 }: {
-  checked: boolean;
-  disabled?: boolean;
-  onChange: () => void;
+  item: PortfolioItem;
+  index: number;
+  total: number;
+  busy: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
+  onToggle: () => void;
+  onMove: (dir: "up" | "down") => void;
 }) {
-  return (
-    <button
-      onClick={onChange}
-      disabled={disabled}
-      role="switch"
-      aria-checked={checked}
-      aria-label={checked ? "Published — click to hide" : "Draft — click to publish"}
-      title={checked ? "Published — click to hide" : "Draft — click to publish"}
-      className="hidden shrink-0 disabled:opacity-50 sm:block"
-    >
-      <span
-        className={`relative block h-5 w-9 rounded-full transition-colors ${
-          checked ? "bg-emerald-500/80" : "bg-white/15"
-        }`}
-      >
-        <span
-          className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform ${
-            checked ? "translate-x-4" : "translate-x-0.5"
-          }`}
-        />
-      </span>
-    </button>
-  );
-}
+  const isDrive = item.video_provider === "google_drive";
+  const thumb = videoThumbnail({
+    provider: item.video_provider,
+    youtubeId: item.youtube_id ?? undefined,
+    driveId: isDrive ? extractDriveId(item.video_url) ?? undefined : undefined,
+    thumbnailUrl: item.thumbnail_url ?? undefined,
+  });
+  const openUrl = item.video_url || item.youtube_url || undefined;
 
-function IconBtn({
-  label,
-  onClick,
-  disabled,
-  danger,
-  children,
-}: {
-  label: string;
-  onClick: () => void;
-  disabled?: boolean;
-  danger?: boolean;
-  children: React.ReactNode;
-}) {
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      aria-label={label}
-      title={label}
-      className={`flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 transition-colors disabled:opacity-25 ${
-        danger
-          ? "hover:bg-red-500/15 hover:text-red-300"
-          : "hover:bg-white/10 hover:text-white"
+    <li
+      className={`group flex items-center gap-3.5 rounded-2xl border border-white/[0.07] bg-white/[0.02] p-3 transition-colors hover:border-white/15 hover:bg-white/[0.035] ${
+        item.is_active ? "" : "opacity-60"
       }`}
     >
-      {children}
-    </button>
+      <div className="relative aspect-video h-14 shrink-0 overflow-hidden rounded-lg ring-1 ring-white/10">
+        <MediaPlaceholder src={thumb} seed={index + 1} />
+        {item.is_featured && (
+          <span className="absolute left-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-black/70 text-amber-300">
+            <Star className="h-2.5 w-2.5" fill="currentColor" strokeWidth={0} />
+          </span>
+        )}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium text-white">{item.title}</p>
+        <div className="mt-1 flex items-center gap-2 text-xs text-neutral-500">
+          {item.subtitle && <span className="truncate">{item.subtitle}</span>}
+          <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-[0.6rem] uppercase tracking-wide text-neutral-400">
+            {isDrive ? "Drive" : "YouTube"}
+          </span>
+          {openUrl && (
+            <a
+              href={openUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex shrink-0 items-center gap-1 text-neutral-500 transition-colors hover:text-white"
+            >
+              <ExternalLink className="h-3 w-3" /> open
+            </a>
+          )}
+        </div>
+      </div>
+
+      <Switch
+        checked={item.is_active}
+        disabled={busy}
+        onChange={onToggle}
+        srLabel={item.is_active ? "Published — click to hide" : "Draft — click to publish"}
+      />
+
+      <div className="flex shrink-0 items-center gap-0.5">
+        <IconButton
+          label="Move up"
+          disabled={index === 0 || busy}
+          onClick={() => onMove("up")}
+        >
+          <ChevronUp className="h-4 w-4" />
+        </IconButton>
+        <IconButton
+          label="Move down"
+          disabled={index === total - 1 || busy}
+          onClick={() => onMove("down")}
+        >
+          <ChevronDown className="h-4 w-4" />
+        </IconButton>
+        <IconButton label="Edit" onClick={onEdit}>
+          <Pencil className="h-4 w-4" />
+        </IconButton>
+        <IconButton label="Delete" onClick={onDelete} danger>
+          <Trash2 className="h-4 w-4" />
+        </IconButton>
+      </div>
+    </li>
   );
 }
 
@@ -544,18 +511,12 @@ function ConfirmDialog({
         <h2 className="text-base font-semibold text-white">{title}</h2>
         <p className="mt-2 text-sm text-neutral-400">{body}</p>
         <div className="mt-6 flex justify-end gap-3">
-          <button
-            onClick={onCancel}
-            className="rounded-lg border border-white/15 px-4 py-2 text-sm text-neutral-300 transition-colors hover:bg-white/5"
-          >
+          <Button variant="ghost" onClick={onCancel}>
             Cancel
-          </button>
-          <button
-            onClick={onConfirm}
-            className="rounded-lg bg-red-500 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-600"
-          >
+          </Button>
+          <Button variant="danger" onClick={onConfirm}>
             {confirmLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
