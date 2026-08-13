@@ -49,7 +49,15 @@ export async function loginAction(
 ): Promise<{ error?: string }> {
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
-  const user = await authenticate(email, password);
+  let user: { id: string; email: string } | null;
+  try {
+    user = await authenticate(email, password);
+  } catch (e) {
+    console.error("[login] error:", e);
+    return {
+      error: "Server error — the database may be unreachable. Please try again.",
+    };
+  }
   if (!user) return { error: "Invalid email or password." };
   await startSession(user);
   redirect("/admin/dashboard");
