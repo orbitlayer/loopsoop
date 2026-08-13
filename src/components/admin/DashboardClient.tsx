@@ -13,14 +13,18 @@ import {
   Star,
   Clapperboard,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { adminPath } from "@/lib/admin-nav";
+import {
+  listItems,
+  setActive,
+  swapOrder,
+  deleteItem,
+  logoutAction,
+} from "@/lib/actions";
 import { extractDriveId, videoThumbnail } from "@/lib/video";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { VideoForm } from "./VideoForm";
 import { Button, IconButton, SmallButton, Switch } from "./ui";
 import {
-  ITEM_COLUMNS,
   type AdminCategory,
   type PortfolioItem,
   type VideoType,
@@ -53,16 +57,11 @@ export function DashboardClient({
     if (!categoryId) return;
     setLoading(true);
     setError(null);
-    const { data, error: dbError } = await createClient()
-      .from("portfolio_items")
-      .select(ITEM_COLUMNS)
-      .eq("category_id", categoryId)
-      .order("sort_order", { ascending: true });
-    if (dbError) {
+    try {
+      setItems(await listItems(categoryId));
+    } catch {
       setError("Could not load videos. Check your connection and try again.");
       setItems([]);
-    } else {
-      setItems((data ?? []) as PortfolioItem[]);
     }
     setLoading(false);
   }, [categoryId]);
@@ -84,11 +83,11 @@ export function DashboardClient({
 
   async function toggleActive(item: PortfolioItem) {
     setBusyId(item.id);
-    const { error: dbError } = await createClient()
-      .from("portfolio_items")
-      .update({ is_active: !item.is_active })
-      .eq("id", item.id);
-    if (dbError) setError(dbError.message);
+    try {
+      await setActive(item.id, !item.is_active);
+    } catch {
+      setError("Could not update. Please try again.");
+    }
     await fetchItems();
     setBusyId(null);
   }
@@ -99,18 +98,11 @@ export function DashboardClient({
     const swap = siblings[dir === "up" ? idx - 1 : idx + 1];
     if (!swap) return;
     setBusyId(item.id);
-    const supabase = createClient();
-    const [r1, r2] = await Promise.all([
-      supabase
-        .from("portfolio_items")
-        .update({ sort_order: swap.sort_order })
-        .eq("id", item.id),
-      supabase
-        .from("portfolio_items")
-        .update({ sort_order: item.sort_order })
-        .eq("id", swap.id),
-    ]);
-    if (r1.error || r2.error) setError("Could not reorder. Please try again.");
+    try {
+      await swapOrder(item.id, item.sort_order, swap.id, swap.sort_order);
+    } catch {
+      setError("Could not reorder. Please try again.");
+    }
     await fetchItems();
     setBusyId(null);
   }
@@ -119,19 +111,19 @@ export function DashboardClient({
     if (!deleteTarget) return;
     const id = deleteTarget.id;
     setBusyId(id);
-    const { error: dbError } = await createClient()
-      .from("portfolio_items")
-      .delete()
-      .eq("id", id);
-    if (dbError) setError(dbError.message);
+    try {
+      await deleteItem(id);
+    } catch {
+      setError("Could not delete. Please try again.");
+    }
     setDeleteTarget(null);
     await fetchItems();
     setBusyId(null);
   }
 
   async function logout() {
-    await createClient().auth.signOut();
-    router.replace(adminPath("/login"));
+    await logoutAction();
+    router.replace("/admin/login");
     router.refresh();
   }
 

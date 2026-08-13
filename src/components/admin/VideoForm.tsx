@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { createItem, updateItem } from "@/lib/actions";
 import { extractYouTubeId, youtubeThumb, youtubeWatchUrl } from "@/lib/youtube";
 import {
   extractDriveId,
@@ -104,7 +104,6 @@ export function VideoForm({
     }
 
     setPending(true);
-    const supabase = createClient();
 
     const ytUrl = ytId ? youtubeWatchUrl(ytId) : null;
     const payload: ItemWrite = {
@@ -124,17 +123,14 @@ export function VideoForm({
       thumbnail_url: isDrive ? thumb.trim() || null : null,
     };
 
-    const { error: dbError } = editing
-      ? await supabase.from("portfolio_items").update(payload).eq("id", item!.id)
-      : await supabase.from("portfolio_items").insert(payload);
-
-    if (dbError) {
-      setError(dbError.message || "Could not save. Please try again.");
+    try {
+      if (editing) await updateItem(item!.id, payload);
+      else await createItem(payload);
+      onSaved();
+    } catch {
+      setError("Could not save. Please try again.");
       setPending(false);
-      return;
     }
-
-    onSaved();
   }
 
   return (

@@ -1,0 +1,149 @@
+"use server";
+
+import { randomUUID } from "crypto";
+import { redirect } from "next/navigation";
+import { query } from "@/lib/db";
+import {
+  authenticate,
+  startSession,
+  endSession,
+  requireAdmin,
+} from "@/lib/auth";
+import { ITEM_COLUMNS, type PortfolioItem } from "@/components/admin/types";
+
+/*
+ * Server Actions — the ONLY way the admin reads/writes data now (MySQL can't be
+ * touched from the browser). Every mutation calls requireAdmin() first, which is
+ * the security boundary that Supabase RLS used to provide.
+ */
+
+const SELECT_ITEM = `SELECT ${ITEM_COLUMNS} FROM portfolio_items`;
+
+function normalizeItem(r: Record<string, unknown>): PortfolioItem {
+  return {
+    ...(r as PortfolioItem),
+    is_active: Boolean(r.is_active),
+    is_featured: Boolean(r.is_featured),
+  };
+}
+
+export type ItemInput = {
+  category_id: string;
+  title: string;
+  subtitle: string | null;
+  video_provider: "youtube" | "google_drive";
+  video_url: string;
+  youtube_id: string | null;
+  youtube_url: string | null;
+  thumbnail_url: string | null;
+  video_type: "long" | "short";
+  sort_order: number;
+  is_active: boolean;
+  is_featured: boolean;
+};
+
+/* ------------------------------------------------------------------- Auth */
+export async function loginAction(
+  _prev: { error?: string } | undefined,
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const email = String(formData.get("email") ?? "");
+  const password = String(formData.get("password") ?? "");
+  const user = await authenticate(email, password);
+  if (!user) return { error: "Invalid email or password." };
+  await startSession(user);
+  redirect("/admin/dashboard");
+}
+
+export async function logoutAction() {
+  await endSession();
+  return { ok: true as const };
+}
+
+/* -------------------------------------------------------------------- Read */
+export async function listItems(categoryId: string): Promise<PortfolioItem[]> {
+  await requireAdmin();
+  const rows = await query(
+    `${SELECT_ITEM} WHERE category_id = ? ORDER BY sort_order ASC`,
+    [categoryId],
+  );
+  return rows.map(normalizeItem);
+}
+
+/* ------------------------------------------------------------------ Writes */
+function toValues(input: ItemInput) {
+  return [
+    input.category_id,
+    input.title,
+    input.subtitle,
+    input.video_provider,
+    input.video_url,
+    input.youtube_id,
+    input.youtube_url,
+    input.thumbnail_url,
+    input.video_type,
+    Number.isFinite(input.sort_order) ? input.sort_order : 0,
+    input.is_active ? 1 : 0,
+    input.is_featured ? 1 : 0,
+  ];
+}
+
+export async function createItem(input: ItemInput) {
+  await requireAdmin();
+  const id = randomUUID();
+  await query(
+    `INSERT INTO portfolio_items
+       (id, category_id, title, subtitle, video_provider, video_url, youtube_id,
+        youtube_url, thumbnail_url, video_type, sort_order, is_active, is_featured)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [id, ...toValues(input)],
+  );
+  return { ok: true as const };
+}
+
+export async function updateItem(id: string, input: ItemInput) {
+  await requireAdmin();
+  await query(
+    `UPDATE portfolio_items SET
+       category_id = ?, title = ?, subtitle = ?, video_provider = ?, video_url = ?,
+       youtube_id = ?, youtube_url = ?, thumbnail_url = ?, video_type = ?,
+       sort_order = ?, is_active = ?, is_featured = ?
+     WHERE id = ?`,
+    [...toValues(input), id],
+  );
+  return { ok: true as const };
+}
+
+export async function deleteItem(id: string) {
+  await requireAdmin();
+  await query("DELETE FROM portfolio_items WHERE id = ?", [id]);
+  return { ok: true as const };
+}
+
+export async function setActive(id: string, isActive: boolean) {
+  await requireAdmin();
+  await query("UPDATE portfolio_items SET is_active = ? WHERE id = ?", [
+    isActive ? 1 : 0,
+    id,
+  ]);
+  return { ok: true as const };
+}
+
+/** Swap the sort_order of two items (used by move up/down). */
+export async function swapOrder(
+  aId: string,
+  aOrder: number,
+  bId: string,
+  bOrder: number,
+) {
+  await requireAdmin();
+  await query("UPDATE portfolio_items SET sort_order = ? WHERE id = ?", [
+    bOrder,
+    aId,
+  ]);
+  await query("UPDATE portfolio_items SET sort_order = ? WHERE id = ?", [
+    aOrder,
+    bId,
+  ]);
+  return { ok: true as const };
+}
