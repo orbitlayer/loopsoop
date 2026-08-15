@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: {
     default:
       "Loopsoop | Video Editing & Graphic Design | A Creative Division of OrbitLayer",
-    template: `%s — ${site.name}`,
+    template: `%s - ${site.name}`,
   },
   description: site.description,
   keywords: [
