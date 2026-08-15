@@ -58,7 +58,7 @@ export function Footer() {
                   <span
                     key={label}
                     aria-hidden
-                    className={`${socialBase} cursor-default border-white/10 text-white/25`}
+                    className={`${socialBase} cursor-default border-white/15 text-white/70`}
                   >
                     <Icon className="h-4 w-4" />
                   </span>
