@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false, nocache: true },
 };
 
+// Render admin routes dynamically (never statically prerender/cache them) so a
+// redeploy can't leave a cached page pointing at deleted CSS/JS chunk files.
+export const dynamic = "force-dynamic";
+
 /* Admin shell — layered near-black with a soft top glow. Self-contained, no
    public nav/footer. Rendered inside the minimal root <html>/<body>. */
 export default function AdminLayout({
