@@ -11,13 +11,17 @@ import {
   YoutubeIcon,
 } from "@/lib/icons";
 
+// `disabled` icons are shown but not linked yet (no live account).
 const socialLinks = [
-  { label: "Instagram", href: site.socials.instagram, Icon: InstagramIcon },
-  { label: "YouTube", href: site.socials.youtube, Icon: YoutubeIcon },
-  { label: "LinkedIn", href: site.socials.linkedin, Icon: LinkedinIcon },
-  { label: "Discord", href: site.socials.discord, Icon: DiscordIcon },
-  { label: "Email", href: `mailto:${site.email}`, Icon: Mail },
+  { label: "Instagram", href: site.socials.instagram, Icon: InstagramIcon, disabled: true },
+  { label: "YouTube", href: site.socials.youtube, Icon: YoutubeIcon, disabled: true },
+  { label: "LinkedIn", href: site.socials.linkedin, Icon: LinkedinIcon, disabled: true },
+  { label: "Discord", href: site.socials.discord, Icon: DiscordIcon, disabled: false },
+  { label: "Email", href: `mailto:${site.email}`, Icon: Mail, disabled: false },
 ];
+
+const socialBase =
+  "flex h-11 w-11 items-center justify-center rounded-full border";
 
 // "Company" renamed to "Explore" — these are the site's main pages.
 const exploreLinks = [
@@ -49,18 +53,28 @@ export function Footer() {
               We edit videos. You tell stories. We elevate them.
             </p>
             <div className="mt-7 flex items-center gap-3">
-              {socialLinks.map(({ label, href, Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  target={href.startsWith("http") ? "_blank" : undefined}
-                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white/70 transition-colors hover:border-white hover:text-white"
-                >
-                  <Icon className="h-4 w-4" />
-                </a>
-              ))}
+              {socialLinks.map(({ label, href, Icon, disabled }) =>
+                disabled ? (
+                  <span
+                    key={label}
+                    aria-hidden
+                    className={`${socialBase} cursor-default border-white/10 text-white/25`}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </span>
+                ) : (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    target={href.startsWith("http") ? "_blank" : undefined}
+                    rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className={`${socialBase} border-white/15 text-white/70 transition-colors hover:border-white hover:text-white`}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                ),
+              )}
             </div>
           </div>
 

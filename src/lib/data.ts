@@ -10,14 +10,14 @@ export const site = {
   url: "https://loopsoop.in",
   description:
     "Loopsoop is the creative division of OrbitLayer, providing premium Video Editing and Graphic Design services for creators, startups, agencies, and businesses.",
-  email: "hello@loopsoop.in",
+  email: "loopsoop@orbitlayer.in",
   phone: "+91 98351 06943",
   phoneHref: "+919835106943",
   // WhatsApp number in international format, digits only (no +, spaces or dashes).
   whatsapp: "919835106943",
   hours: "Mon – Sat, 10AM – 8PM IST",
-  discord: "discord.gg/loopsoop",
-  discordHref: "https://discord.gg/loopsoop",
+  discord: "@loopsoop.in",
+  discordHref: "https://discord.com/users/loopsoop.in",
   location: "Remote First",
   // Loopsoop is the creative division of its parent company, OrbitLayer.
   parent: {
@@ -29,7 +29,7 @@ export const site = {
     instagram: "https://instagram.com/loopsoop",
     youtube: "https://youtube.com/@loopsoop",
     linkedin: "https://linkedin.com/company/loopsoop",
-    discord: "https://discord.gg/loopsoop",
+    discord: "https://discord.com/users/loopsoop.in",
   },
 } as const;
 
