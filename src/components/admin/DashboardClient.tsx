@@ -421,7 +421,9 @@ function Row({
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-white">{item.title}</p>
+        <p className="truncate text-sm font-medium text-white">
+          {item.title?.trim() || item.subtitle?.trim() || "Untitled"}
+        </p>
         <div className="mt-1 flex items-center gap-2 text-xs text-neutral-500">
           {item.subtitle && <span className="truncate">{item.subtitle}</span>}
           <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-[0.6rem] uppercase tracking-wide text-neutral-400">
@@ -444,7 +446,7 @@ function Row({
         checked={item.is_active}
         disabled={busy}
         onChange={onToggle}
-        srLabel={item.is_active ? "Published — click to hide" : "Draft — click to publish"}
+        srLabel={item.is_active ? "Shown on portfolio — click to hide" : "Hidden from portfolio — click to show"}
       />
 
       <div className="flex shrink-0 items-center gap-0.5">

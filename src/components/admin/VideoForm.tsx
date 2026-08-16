@@ -90,10 +90,7 @@ export function VideoForm({
     e.preventDefault();
     setError(null);
 
-    if (!title.trim()) {
-      setError("Please enter a title.");
-      return;
-    }
+    // Title is optional now — only the video URL is required.
     if (!isValidVideoUrl(provider, url)) {
       setError(
         isDrive
@@ -158,7 +155,7 @@ export function VideoForm({
         </p>
 
         <div className="mt-5 space-y-4">
-          <Field label="Title">
+          <Field label="Title (optional)">
             <TextInput
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -282,7 +279,11 @@ export function VideoForm({
           </Field>
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-lg border border-white/10 bg-black/20 px-4 py-3">
-            <Switch label="Published" checked={isActive} onChange={setIsActive} />
+            <Switch
+              label="Show on portfolio"
+              checked={isActive}
+              onChange={setIsActive}
+            />
             <Switch
               label="Featured on home"
               checked={isFeatured}

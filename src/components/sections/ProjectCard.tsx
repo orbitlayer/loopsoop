@@ -64,14 +64,16 @@ export function ProjectCard({
         )}
       >
         <div>
-          <h3
-            className={cn(
-              "font-display font-medium leading-tight text-white",
-              portrait ? "text-base" : "text-lg",
-            )}
-          >
-            {project.title}
-          </h3>
+          {project.title?.trim() && (
+            <h3
+              className={cn(
+                "font-display font-medium leading-tight text-white",
+                portrait ? "text-base" : "text-lg",
+              )}
+            >
+              {project.title}
+            </h3>
+          )}
           <p
             className={cn(
               "mt-1 text-white/60",
