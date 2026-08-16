@@ -53,7 +53,7 @@ export default async function HomePage() {
               </p>
             </Reveal>
             <Reveal delay={0.18} className="mt-8">
-              <Button href="/our-work">Explore Our Work</Button>
+              <Button href="/our-work">Explore Portfolio</Button>
             </Reveal>
           </div>
         </Container>
