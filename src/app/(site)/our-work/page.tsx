@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import { editingCategories, styleIncludes } from "@/lib/data";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/lib/icons";
@@ -39,10 +39,25 @@ export default function OurWorkPage() {
         }
         subtitle="Premium Video Editing and Graphic Design, crafted for your brand. Pick a style to explore the work — each one opens the matching projects in our portfolio."
         action={<Button href="/contact">Let&apos;s Work Together</Button>}
+        extra={
+          <a
+            href="#work"
+            className="group flex flex-col items-center gap-2 text-faint transition-colors hover:text-ink"
+          >
+            <span className="text-[0.7rem] font-medium uppercase tracking-[0.22em]">
+              Scroll to explore the work
+            </span>
+            <ChevronDown
+              className="h-4 w-4 motion-safe:animate-bounce"
+              strokeWidth={1.5}
+              aria-hidden
+            />
+          </a>
+        }
       />
 
       {/* Category grid — each card deep-links into the filtered portfolio */}
-      <section className="py-16 md:py-20">
+      <section id="work" className="scroll-mt-24 py-16 md:py-20">
         <Container>
           <Reveal className="mb-14 text-center">
             <h2 className="font-display text-3xl font-medium md:text-[2.6rem]">
