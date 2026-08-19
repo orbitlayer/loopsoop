@@ -133,7 +133,7 @@ export type EditingCategory = {
 export const editingCategories: EditingCategory[] = [
   { slug: "documentary", name: "Documentary", description: "Natural, raw and real edits that keep the story authentic.", seed: 51, image: "/categories/documentary.webp" },
   { slug: "commercial", name: "Commercial", description: "Punchy, high-converting ads and brand films that sell.", seed: 21, image: "/categories/commercial.webp" },
-  { slug: "corporate", name: "Motion Graphics", description: "Animated graphics, kinetic typography and motion design that bring ideas to life.", seed: 72, image: "/categories/corporate.webp" },
+  { slug: "corporate", name: "Motion Graphics", description: "Animated graphics, kinetic typography and motion design that bring ideas to life.", seed: 72, image: "/categories/motion-graphics.png" },
   { slug: "gaming", name: "Gaming", description: "High-energy gaming edits — montages, highlights and stream moments that hit hard.", seed: 33, image: "/categories/gaming.webp" },
   { slug: "fast-pace", name: "Highlight Edit", description: "The best moments cut into punchy, high-energy highlight reels.", seed: 84, image: "/categories/fast-pace.webp" },
   { slug: "luxury", name: "Real Estate", description: "Cinematic property tours and walkthroughs that sell every space.", seed: 44, image: "/categories/luxury.webp" },
