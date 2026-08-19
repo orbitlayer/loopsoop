@@ -34,7 +34,7 @@ const exploreLinks = [
 const serviceLinks = [
   { label: "Documentary", href: "/portfolio?category=documentary" },
   { label: "Commercial", href: "/portfolio?category=commercial" },
-  { label: "Corporate", href: "/portfolio?category=corporate" },
+  { label: "Motion Graphics", href: "/portfolio?category=corporate" },
   { label: "Social Media", href: "/portfolio?category=social-media" },
   { label: "Educational", href: "/portfolio?category=educational" },
 ];

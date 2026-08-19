@@ -14,7 +14,7 @@ import { CtaBand } from "@/components/sections/CtaBand";
 export const metadata: Metadata = {
   title: "Our Work",
   description:
-    "Explore Loopsoop's work by category — documentary, commercial, corporate, emotional, luxury, social media and more. Pick a category to see the matching projects.",
+    "Explore Loopsoop's work by category — documentary, commercial, motion graphics, highlight edits, real estate, social media and more. Pick a category to see the matching projects.",
   alternates: { canonical: "/our-work" },
 };
 

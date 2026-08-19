@@ -58,10 +58,10 @@ CREATE TABLE IF NOT EXISTS portfolio_items (
 INSERT INTO categories (id, name, slug, description, image, sort_order) VALUES
 ('cbfb785a-2a8b-48c3-af98-6bb827523c3f','Documentary','documentary','Natural, raw and real edits that keep the story authentic.','/categories/documentary.webp',0),
 ('008cec5a-e449-4061-95dc-a7a80b5325f3','Commercial','commercial','Punchy, high-converting ads and brand films that sell.','/categories/commercial.webp',1),
-('488e80ef-bcf1-48bb-8aeb-80709b9becb1','Corporate','corporate','Polished, professional edits for brands and businesses.','/categories/corporate.webp',2),
+('488e80ef-bcf1-48bb-8aeb-80709b9becb1','Motion Graphics','corporate','Animated graphics, kinetic typography and motion design that bring ideas to life.','/categories/corporate.webp',2),
 ('b537c675-2788-45bb-9271-d2b73582a04d','Gaming','gaming','High-energy gaming edits — montages, highlights and stream moments that hit hard.','/categories/gaming.webp',3),
-('f849462f-a7d4-4ffb-a94e-daba8eda1559','Fast Pace','fast-pace','High-energy cuts, quick transitions and impactful beats.','/categories/fast-pace.webp',4),
-('83cf97b2-4589-4c8e-aac4-7ebf0f6a3cad','Luxury','luxury','Elegant, refined edits with a premium, high-end feel.','/categories/luxury.webp',5),
+('f849462f-a7d4-4ffb-a94e-daba8eda1559','Highlight Edit','fast-pace','The best moments cut into punchy, high-energy highlight reels.','/categories/fast-pace.webp',4),
+('83cf97b2-4589-4c8e-aac4-7ebf0f6a3cad','Real Estate','luxury','Cinematic property tours and walkthroughs that sell every space.','/categories/luxury.webp',5),
 ('4800c0bb-70a3-4bb0-bfb7-f3ee13646b77','Educational','educational','Clear, engaging edits that make complex ideas easy to follow.','/categories/educational.webp',6),
 ('b82ae464-8f92-4ba9-ad8b-107013249580','Social Media','social-media','Scroll-stopping edits optimised for reach and engagement.','/categories/social-media.webp',7);
 
