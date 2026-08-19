@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/our-work" },
 };
 
+// Served fresh on every request so category renames / image swaps show
+// immediately instead of being pinned by the CDN's long static cache.
+export const dynamic = "force-dynamic";
+
 const checklist = [
   "Free consultation",
   "Style recommendation",
