@@ -90,7 +90,7 @@ export function VideoForm({
     e.preventDefault();
     setError(null);
 
-    // Title is optional now — only the video URL is required.
+    // Title is optional now - only the video URL is required.
     if (!isValidVideoUrl(provider, url)) {
       setError(
         isDrive
@@ -143,15 +143,15 @@ export function VideoForm({
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
-        className={`my-8 w-full max-w-lg rounded-2xl border border-white/10 bg-[#141417] p-6 shadow-2xl transition-all duration-200 ${
+        className={`my-8 w-full max-w-lg rounded-[20px] border border-white/10 bg-dark-surface p-6 shadow-2xl shadow-black/50 transition-all duration-200 ${
           mounted ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-[0.98] opacity-0"
         }`}
       >
-        <h2 className="font-display text-lg font-medium text-white">
+        <h2 className="font-display text-lg font-medium tracking-[-0.02em] text-white">
           {editing ? "Edit video" : "Add video"}
         </h2>
-        <p className="mt-0.5 text-sm text-neutral-500">
-          Paste a link — the thumbnail and player are generated for you.
+        <p className="mt-0.5 text-sm text-dark-faint">
+          Paste a link - the thumbnail and player are generated for you.
         </p>
 
         <div className="mt-5 space-y-4">
@@ -208,7 +208,7 @@ export function VideoForm({
             {url.trim() && (
               <div className="mt-2.5">
                 {urlValid ? (
-                  <div className="flex items-center gap-2.5 rounded-lg border border-emerald-500/20 bg-emerald-500/[0.06] p-2">
+                  <div className="flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/[0.04] p-2">
                     {previewThumb && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -218,9 +218,9 @@ export function VideoForm({
                         className="h-10 w-[71px] rounded bg-black/40 object-cover"
                       />
                     )}
-                    <span className="text-xs text-emerald-300">
+                    <span className="text-xs text-white">
                       Valid {isDrive ? "Drive file" : "video"}
-                      <span className="ml-1 text-emerald-500/70">
+                      <span className="ml-1 text-dark-faint">
                         {isDrive ? drId : ytId}
                       </span>
                     </span>
