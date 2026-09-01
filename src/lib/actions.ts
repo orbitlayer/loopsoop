@@ -7,9 +7,15 @@ import {
   authenticate,
   startSession,
   endSession,
+  getSession,
   requireAdmin,
 } from "@/lib/auth";
+import { logAudit } from "@/lib/audit";
 import { ITEM_COLUMNS, type PortfolioItem } from "@/components/admin/types";
+
+function itemLabel(input: ItemInput): string {
+  return input.title.trim() || input.subtitle?.trim() || "Untitled";
+}
 
 /*
  * Server Actions — the ONLY way the admin reads/writes data now (MySQL can't be
@@ -60,11 +66,26 @@ export async function loginAction(
   }
   if (!user) return { error: "Invalid email or password." };
   await startSession(user);
+  await logAudit({
+    actorId: user.id,
+    actorEmail: user.email,
+    action: "login",
+    summary: "Signed in to the admin panel",
+  });
   redirect("/admin/dashboard");
 }
 
 export async function logoutAction() {
+  const session = await getSession();
   await endSession();
+  if (session) {
+    await logAudit({
+      actorId: session.uid,
+      actorEmail: session.email,
+      action: "logout",
+      summary: "Signed out of the admin panel",
+    });
+  }
   return { ok: true as const };
 }
 
@@ -97,7 +118,7 @@ function toValues(input: ItemInput) {
 }
 
 export async function createItem(input: ItemInput) {
-  await requireAdmin();
+  const session = await requireAdmin();
   const id = randomUUID();
   await query(
     `INSERT INTO portfolio_items
@@ -106,11 +127,20 @@ export async function createItem(input: ItemInput) {
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [id, ...toValues(input)],
   );
+  await logAudit({
+    actorId: session.uid,
+    actorEmail: session.email,
+    action: "item.create",
+    resourceType: "portfolio_item",
+    resourceId: id,
+    summary: `Added video "${itemLabel(input)}"`,
+    meta: { category_id: input.category_id, video_type: input.video_type },
+  });
   return { ok: true as const };
 }
 
 export async function updateItem(id: string, input: ItemInput) {
-  await requireAdmin();
+  const session = await requireAdmin();
   await query(
     `UPDATE portfolio_items SET
        category_id = ?, title = ?, subtitle = ?, video_provider = ?, video_url = ?,
@@ -119,21 +149,47 @@ export async function updateItem(id: string, input: ItemInput) {
      WHERE id = ?`,
     [...toValues(input), id],
   );
+  await logAudit({
+    actorId: session.uid,
+    actorEmail: session.email,
+    action: "item.update",
+    resourceType: "portfolio_item",
+    resourceId: id,
+    summary: `Edited video "${itemLabel(input)}"`,
+  });
   return { ok: true as const };
 }
 
 export async function deleteItem(id: string) {
-  await requireAdmin();
+  const session = await requireAdmin();
   await query("DELETE FROM portfolio_items WHERE id = ?", [id]);
+  await logAudit({
+    actorId: session.uid,
+    actorEmail: session.email,
+    action: "item.delete",
+    resourceType: "portfolio_item",
+    resourceId: id,
+    summary: "Deleted a portfolio video",
+  });
   return { ok: true as const };
 }
 
 export async function setActive(id: string, isActive: boolean) {
-  await requireAdmin();
+  const session = await requireAdmin();
   await query("UPDATE portfolio_items SET is_active = ? WHERE id = ?", [
     isActive ? 1 : 0,
     id,
   ]);
+  await logAudit({
+    actorId: session.uid,
+    actorEmail: session.email,
+    action: "item.toggle",
+    resourceType: "portfolio_item",
+    resourceId: id,
+    summary: isActive
+      ? "Showed a video on the portfolio"
+      : "Hid a video from the portfolio",
+  });
   return { ok: true as const };
 }
 

@@ -1,14 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Plus,
   Pencil,
   Trash2,
   ChevronUp,
   ChevronDown,
-  LogOut,
   ExternalLink,
   Star,
   Clapperboard,
@@ -19,13 +17,11 @@ import {
   setActive,
   swapOrder,
   deleteItem,
-  logoutAction,
 } from "@/lib/actions";
 import { extractDriveId, videoThumbnail } from "@/lib/video";
-import { site } from "@/lib/data";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { VideoForm } from "./VideoForm";
-import { Button, IconButton, SmallButton, Switch } from "./ui";
+import { IconButton, SmallButton, Switch, Button } from "./ui";
 import {
   type AdminCategory,
   type PortfolioItem,
@@ -37,14 +33,16 @@ type FormState =
   | { mode: "edit"; item: PortfolioItem }
   | null;
 
+/*
+ * Portfolio manager — the video CRUD that lives on /admin/portfolio, rendered
+ * inside <AdminShell>. Category selection is an in-body bar; the app-level nav
+ * lives in the shell. Data flows entirely through the existing Server Actions.
+ */
 export function DashboardClient({
   categories,
-  adminEmail,
 }: {
   categories: AdminCategory[];
-  adminEmail: string | null;
 }) {
-  const router = useRouter();
   const [categoryId, setCategoryId] = useState(categories[0]?.id ?? "");
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +51,6 @@ export function DashboardClient({
   const [form, setForm] = useState<FormState>(null);
   const [deleteTarget, setDeleteTarget] = useState<PortfolioItem | null>(null);
   const [search, setSearch] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const activeCategory = categories.find((c) => c.id === categoryId) ?? null;
 
@@ -73,24 +70,6 @@ export function DashboardClient({
   useEffect(() => {
     fetchItems();
   }, [fetchItems]);
-
-  // Close the profile menu on outside-click / Escape.
-  const menuRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onDoc = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
-    document.addEventListener("mousedown", onDoc);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDoc);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
 
   const q = search.trim().toLowerCase();
   const isSearching = q.length > 0;
@@ -159,230 +138,101 @@ export function DashboardClient({
     setBusyId(null);
   }
 
-  async function logout() {
-    await logoutAction();
-    router.replace("/admin/login");
-    router.refresh();
-  }
-
-  const initial = (adminEmail?.trim()?.[0] ?? "A").toUpperCase();
-
   return (
-    <div className="min-h-screen">
-      {/* ----------------------------------------------------------- Top bar */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-dark/80 backdrop-blur-xl">
-        <div className="flex h-16 items-center gap-3 px-4 sm:gap-4 sm:px-6">
-          <div className="flex items-baseline gap-2">
-            <span className="font-logo text-lg font-bold tracking-[-0.02em] text-white">
-              Loopsoop
-            </span>
-            <span className="rounded-full border border-white/10 px-2 py-0.5 text-[0.6rem] font-medium uppercase tracking-[0.18em] text-dark-faint">
-              Admin
-            </span>
-          </div>
+    <div className="mx-auto max-w-5xl">
+      <nav
+        aria-label="Breadcrumb"
+        className="mb-3 flex items-center gap-1.5 text-xs text-dark-faint"
+      >
+        <span>Portfolio</span>
+        <span aria-hidden>/</span>
+        <span className="text-dark-muted">{activeCategory?.name ?? "All"}</span>
+      </nav>
 
-          {/* Search — filters the videos in the current category */}
-          <div className="relative ml-1 hidden min-w-0 flex-1 sm:block sm:max-w-md">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-faint" />
-            <input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search videos in this category…"
-              aria-label="Search videos"
-              className="h-10 w-full rounded-full border border-white/10 bg-dark-surface pl-10 pr-4 text-sm text-white outline-none transition-colors placeholder:text-dark-faint hover:border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10"
-            />
-          </div>
-
-          {/* Profile menu */}
-          <div className="relative ml-auto" ref={menuRef}>
-            <button
-              type="button"
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-haspopup="menu"
-              aria-expanded={menuOpen}
-              className="flex items-center gap-2 rounded-full border border-white/10 py-1 pl-1 pr-2.5 text-sm text-dark-muted outline-none transition-colors hover:border-white/20 hover:text-white focus-visible:ring-2 focus-visible:ring-white/30"
-            >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-semibold text-dark">
-                {initial}
-              </span>
-              <ChevronDown className="h-4 w-4" />
-            </button>
-
-            {menuOpen && (
-              <div
-                role="menu"
-                className="absolute right-0 top-full z-50 mt-2 w-60 overflow-hidden rounded-2xl border border-white/10 bg-dark-surface p-1.5 shadow-2xl shadow-black/50"
-              >
-                <div className="px-3 py-2">
-                  <p className="text-[0.65rem] uppercase tracking-[0.15em] text-dark-faint">
-                    Signed in as
-                  </p>
-                  <p className="mt-0.5 truncate text-sm text-white">
-                    {adminEmail ?? "Admin"}
-                  </p>
-                </div>
-                <div className="my-1 h-px bg-white/10" />
-                <a
-                  href={site.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  role="menuitem"
-                  className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-dark-muted outline-none transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:bg-white/[0.06]"
-                >
-                  <ExternalLink className="h-4 w-4" /> View live site
-                </a>
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    setMenuOpen(false);
-                    logout();
-                  }}
-                  className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-dark-muted outline-none transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:bg-white/[0.06]"
-                >
-                  <LogOut className="h-4 w-4" /> Log out
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
-
-      <div className="lg:grid lg:grid-cols-[16rem_1fr]">
-        {/* --------------------------------------------------------- Sidebar */}
-        <aside className="hidden border-r border-white/10 lg:sticky lg:top-16 lg:block lg:h-[calc(100vh-4rem)] lg:overflow-y-auto">
-          <p className="px-6 pb-2 pt-6 text-[0.65rem] font-medium uppercase tracking-[0.15em] text-dark-faint">
-            Portfolio Categories
+      <div className="flex items-center gap-3">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-dark-muted">
+          <Clapperboard className="h-5 w-5" strokeWidth={1.5} />
+        </span>
+        <div>
+          <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-white">
+            {activeCategory?.name ?? "Portfolio"}
+          </h1>
+          <p className="text-sm text-dark-faint">
+            {items.length} {items.length === 1 ? "video" : "videos"} · manage
+            what appears on the public site
           </p>
-          <nav className="space-y-0.5 px-3 pb-6">
-            {categories.map((c) => {
-              const active = c.id === categoryId;
-              return (
-                <button
-                  key={c.id}
-                  onClick={() => setCategoryId(c.id)}
-                  className={`group flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/30 ${
-                    active
-                      ? "bg-white/[0.08] font-medium text-white"
-                      : "text-dark-muted hover:bg-white/[0.04] hover:text-white"
-                  }`}
-                >
-                  <span
-                    className={`h-1.5 w-1.5 rounded-full transition-colors ${
-                      active
-                        ? "bg-white"
-                        : "bg-dark-faint group-hover:bg-white/60"
-                    }`}
-                  />
-                  {c.name}
-                </button>
-              );
-            })}
-          </nav>
-        </aside>
-
-        {/* ------------------------------------------------ Mobile category bar */}
-        <div className="border-b border-white/10 lg:hidden">
-          <div className="no-scrollbar flex gap-2 overflow-x-auto px-4 py-3">
-            {categories.map((c) => {
-              const active = c.id === categoryId;
-              return (
-                <button
-                  key={c.id}
-                  onClick={() => setCategoryId(c.id)}
-                  className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
-                    active
-                      ? "bg-white text-dark"
-                      : "border border-white/10 text-dark-muted hover:text-white"
-                  }`}
-                >
-                  {c.name}
-                </button>
-              );
-            })}
-          </div>
         </div>
+      </div>
 
-        {/* ------------------------------------------------------- Main area */}
-        <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-8 sm:py-10">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-3 flex items-center gap-1.5 text-xs text-dark-faint"
-          >
-            <span>Portfolio</span>
-            <span aria-hidden>/</span>
-            <span className="text-dark-muted">
-              {activeCategory?.name ?? "All"}
-            </span>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-dark-muted">
-              <Clapperboard className="h-5 w-5" strokeWidth={1.5} />
-            </span>
-            <div>
-              <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-white">
-                {activeCategory?.name ?? "Portfolio"}
-              </h1>
-              <p className="text-sm text-dark-faint">
-                {items.length} {items.length === 1 ? "video" : "videos"} · manage
-                what appears on the public site
-              </p>
-            </div>
-          </div>
-
-          {/* Mobile search */}
-          <div className="relative mt-6 sm:hidden">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-faint" />
-            <input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search videos…"
-              aria-label="Search videos"
-              className="h-11 w-full rounded-full border border-white/10 bg-dark-surface pl-10 pr-4 text-sm text-white outline-none transition-colors placeholder:text-dark-faint hover:border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10"
-            />
-          </div>
-
-          {error && (
-            <p
-              role="alert"
-              className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300"
+      {/* Category selector */}
+      <div className="no-scrollbar -mx-1 mt-6 flex gap-2 overflow-x-auto px-1 pb-1">
+        {categories.map((c) => {
+          const active = c.id === categoryId;
+          return (
+            <button
+              key={c.id}
+              onClick={() => setCategoryId(c.id)}
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                active
+                  ? "bg-white text-dark"
+                  : "border border-white/10 text-dark-muted hover:text-white"
+              }`}
             >
-              {error}
-            </p>
-          )}
+              {c.name}
+            </button>
+          );
+        })}
+      </div>
 
-          <div className="mt-8 space-y-10">
-            <Section
-              title="Long Form"
-              hint="16:9 landscape"
-              items={longform}
-              loading={loading}
-              busyId={busyId}
-              searching={isSearching}
-              onAdd={() => setForm({ mode: "add", type: "long" })}
-              onEdit={(item) => setForm({ mode: "edit", item })}
-              onDelete={setDeleteTarget}
-              onToggle={toggleActive}
-              onMove={move}
-            />
-            <Section
-              title="Short Form"
-              hint="9:16 vertical"
-              items={shortform}
-              loading={loading}
-              busyId={busyId}
-              searching={isSearching}
-              onAdd={() => setForm({ mode: "add", type: "short" })}
-              onEdit={(item) => setForm({ mode: "edit", item })}
-              onDelete={setDeleteTarget}
-              onToggle={toggleActive}
-              onMove={move}
-            />
-          </div>
-        </main>
+      {/* Search within the category */}
+      <div className="relative mt-4 max-w-md">
+        <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-faint" />
+        <input
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search videos in this category…"
+          aria-label="Search videos"
+          className="h-11 w-full rounded-full border border-white/10 bg-dark-surface pl-10 pr-4 text-sm text-white outline-none transition-colors placeholder:text-dark-faint hover:border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10"
+        />
+      </div>
+
+      {error && (
+        <p
+          role="alert"
+          className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300"
+        >
+          {error}
+        </p>
+      )}
+
+      <div className="mt-8 space-y-10">
+        <Section
+          title="Long Form"
+          hint="16:9 landscape"
+          items={longform}
+          loading={loading}
+          busyId={busyId}
+          searching={isSearching}
+          onAdd={() => setForm({ mode: "add", type: "long" })}
+          onEdit={(item) => setForm({ mode: "edit", item })}
+          onDelete={setDeleteTarget}
+          onToggle={toggleActive}
+          onMove={move}
+        />
+        <Section
+          title="Short Form"
+          hint="9:16 vertical"
+          items={shortform}
+          loading={loading}
+          busyId={busyId}
+          searching={isSearching}
+          onAdd={() => setForm({ mode: "add", type: "short" })}
+          onEdit={(item) => setForm({ mode: "edit", item })}
+          onDelete={setDeleteTarget}
+          onToggle={toggleActive}
+          onMove={move}
+        />
       </div>
 
       {form && (

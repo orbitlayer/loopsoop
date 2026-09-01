@@ -1,0 +1,276 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  LayoutDashboard,
+  Clapperboard,
+  ScrollText,
+  LogOut,
+  ExternalLink,
+  ChevronDown,
+  Menu,
+  X,
+  type LucideIcon,
+} from "lucide-react";
+import { logoutAction } from "@/lib/actions";
+import { site } from "@/lib/data";
+
+/*
+ * AdminShell — the shared control-room chrome for every admin page.
+ *   top bar   : brand · mobile-nav toggle · profile menu (view site / log out)
+ *   sidebar   : app-level navigation, grouped (Overview / Website / System)
+ *   main      : the page's own content (passed as children)
+ * Visual language matches the public site's dark bands (see ui.tsx).
+ *
+ * `active` is the current section key so the nav can highlight it. New sections
+ * (Media, Inquiries, SEO, …) are added here as they are built — no dead links.
+ */
+
+type NavItem = { key: string; label: string; href: string; icon: LucideIcon };
+type NavGroup = { group: string; items: NavItem[] };
+
+const NAV: NavGroup[] = [
+  {
+    group: "Overview",
+    items: [
+      {
+        key: "dashboard",
+        label: "Dashboard",
+        href: "/admin/dashboard",
+        icon: LayoutDashboard,
+      },
+    ],
+  },
+  {
+    group: "Website",
+    items: [
+      {
+        key: "portfolio",
+        label: "Portfolio",
+        href: "/admin/portfolio",
+        icon: Clapperboard,
+      },
+    ],
+  },
+  {
+    group: "System",
+    items: [
+      {
+        key: "activity",
+        label: "Activity",
+        href: "/admin/activity",
+        icon: ScrollText,
+      },
+    ],
+  },
+];
+
+function NavList({
+  active,
+  onNavigate,
+}: {
+  active: string;
+  onNavigate?: () => void;
+}) {
+  return (
+    <nav className="space-y-6">
+      {NAV.map((group) => (
+        <div key={group.group}>
+          <p className="px-3 pb-1.5 text-[0.65rem] font-medium uppercase tracking-[0.15em] text-dark-faint">
+            {group.group}
+          </p>
+          <div className="space-y-0.5">
+            {group.items.map((item) => {
+              const Icon = item.icon;
+              const isActive = item.key === active;
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  onClick={onNavigate}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`group flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/30 ${
+                    isActive
+                      ? "bg-white/[0.08] font-medium text-white"
+                      : "text-dark-muted hover:bg-white/[0.04] hover:text-white"
+                  }`}
+                >
+                  <Icon
+                    className={`h-4 w-4 ${isActive ? "text-white" : "text-dark-faint group-hover:text-white"}`}
+                    strokeWidth={1.75}
+                  />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </nav>
+  );
+}
+
+export function AdminShell({
+  email,
+  active,
+  children,
+}: {
+  email: string | null;
+  active: string;
+  children: React.ReactNode;
+}) {
+  const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onDoc = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!navOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setNavOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [navOpen]);
+
+  async function logout() {
+    await logoutAction();
+    router.replace("/admin/login");
+    router.refresh();
+  }
+
+  const initial = (email?.trim()?.[0] ?? "A").toUpperCase();
+
+  return (
+    <div className="min-h-screen">
+      {/* ----------------------------------------------------------- Top bar */}
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-dark/80 backdrop-blur-xl">
+        <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
+          <button
+            type="button"
+            onClick={() => setNavOpen(true)}
+            aria-label="Open navigation"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-dark-muted outline-none transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:ring-2 focus-visible:ring-white/30 lg:hidden"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+
+          <div className="flex items-baseline gap-2">
+            <span className="font-logo text-lg font-bold tracking-[-0.02em] text-white">
+              Loopsoop
+            </span>
+            <span className="rounded-full border border-white/10 px-2 py-0.5 text-[0.6rem] font-medium uppercase tracking-[0.18em] text-dark-faint">
+              Admin
+            </span>
+          </div>
+
+          {/* Profile menu */}
+          <div className="relative ml-auto" ref={menuRef}>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+              className="flex items-center gap-2 rounded-full border border-white/10 py-1 pl-1 pr-2.5 text-sm text-dark-muted outline-none transition-colors hover:border-white/20 hover:text-white focus-visible:ring-2 focus-visible:ring-white/30"
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-semibold text-dark">
+                {initial}
+              </span>
+              <ChevronDown className="h-4 w-4" />
+            </button>
+
+            {menuOpen && (
+              <div
+                role="menu"
+                className="absolute right-0 top-full z-50 mt-2 w-60 overflow-hidden rounded-2xl border border-white/10 bg-dark-surface p-1.5 shadow-2xl shadow-black/50"
+              >
+                <div className="px-3 py-2">
+                  <p className="text-[0.65rem] uppercase tracking-[0.15em] text-dark-faint">
+                    Signed in as
+                  </p>
+                  <p className="mt-0.5 truncate text-sm text-white">
+                    {email ?? "Admin"}
+                  </p>
+                </div>
+                <div className="my-1 h-px bg-white/10" />
+                <a
+                  href={site.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  role="menuitem"
+                  className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-dark-muted outline-none transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:bg-white/[0.06]"
+                >
+                  <ExternalLink className="h-4 w-4" /> View live site
+                </a>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    logout();
+                  }}
+                  className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-dark-muted outline-none transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:bg-white/[0.06]"
+                >
+                  <LogOut className="h-4 w-4" /> Log out
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <div className="lg:grid lg:grid-cols-[16rem_1fr]">
+        {/* --------------------------------------------------- Desktop sidebar */}
+        <aside className="hidden border-r border-white/10 lg:sticky lg:top-16 lg:block lg:h-[calc(100vh-4rem)] lg:overflow-y-auto lg:px-3 lg:py-6">
+          <NavList active={active} />
+        </aside>
+
+        {/* ---------------------------------------------------- Mobile drawer */}
+        {navOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setNavOpen(false)}
+              aria-hidden
+            />
+            <div className="absolute inset-y-0 left-0 w-72 max-w-[80%] overflow-y-auto border-r border-white/10 bg-dark-surface px-3 py-4">
+              <div className="mb-4 flex items-center justify-between px-3">
+                <span className="font-logo text-lg font-bold tracking-[-0.02em] text-white">
+                  Loopsoop
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setNavOpen(false)}
+                  aria-label="Close navigation"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl text-dark-muted outline-none transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:ring-2 focus-visible:ring-white/30"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <NavList active={active} onNavigate={() => setNavOpen(false)} />
+            </div>
+          </div>
+        )}
+
+        {/* ------------------------------------------------------- Main area */}
+        <main className="min-w-0 px-4 py-8 sm:px-6 lg:px-8">{children}</main>
+      </div>
+    </div>
+  );
+}
