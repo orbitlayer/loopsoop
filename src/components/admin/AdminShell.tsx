@@ -8,6 +8,7 @@ import {
   Clapperboard,
   FileText,
   Globe,
+  Image as ImageIcon,
   Inbox,
   ScrollText,
   SlidersHorizontal,
@@ -61,6 +62,12 @@ const NAV: NavGroup[] = [
         label: "SEO",
         href: "/admin/seo",
         icon: Globe,
+      },
+      {
+        key: "media",
+        label: "Media",
+        href: "/admin/media",
+        icon: ImageIcon,
       },
       {
         key: "portfolio",
