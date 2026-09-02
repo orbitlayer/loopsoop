@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import type { Metadata } from "next";
 import { query } from "./db";
 import { faqs as defaultFaqs, site } from "./data";
 
@@ -87,6 +88,81 @@ function validateSiteDetails(raw: unknown): SiteInfo {
   return { email, whatsapp, phone, phoneHref, hours };
 }
 
+/* ------------------------------------------------------------- seo.<page> */
+export type SeoFields = {
+  title: string; // empty = use the page's built-in default
+  description: string;
+  ogImage: string;
+  noindex: boolean;
+};
+
+export type SeoPage = {
+  key: string;
+  label: string;
+  path: string;
+  defaultTitle: string;
+  defaultDescription: string;
+  absoluteTitle?: boolean; // home uses an absolute title (no "%s - Loopsoop")
+};
+
+export const SEO_PAGES: SeoPage[] = [
+  {
+    key: "home",
+    label: "Home",
+    path: "/",
+    defaultTitle:
+      "Loopsoop | Video Editing & Graphic Design | A Creative Division of OrbitLayer",
+    defaultDescription: site.description,
+    absoluteTitle: true,
+  },
+  {
+    key: "our-work",
+    label: "Our Work",
+    path: "/our-work",
+    defaultTitle: "Our Work",
+    defaultDescription:
+      "Explore Loopsoop's work by category - documentary, commercial, motion graphics, highlight edits, real estate, social media and more. Pick a category to see the matching projects.",
+  },
+  {
+    key: "portfolio",
+    label: "Portfolio",
+    path: "/portfolio",
+    defaultTitle: "Portfolio",
+    defaultDescription:
+      "From raw footage to real impact - explore Loopsoop's portfolio of long-form and short-form video edits crafted for brands, creators, startups and businesses.",
+  },
+  {
+    key: "about",
+    label: "About",
+    path: "/about",
+    defaultTitle: "About",
+    defaultDescription:
+      "Loopsoop transforms raw footage into cinematic, engaging and high-performing content. Meet the team and the philosophy behind the edits.",
+  },
+  {
+    key: "contact",
+    label: "Contact",
+    path: "/contact",
+    defaultTitle: "Contact",
+    defaultDescription:
+      "Have a project in mind? Message Loopsoop on WhatsApp and get a tailored quote, usually within a few hours.",
+  },
+];
+
+function strOpt(v: unknown, max: number): string {
+  return (typeof v === "string" ? v.trim() : "").slice(0, max);
+}
+
+function validateSeo(raw: unknown): SeoFields {
+  const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
+  return {
+    title: strOpt(r.title, 200),
+    description: strOpt(r.description, 400),
+    ogImage: strOpt(r.ogImage, 500),
+    noindex: Boolean(r.noindex),
+  };
+}
+
 type BlockDef = {
   label: string;
   description: string;
@@ -111,6 +187,15 @@ export const CONTENT: Record<string, BlockDef> = {
     validate: validateSiteDetails,
   },
 };
+
+// Register one SEO block per page (seo.home, seo.contact, …).
+for (const p of SEO_PAGES) {
+  CONTENT[`seo.${p.key}`] = {
+    label: `SEO — ${p.label}`,
+    description: `Search & social metadata for the ${p.label} page.`,
+    validate: validateSeo,
+  };
+}
 
 export function isContentKey(key: string): boolean {
   return Object.prototype.hasOwnProperty.call(CONTENT, key);
@@ -366,6 +451,91 @@ export async function getSiteDetailsForEdit(): Promise<SiteDetailsEditable> {
       publishedAt: null,
     };
   }
+}
+
+/* --------------------------------------------------------------------- SEO */
+const EMPTY_SEO: SeoFields = {
+  title: "",
+  description: "",
+  ogImage: "",
+  noindex: false,
+};
+
+/** Published SEO override for a page (empty fields mean "use built-in default"). */
+export async function getSeo(key: string): Promise<SeoFields> {
+  const rows = await withTimeout<{ published: string | null }[] | null>(
+    query<{ published: string | null }>(
+      "SELECT `published` FROM content_blocks WHERE `key` = ? LIMIT 1",
+      [`seo.${key}`],
+    ),
+    2500,
+    null,
+  );
+  const raw = parse<unknown>(rows?.[0]?.published);
+  if (raw == null) return EMPTY_SEO;
+  try {
+    return validateSeo(raw);
+  } catch {
+    return EMPTY_SEO;
+  }
+}
+
+export type SeoEditable = {
+  draft: SeoFields;
+  published: SeoFields;
+  hasDraft: boolean;
+  updatedBy: string | null;
+};
+
+export async function getSeoForEdit(key: string): Promise<SeoEditable> {
+  try {
+    const rows = await query<{
+      draft: string | null;
+      published: string | null;
+      updated_by: string | null;
+    }>(
+      "SELECT draft, published, updated_by FROM content_blocks WHERE `key` = ? LIMIT 1",
+      [`seo.${key}`],
+    );
+    const row = rows[0];
+    const published = row?.published
+      ? safeValidate(() => validateSeo(parse(row.published)), EMPTY_SEO)
+      : EMPTY_SEO;
+    const draft = row?.draft
+      ? safeValidate(() => validateSeo(parse(row.draft)), published)
+      : published;
+    return {
+      draft,
+      published,
+      hasDraft: JSON.stringify(draft) !== JSON.stringify(published),
+      updatedBy: row?.updated_by ?? null,
+    };
+  } catch (err) {
+    console.error("[content] getSeoForEdit failed:", err);
+    return { draft: EMPTY_SEO, published: EMPTY_SEO, hasDraft: false, updatedBy: null };
+  }
+}
+
+/** Build a Next Metadata object for a page, merging the SEO override over the
+    built-in defaults. Canonical stays code-controlled (never editable). */
+export async function resolvePageMetadata(key: string): Promise<Metadata> {
+  const page = SEO_PAGES.find((p) => p.key === key);
+  if (!page) return {};
+  const seo = await getSeo(key);
+  const title = seo.title || page.defaultTitle;
+  const description = seo.description || page.defaultDescription;
+  const md: Metadata = {
+    title: page.absoluteTitle ? { absolute: title } : title,
+    description,
+    alternates: { canonical: page.path },
+    openGraph: {
+      title,
+      description,
+      ...(seo.ogImage ? { images: [seo.ogImage] } : {}),
+    },
+  };
+  if (seo.noindex) md.robots = { index: false, follow: false };
+  return md;
 }
 
 /* -------------------------------------------------------------- admin writes */

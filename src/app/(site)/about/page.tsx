@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Mail } from "lucide-react";
 import { processSteps, site, statsMain, team, values } from "@/lib/data";
-import { getSiteInfo } from "@/lib/content";
+import { getSiteInfo, resolvePageMetadata } from "@/lib/content";
 import { Icon, InstagramIcon, LinkedinIcon } from "@/lib/icons";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
@@ -13,12 +13,9 @@ import { StatsBand } from "@/components/sections/StatsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { OrbitLayerCard } from "@/components/sections/OrbitLayerCard";
 
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Loopsoop transforms raw footage into cinematic, engaging and high-performing content. Meet the team and the philosophy behind the edits.",
-  alternates: { canonical: "/about" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return resolvePageMetadata("about");
+}
 
 // "Meet The Team" section is hidden for now — set to true to re-enable it.
 const SHOW_TEAM = false;

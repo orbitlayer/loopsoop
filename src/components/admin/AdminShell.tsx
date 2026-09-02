@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Clapperboard,
   FileText,
+  Globe,
   Inbox,
   ScrollText,
   SlidersHorizontal,
@@ -54,6 +55,12 @@ const NAV: NavGroup[] = [
         label: "Content",
         href: "/admin/content",
         icon: FileText,
+      },
+      {
+        key: "seo",
+        label: "SEO",
+        href: "/admin/seo",
+        icon: Globe,
       },
       {
         key: "portfolio",

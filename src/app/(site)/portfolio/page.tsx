@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
 import { categorySlugToName, statsWork } from "@/lib/data";
 import { getPortfolioProjects } from "@/lib/portfolio";
+import { resolvePageMetadata } from "@/lib/content";
 import { WorkGrid } from "@/components/sections/WorkGrid";
 import { StatsBand } from "@/components/sections/StatsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
 
-export const metadata: Metadata = {
-  title: "Portfolio",
-  description:
-    "From raw footage to real impact — explore Loopsoop's portfolio of long-form and short-form video edits crafted for brands, creators, startups and businesses.",
-  alternates: { canonical: "/portfolio" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return resolvePageMetadata("portfolio");
+}
 
 // Always render fresh so videos added/edited in the admin panel appear
 // immediately with no redeploy.

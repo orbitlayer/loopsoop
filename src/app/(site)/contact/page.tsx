@@ -24,15 +24,13 @@ import {
   getContactCopyForEdit,
   getSiteInfo,
   getSiteDetailsForEdit,
+  resolvePageMetadata,
 } from "@/lib/content";
 import { getSession } from "@/lib/auth";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Have a project in mind? Message Loopsoop on WhatsApp and get a tailored quote, usually within a few hours.",
-  alternates: { canonical: "/contact" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return resolvePageMetadata("contact");
+}
 
 const quickStart = projectTypes.filter((t) => t !== "Other");
 

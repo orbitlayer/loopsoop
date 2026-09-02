@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { categories, statsMain, stylesShort, trustedHome } from "@/lib/data";
 import { getFeaturedProjects } from "@/lib/portfolio";
+import { resolvePageMetadata } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/lib/icons";
 import { Container } from "@/components/ui/Container";
@@ -15,9 +16,9 @@ import { LogoRow } from "@/components/sections/LogoStrip";
 import { StatsBand } from "@/components/sections/StatsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return resolvePageMetadata("home");
+}
 
 // Always fresh so featured items managed in the admin panel appear immediately.
 export const dynamic = "force-dynamic";

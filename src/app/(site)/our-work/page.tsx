@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import { editingCategories, styleIncludes } from "@/lib/data";
+import { resolvePageMetadata } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/lib/icons";
 import { Container } from "@/components/ui/Container";
@@ -11,12 +12,9 @@ import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBand } from "@/components/sections/CtaBand";
 
-export const metadata: Metadata = {
-  title: "Our Work",
-  description:
-    "Explore Loopsoop's work by category — documentary, commercial, motion graphics, highlight edits, real estate, social media and more. Pick a category to see the matching projects.",
-  alternates: { canonical: "/our-work" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return resolvePageMetadata("our-work");
+}
 
 // Served fresh on every request so category renames / image swaps show
 // immediately instead of being pinned by the CDN's long static cache.
