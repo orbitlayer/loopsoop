@@ -79,7 +79,7 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
     setSelected(item);
     if (!item.is_read) {
       patch(item.id, { is_read: true });
-      await setInquiryReadAction(item.id, true);
+      setInquiryReadAction(item.id, true).catch(() => {});
     }
   }
 
@@ -87,26 +87,36 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
     if (!selected) return;
     setError(null);
     setPending(true);
-    const res = await setInquiryStatusAction(selected.id, status);
-    setPending(false);
-    if ("error" in res) return setError(res.error);
-    patch(selected.id, { status });
+    try {
+      const res = await setInquiryStatusAction(selected.id, status);
+      if ("error" in res) return setError(res.error);
+      patch(selected.id, { status });
+    } catch {
+      setError("Could not update. Your session may have expired.");
+    } finally {
+      setPending(false);
+    }
   }
 
   async function saveNotes() {
     if (!selected) return;
     setError(null);
     setPending(true);
-    const res = await saveInquiryNotesAction(selected.id, notesDraft);
-    setPending(false);
-    if ("error" in res) return setError(res.error);
-    patch(selected.id, { notes: notesDraft });
+    try {
+      const res = await saveInquiryNotesAction(selected.id, notesDraft);
+      if ("error" in res) return setError(res.error);
+      patch(selected.id, { notes: notesDraft });
+    } catch {
+      setError("Could not save. Your session may have expired.");
+    } finally {
+      setPending(false);
+    }
   }
 
   async function markUnread() {
     if (!selected) return;
     patch(selected.id, { is_read: false });
-    await setInquiryReadAction(selected.id, false);
+    setInquiryReadAction(selected.id, false).catch(() => {});
     setSelected(null);
   }
 
@@ -114,12 +124,17 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
     if (!selected) return;
     setError(null);
     setPending(true);
-    const res = await deleteInquiryAction(selected.id);
-    setPending(false);
-    if ("error" in res) return setError(res.error);
-    setItems((prev) => prev.filter((i) => i.id !== selected.id));
-    setSelected(null);
-    setConfirmDelete(false);
+    try {
+      const res = await deleteInquiryAction(selected.id);
+      if ("error" in res) return setError(res.error);
+      setItems((prev) => prev.filter((i) => i.id !== selected.id));
+      setSelected(null);
+      setConfirmDelete(false);
+    } catch {
+      setError("Could not delete. Your session may have expired.");
+    } finally {
+      setPending(false);
+    }
   }
 
   const unread = items.filter((i) => !i.is_read).length;

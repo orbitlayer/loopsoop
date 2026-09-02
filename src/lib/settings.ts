@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { query } from "./db";
 
 /*
@@ -72,8 +73,9 @@ export type SiteControls = {
   killContact: boolean;
 };
 
-/** Resolved control state with safe defaults (everything OFF). Never throws. */
-export async function getSiteControls(): Promise<SiteControls> {
+/** Resolved control state with safe defaults (everything OFF). Never throws.
+    Memoised per request (React cache) so the layout + page share one read. */
+export const getSiteControls = cache(async (): Promise<SiteControls> => {
   const s = await getAllSettings();
   return {
     maintenance: s[SETTING.MAINTENANCE] === "on",
@@ -81,4 +83,4 @@ export async function getSiteControls(): Promise<SiteControls> {
       s[SETTING.MAINTENANCE_MESSAGE]?.trim() || DEFAULT_MAINTENANCE_MESSAGE,
     killContact: s[SETTING.KILL_CONTACT] === "on",
   };
-}
+});

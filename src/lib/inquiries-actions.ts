@@ -34,6 +34,23 @@ async function clientIp(): Promise<string | null> {
   }
 }
 
+// Best-effort in-memory per-IP throttle (single Node process; resets on restart)
+// so a public flood can't hammer the DB. 5 accepted submissions / 10 minutes.
+const SUBMIT_LOG = new Map<string, number[]>();
+function isRateLimited(ip: string | null): boolean {
+  if (!ip) return false;
+  const now = Date.now();
+  const windowMs = 10 * 60 * 1000;
+  const recent = (SUBMIT_LOG.get(ip) ?? []).filter((t) => now - t < windowMs);
+  if (recent.length >= 5) {
+    SUBMIT_LOG.set(ip, recent);
+    return true;
+  }
+  recent.push(now);
+  SUBMIT_LOG.set(ip, recent);
+  return false;
+}
+
 export async function submitInquiryAction(
   _prev: SubmitState | undefined,
   formData: FormData,
@@ -58,6 +75,14 @@ export async function submitInquiryAction(
   if (name.length > 200) return { error: "Please shorten your name." };
   if (message.length > 5000) return { error: "Please shorten your message." };
 
+  const ip = await clientIp();
+  if (isRateLimited(ip)) {
+    return {
+      error:
+        "You've sent a few messages already. Please try again a little later, or reach us on WhatsApp.",
+    };
+  }
+
   try {
     await insertInquiry({
       name: name.slice(0, 200),
@@ -65,14 +90,11 @@ export async function submitInquiryAction(
       phone: phone ? phone.slice(0, 40) : null,
       project_type: projectType ? projectType.slice(0, 80) : null,
       message: message.slice(0, 5000),
-      ip: await clientIp(),
+      ip,
     });
-    await logAudit({
-      actorEmail: email,
-      action: "inquiry.received",
-      resourceType: "inquiry",
-      summary: `New inquiry from ${name}`,
-    });
+    // Note: intentionally NOT audit-logged — a public endpoint shouldn't let
+    // an unauthenticated visitor write into the admin audit trail (spoofing) or
+    // multiply one request into two DB writes. The inquiries row is the record.
     return { ok: true };
   } catch (err) {
     console.error("[inquiry] submit failed:", err);

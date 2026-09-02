@@ -38,18 +38,23 @@ export function MediaClient({ initial }: { initial: MediaItem[] }) {
     if (!files || files.length === 0) return;
     setError(null);
     setUploading(true);
-    for (const file of Array.from(files)) {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await uploadMediaAction(fd);
-      if ("error" in res) {
-        setError(res.error);
-        break;
+    try {
+      for (const file of Array.from(files)) {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await uploadMediaAction(fd);
+        if ("error" in res) {
+          setError(res.error);
+          break;
+        }
+        setItems((prev) => [res.item, ...prev]);
       }
-      setItems((prev) => [res.item, ...prev]);
+    } catch {
+      setError("Upload failed. Your session may have expired — reload the page.");
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
     }
-    setUploading(false);
-    if (inputRef.current) inputRef.current.value = "";
   }
 
   async function copy(item: MediaItem) {
@@ -66,14 +71,19 @@ export function MediaClient({ initial }: { initial: MediaItem[] }) {
   async function remove(id: string) {
     setPendingId(id);
     setError(null);
-    const res = await deleteMediaAction(id);
-    setPendingId(null);
-    if ("error" in res) {
-      setError(res.error);
-      return;
+    try {
+      const res = await deleteMediaAction(id);
+      if ("error" in res) {
+        setError(res.error);
+        return;
+      }
+      setItems((prev) => prev.filter((i) => i.id !== id));
+      setConfirmId(null);
+    } catch {
+      setError("Could not delete. Your session may have expired.");
+    } finally {
+      setPendingId(null);
     }
-    setItems((prev) => prev.filter((i) => i.id !== id));
-    setConfirmId(null);
   }
 
   return (
@@ -123,7 +133,7 @@ export function MediaClient({ initial }: { initial: MediaItem[] }) {
           <span className="mt-2 text-sm text-dark-muted">
             Upload your first image
           </span>
-          <span className="text-xs text-dark-faint">JPG, PNG, WebP, GIF, SVG or AVIF</span>
+          <span className="text-xs text-dark-faint">JPG, PNG, WebP, GIF or AVIF</span>
         </button>
       ) : (
         <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">

@@ -528,7 +528,12 @@ export async function resolvePageMetadata(key: string): Promise<Metadata> {
     title: page.absoluteTitle ? { absolute: title } : title,
     description,
     alternates: { canonical: page.path },
+    // Re-include the root OG fields (type/siteName/url): a page-level openGraph
+    // shallow-replaces the layout's, so these must be repeated or they're lost.
     openGraph: {
+      type: "website",
+      siteName: site.name,
+      url: page.path,
       title,
       description,
       ...(seo.ogImage ? { images: [seo.ogImage] } : {}),

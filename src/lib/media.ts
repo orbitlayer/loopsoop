@@ -19,13 +19,13 @@ export function uploadsDir(): string {
   return dir && dir.length > 0 ? dir : FALLBACK_DIR;
 }
 
-// mime -> extension for the image types we accept.
+// mime -> extension for the image types we accept. SVG is intentionally
+// excluded: it can embed scripts and would be an inline stored-XSS vector.
 const ALLOWED: Record<string, string> = {
   "image/jpeg": "jpg",
   "image/png": "png",
   "image/webp": "webp",
   "image/gif": "gif",
-  "image/svg+xml": "svg",
   "image/avif": "avif",
 };
 const MAX_BYTES = 5 * 1024 * 1024; // 5MB
@@ -60,8 +60,7 @@ export async function saveUpload(
   const ext = ALLOWED[file.type];
   if (!ext) {
     return {
-      error:
-        "Unsupported file type. Upload a JPG, PNG, WebP, GIF, SVG or AVIF image.",
+      error: "Unsupported file type. Upload a JPG, PNG, WebP, GIF or AVIF image.",
     };
   }
   if (file.size > MAX_BYTES) return { error: "File is too large (max 5MB)." };
@@ -83,10 +82,24 @@ export async function saveUpload(
     };
   }
 
-  await query(
-    "INSERT INTO media (id, filename, original_name, mime, size, uploaded_by) VALUES (?, ?, ?, ?, ?, ?)",
-    [id, filename, original, file.type, file.size, uploadedBy],
-  );
+  try {
+    await query(
+      "INSERT INTO media (id, filename, original_name, mime, size, uploaded_by) VALUES (?, ?, ?, ?, ?, ?)",
+      [id, filename, original, file.type, file.size, uploadedBy],
+    );
+  } catch (err) {
+    console.error("[media] db insert failed:", err);
+    // Roll back the just-written file so we don't orphan it.
+    try {
+      await fs.unlink(path.join(dir, filename));
+    } catch {
+      // ignore
+    }
+    return {
+      error:
+        "Could not record the upload. Make sure the media table exists (run mysql/007_media.sql).",
+    };
+  }
 
   return {
     ok: true,
