@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Clapperboard,
   FileText,
+  Inbox,
   ScrollText,
   SlidersHorizontal,
   LogOut,
@@ -59,6 +60,17 @@ const NAV: NavGroup[] = [
         label: "Portfolio",
         href: "/admin/portfolio",
         icon: Clapperboard,
+      },
+    ],
+  },
+  {
+    group: "Management",
+    items: [
+      {
+        key: "inquiries",
+        label: "Inquiries",
+        href: "/admin/inquiries",
+        icon: Inbox,
       },
     ],
   },

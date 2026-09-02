@@ -7,6 +7,7 @@ import {
   Clapperboard,
   ScrollText,
   SlidersHorizontal,
+  Inbox,
   ExternalLink,
   ArrowRight,
   AlertTriangle,
@@ -107,10 +108,12 @@ export function Overview({
   counts,
   recent,
   controls,
+  inbox,
 }: {
   counts: OverviewCounts;
   recent: AuditRow[];
   controls: SiteControls;
+  inbox: { total: number; unread: number; fresh: number };
 }) {
   const hidden = Math.max(0, counts.total - counts.active);
   const stats = [
@@ -153,6 +156,18 @@ export function Overview({
               </Link>
             </div>
           )}
+        </div>
+      )}
+
+      {inbox.unread > 0 && (
+        <div className="mt-6 flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2.5 text-sm text-white">
+          <Inbox className="h-4 w-4 shrink-0" />
+          <span className="flex-1">
+            {inbox.unread} unread {inbox.unread === 1 ? "inquiry" : "inquiries"}.
+          </span>
+          <Link href="/admin/inquiries" className="shrink-0 font-medium underline">
+            View
+          </Link>
         </div>
       )}
 
@@ -207,6 +222,16 @@ export function Overview({
         <section>
           <h2 className="mb-3 text-sm font-semibold text-white">Quick actions</h2>
           <div className="space-y-2">
+            <QuickLink
+              href="/admin/inquiries"
+              icon={Inbox}
+              title="Inquiries"
+              desc={
+                inbox.unread > 0
+                  ? `${inbox.unread} unread of ${inbox.total}`
+                  : `${inbox.total} total`
+              }
+            />
             <QuickLink
               href="/admin/portfolio"
               icon={Clapperboard}

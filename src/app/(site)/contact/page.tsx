@@ -15,6 +15,7 @@ import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { PageHero } from "@/components/sections/PageHero";
 import { LogoMarquee } from "@/components/sections/LogoStrip";
 import { FaqAccordion } from "@/components/sections/FaqAccordion";
+import { ContactForm } from "@/components/sections/ContactForm";
 import { getSiteControls } from "@/lib/settings";
 import {
   getFaqs,
@@ -172,6 +173,22 @@ export default async function ContactPage({
               </div>
             </div>
           </Reveal>
+        </Container>
+      </section>
+
+      {/* Contact form — stored inquiry (alternative to WhatsApp) */}
+      <section id="message" className="scroll-mt-24 py-8 md:py-12">
+        <Container>
+          <div className="mx-auto max-w-2xl">
+            <div className="mb-8 text-center">
+              <SectionLabel className="justify-center">Or send a message</SectionLabel>
+              <h2 className="mt-3 font-display text-3xl font-medium md:text-4xl">
+                Prefer a form?{" "}
+                <span className="text-faint">Write to us.</span>
+              </h2>
+            </div>
+            <ContactForm projectTypes={quickStart} />
+          </div>
         </Container>
       </section>
 

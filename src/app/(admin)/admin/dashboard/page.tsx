@@ -3,6 +3,7 @@ import { getSession } from "@/lib/auth";
 import { query } from "@/lib/db";
 import { listAuditLogs } from "@/lib/audit";
 import { getSiteControls } from "@/lib/settings";
+import { getInquiryStats } from "@/lib/inquiries";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { Overview, type OverviewCounts } from "@/components/admin/Overview";
 
@@ -43,10 +44,11 @@ export default async function DashboardPage() {
 
   const recent = await listAuditLogs(6);
   const controls = await getSiteControls();
+  const inbox = await getInquiryStats();
 
   return (
     <AdminShell email={session.email} active="dashboard">
-      <Overview counts={counts} recent={recent} controls={controls} />
+      <Overview counts={counts} recent={recent} controls={controls} inbox={inbox} />
     </AdminShell>
   );
 }
