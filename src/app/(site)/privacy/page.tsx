@@ -16,7 +16,7 @@ export default async function PrivacyPage() {
   const sections = [
     {
       h: "Information We Collect",
-      p: "When you contact us or submit a project enquiry, we collect the details you provide — such as your name, email address, phone number, company and project description. We may also collect basic, anonymised analytics about how visitors use this website.",
+      p: "When you contact us or submit a project enquiry, we collect the details you provide - such as your name, email address, phone number, company and project description. We may also collect basic, anonymised analytics about how visitors use this website.",
     },
     {
       h: "How We Use Your Information",

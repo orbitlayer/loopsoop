@@ -82,7 +82,7 @@ export function SiteDetailsEditor({
     }
     setPub(current);
     setConfirm(null);
-    setNotice("Published — the new details are now live across the site.");
+    setNotice("Published - the new details are now live across the site.");
   }
 
   async function doDiscard() {

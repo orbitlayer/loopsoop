@@ -139,7 +139,7 @@ export function WorkGrid({
           </div>
         ) : isEmpty ? (
           <p className="mt-16 text-center text-muted">
-            No projects in this category yet — check back soon.
+            No projects in this category yet - check back soon.
           </p>
         ) : (
           <div className="mt-12 space-y-14 md:space-y-16">

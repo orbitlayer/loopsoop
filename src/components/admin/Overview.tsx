@@ -138,7 +138,7 @@ export function Overview({
             <div className="flex items-center gap-2.5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300">
               <AlertTriangle className="h-4 w-4 shrink-0" />
               <span className="flex-1">
-                Maintenance mode is ON — the public site is offline to visitors.
+                Maintenance mode is ON - the public site is offline to visitors.
               </span>
               <Link href="/admin/controls" className="shrink-0 font-medium underline">
                 Manage

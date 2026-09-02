@@ -50,7 +50,7 @@ export function ProjectCard({
         <MediaPlaceholder
           seed={project.seed}
           src={thumb}
-          alt={hasVideo ? `${project.title} — play video` : undefined}
+          alt={hasVideo ? `${project.title} - play video` : undefined}
           vignette
           play={hasVideo}
           playSize={portrait ? "sm" : "md"}
@@ -126,7 +126,7 @@ export function ProjectCard({
             onClick={() => setOpen(false)}
             role="dialog"
             aria-modal="true"
-            aria-label={`${project.title} — video`}
+            aria-label={`${project.title} - video`}
           >
             <motion.div
               className={cn(

@@ -36,7 +36,7 @@ export default async function AboutPage() {
             We <span className="text-faint">Elevate</span> Them.
           </>
         }
-        subtitle="Loopsoop is the creative division of OrbitLayer — a studio dedicated to premium Video Editing and Graphic Design that helps brands communicate, engage and grow."
+        subtitle="Loopsoop is the creative division of OrbitLayer - a studio dedicated to premium Video Editing and Graphic Design that helps brands communicate, engage and grow."
         action={<Button href="/contact">Let&apos;s Work Together</Button>}
       />
 
@@ -65,7 +65,7 @@ export default async function AboutPage() {
                   <p>
                     While OrbitLayer specializes in Web Development, AI
                     Automation, Campaign Design, and Performance Marketing,
-                    Loopsoop focuses entirely on creative execution—crafting
+                    Loopsoop focuses entirely on creative execution - crafting
                     high-quality visual content that helps brands communicate,
                     engage, and grow.
                   </p>

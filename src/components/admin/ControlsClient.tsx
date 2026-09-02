@@ -80,8 +80,8 @@ export function ControlsClient({
     setNotice(
       confirm.kind === "maintenance"
         ? confirm.next
-          ? "Maintenance mode is now ON — the public site is offline to visitors."
-          : "Maintenance mode is now OFF — the public site is live again."
+          ? "Maintenance mode is now ON - the public site is offline to visitors."
+          : "Maintenance mode is now OFF - the public site is live again."
         : confirm.next
           ? "Public contact is now DISABLED."
           : "Public contact is now ACTIVE.",

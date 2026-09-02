@@ -136,7 +136,7 @@ export function ContactEditor({
     setPubCopy(currentCopy);
     setPubFaqs(cleanFaqs(items));
     setConfirm(null);
-    setNotice("Published — the Contact page is now live.");
+    setNotice("Published - the Contact page is now live.");
   }
 
   async function doDiscard() {

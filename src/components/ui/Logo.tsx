@@ -28,7 +28,7 @@ export function Logo({
   return (
     <Link
       href="/"
-      aria-label="Loopsoop — home"
+      aria-label="Loopsoop - home"
       className={cn(
         "inline-flex items-center gap-2",
         onDark ? "text-white" : "text-ink",

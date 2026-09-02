@@ -78,7 +78,7 @@ export async function submitInquiryAction(
     console.error("[inquiry] submit failed:", err);
     return {
       error:
-        "Sorry — we couldn't send your message just now. Please try again or reach us on WhatsApp.",
+        "Sorry - we couldn't send your message just now. Please try again or reach us on WhatsApp.",
     };
   }
 }

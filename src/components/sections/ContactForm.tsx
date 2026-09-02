@@ -27,7 +27,7 @@ export function ContactForm({ projectTypes }: { projectTypes: string[] }) {
           Message sent
         </h3>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted">
-          Thanks for reaching out — we&apos;ve received your message and will get
+          Thanks for reaching out - we&apos;ve received your message and will get
           back to you soon, usually within a few hours.
         </p>
       </div>
@@ -89,7 +89,7 @@ export function ContactForm({ projectTypes }: { projectTypes: string[] }) {
           required
           maxLength={5000}
           rows={5}
-          placeholder="Tell us about your project — length, style, deadline…"
+          placeholder="Tell us about your project - length, style, deadline…"
           className={inputCls}
         />
       </label>

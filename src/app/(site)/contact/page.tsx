@@ -53,7 +53,7 @@ export default async function ContactPage({
           </h1>
           <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted">
             We&apos;ve paused new project inquiries temporarily. Please check
-            back soon — we&apos;d love to hear from you.
+            back soon - we&apos;d love to hear from you.
           </p>
         </Container>
       </section>
@@ -76,7 +76,7 @@ export default async function ContactPage({
     <>
       {isPreview && (
         <div className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-amber-500 px-4 py-1.5 text-center text-xs font-medium text-black shadow-lg shadow-black/20">
-          Preview — showing unpublished draft content
+          Preview - showing unpublished draft content
         </div>
       )}
       <PageHero

@@ -15,7 +15,7 @@ export const site = {
   phoneHref: "+919835106943",
   // WhatsApp number in international format, digits only (no +, spaces or dashes).
   whatsapp: "919835106943",
-  hours: "Mon – Sat, 10AM – 8PM IST",
+  hours: "Mon - Sat, 10AM - 8PM IST",
   discord: "@loopsoop.in",
   discordHref: "https://discord.com/users/loopsoop.in",
   location: "Remote First",
@@ -141,7 +141,7 @@ export const editingCategories: EditingCategory[] = [
   { slug: "documentary", name: "Documentary", description: "Natural, raw and real edits that keep the story authentic.", seed: 51, image: "/categories/documentary.webp" },
   { slug: "commercial", name: "Commercial", description: "Punchy, high-converting ads and brand films that sell.", seed: 21, image: "/categories/commercial.webp" },
   { slug: "corporate", name: "Motion Graphics", description: "Animated graphics, kinetic typography and motion design that bring ideas to life.", seed: 72, image: "/categories/motion-graphics.png" },
-  { slug: "gaming", name: "Gaming", description: "High-energy gaming edits — montages, highlights and stream moments that hit hard.", seed: 33, image: "/categories/gaming.webp" },
+  { slug: "gaming", name: "Gaming", description: "High-energy gaming edits - montages, highlights and stream moments that hit hard.", seed: 33, image: "/categories/gaming.webp" },
   { slug: "fast-pace", name: "Highlight Edit", description: "The best moments cut into punchy, high-energy highlight reels.", seed: 84, image: "/categories/fast-pace.webp" },
   { slug: "luxury", name: "Real Estate", description: "Cinematic property tours and walkthroughs that sell every space.", seed: 44, image: "/categories/luxury.webp" },
   { slug: "educational", name: "Educational", description: "Clear, engaging edits that make complex ideas easy to follow.", seed: 12, image: "/categories/educational.webp" },
@@ -275,11 +275,11 @@ export const projectTypes = [
 export const faqs = [
   {
     q: "What types of videos do you edit?",
-    a: "From YouTube videos, short-form reels and commercials to corporate films, documentaries, weddings and real-estate walkthroughs — if it needs an edit, we craft it.",
+    a: "From YouTube videos, short-form reels and commercials to corporate films, documentaries, weddings and real-estate walkthroughs - if it needs an edit, we craft it.",
   },
   {
     q: "How long does a typical project take?",
-    a: "Most projects are delivered within 3–7 days depending on length and complexity. Short-form edits often turn around in 48 hours.",
+    a: "Most projects are delivered within 3-7 days depending on length and complexity. Short-form edits often turn around in 48 hours.",
   },
   {
     q: "What do you need to get started?",

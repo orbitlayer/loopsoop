@@ -61,7 +61,7 @@ export async function loginAction(
   } catch (e) {
     console.error("[login] error:", e);
     return {
-      error: "Server error — the database may be unreachable. Please try again.",
+      error: "Server error - the database may be unreachable. Please try again.",
     };
   }
   if (!user) return { error: "Invalid email or password." };
