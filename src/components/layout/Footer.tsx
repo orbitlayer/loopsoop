@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { site } from "@/lib/data";
+import { getSiteInfo } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
@@ -10,15 +11,6 @@ import {
   LinkedinIcon,
   YoutubeIcon,
 } from "@/lib/icons";
-
-// `disabled` icons are shown but not linked yet (no live account).
-const socialLinks = [
-  { label: "Instagram", href: site.socials.instagram, Icon: InstagramIcon, disabled: true },
-  { label: "YouTube", href: site.socials.youtube, Icon: YoutubeIcon, disabled: true },
-  { label: "LinkedIn", href: site.socials.linkedin, Icon: LinkedinIcon, disabled: true },
-  { label: "Discord", href: site.socials.discord, Icon: DiscordIcon, disabled: false },
-  { label: "Email", href: `mailto:${site.email}`, Icon: Mail, disabled: false },
-];
 
 const socialBase =
   "flex h-11 w-11 items-center justify-center rounded-full border";
@@ -39,8 +31,18 @@ const serviceLinks = [
   { label: "Educational", href: "/portfolio?category=educational" },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const { email } = await getSiteInfo();
   const year = new Date().getFullYear();
+
+  // `disabled` icons are shown but not linked yet (no live account).
+  const socialLinks = [
+    { label: "Instagram", href: site.socials.instagram, Icon: InstagramIcon, disabled: true },
+    { label: "YouTube", href: site.socials.youtube, Icon: YoutubeIcon, disabled: true },
+    { label: "LinkedIn", href: site.socials.linkedin, Icon: LinkedinIcon, disabled: true },
+    { label: "Discord", href: site.socials.discord, Icon: DiscordIcon, disabled: false },
+    { label: "Email", href: `mailto:${email}`, Icon: Mail, disabled: false },
+  ];
 
   return (
     <footer className="on-dark mt-auto bg-dark text-white">

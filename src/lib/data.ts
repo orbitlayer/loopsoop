@@ -37,8 +37,15 @@ export const site = {
 export const WHATSAPP_DEFAULT_MESSAGE =
   "Hi LOOPSOOP! I'd like a quote for a video editing project.";
 
+/* Build a wa.me link for a specific number (used with CMS-resolved details). */
+export const whatsappLink = (
+  number: string,
+  message: string = WHATSAPP_DEFAULT_MESSAGE,
+) => `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+
+/* Default wa.me link using the built-in number (fallback when no override). */
 export const whatsappUrl = (message: string = WHATSAPP_DEFAULT_MESSAGE) =>
-  `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`;
+  whatsappLink(site.whatsapp, message);
 
 /* Visible primary navigation.
    Hidden-but-live routes (kept functional, intentionally not listed here):

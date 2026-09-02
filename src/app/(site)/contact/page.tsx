@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import {
   projectTypes,
-  site,
   trustedClients,
-  whatsappUrl,
+  whatsappLink,
   WHATSAPP_DEFAULT_MESSAGE,
 } from "@/lib/data";
 import { WhatsappIcon } from "@/lib/icons";
@@ -22,6 +21,8 @@ import {
   getFaqsForEdit,
   getContactCopy,
   getContactCopyForEdit,
+  getSiteInfo,
+  getSiteDetailsForEdit,
 } from "@/lib/content";
 import { getSession } from "@/lib/auth";
 
@@ -68,12 +69,15 @@ export default async function ContactPage({
     ? (await getContactCopyForEdit()).draft
     : await getContactCopy();
   const faqs = isPreview ? (await getFaqsForEdit()).draft : await getFaqs();
+  const info = isPreview
+    ? (await getSiteDetailsForEdit()).draft
+    : await getSiteInfo();
 
   return (
     <>
       {isPreview && (
         <div className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-amber-500 px-4 py-1.5 text-center text-xs font-medium text-black shadow-lg shadow-black/20">
-          Preview — showing unpublished FAQ draft
+          Preview — showing unpublished draft content
         </div>
       )}
       <PageHero
@@ -86,7 +90,12 @@ export default async function ContactPage({
           </>
         }
         subtitle={copy.heroSubtitle}
-        action={<WhatsAppButton message={WHATSAPP_DEFAULT_MESSAGE} />}
+        action={
+          <WhatsAppButton
+            message={WHATSAPP_DEFAULT_MESSAGE}
+            href={whatsappLink(info.whatsapp, WHATSAPP_DEFAULT_MESSAGE)}
+          />
+        }
         extra={
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2">
@@ -129,14 +138,15 @@ export default async function ContactPage({
               <WhatsAppButton
                 variant="invert"
                 className="px-8 py-4 text-base"
+                href={whatsappLink(info.whatsapp)}
               />
               <a
-                href={`tel:${site.phoneHref}`}
+                href={`tel:${info.phoneHref}`}
                 className="text-sm text-dark-muted transition-colors hover:text-white"
               >
-                {site.phone}
+                {info.phone}
               </a>
-              <span className="text-xs text-dark-faint">{site.hours}</span>
+              <span className="text-xs text-dark-faint">{info.hours}</span>
             </div>
 
             {/* Quick-start: prefill a quote message by service */}
@@ -148,7 +158,8 @@ export default async function ContactPage({
                 {quickStart.map((t) => (
                   <a
                     key={t}
-                    href={whatsappUrl(
+                    href={whatsappLink(
+                      info.whatsapp,
                       `Hi LOOPSOOP! I'd like a quote for a ${t} edit.`,
                     )}
                     target="_blank"
@@ -191,7 +202,10 @@ export default async function ContactPage({
               <FaqAccordion faqs={faqs} />
               <div className="mt-8">
                 <ArrowLink
-                  href={whatsappUrl("Hi LOOPSOOP! I have a few questions.")}
+                  href={whatsappLink(
+                    info.whatsapp,
+                    "Hi LOOPSOOP! I have a few questions.",
+                  )}
                 >
                   Still have questions? Ask on WhatsApp
                 </ArrowLink>

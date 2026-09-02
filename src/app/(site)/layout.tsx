@@ -4,6 +4,8 @@ import { MotionProvider } from "@/components/providers/MotionProvider";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 import { MaintenanceScreen } from "@/components/MaintenanceScreen";
 import { getSiteControls } from "@/lib/settings";
+import { getSiteInfo } from "@/lib/content";
+import { whatsappLink } from "@/lib/data";
 import { getSession } from "@/lib/auth";
 
 /* Public website chrome: nav, footer, floating WhatsApp button, skip link and
@@ -32,6 +34,8 @@ export default async function SiteLayout({
     return <MaintenanceScreen message={controls.maintenanceMessage} />;
   }
 
+  const info = await getSiteInfo();
+
   return (
     <MotionProvider>
       {controls.maintenance && isAdmin && (
@@ -50,7 +54,9 @@ export default async function SiteLayout({
         {children}
       </main>
       <Footer />
-      {!controls.killContact && <WhatsAppFloat />}
+      {!controls.killContact && (
+        <WhatsAppFloat href={whatsappLink(info.whatsapp)} />
+      )}
     </MotionProvider>
   );
 }

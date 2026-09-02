@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/data";
+import { getSiteInfo } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
@@ -32,7 +33,8 @@ const sections = [
   },
 ];
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const { email } = await getSiteInfo();
   return (
     <section className="pb-24 pt-32 md:pt-40">
       <Container className="max-w-3xl">
@@ -59,8 +61,8 @@ export default function TermsPage() {
 
         <p className="mt-12 border-t border-line pt-8 text-sm text-muted">
           Questions about these terms? Contact us at{" "}
-          <a href={`mailto:${site.email}`} className="text-ink underline underline-offset-4">
-            {site.email}
+          <a href={`mailto:${email}`} className="text-ink underline underline-offset-4">
+            {email}
           </a>
           .
         </p>

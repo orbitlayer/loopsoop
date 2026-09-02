@@ -2,11 +2,12 @@ import { whatsappUrl } from "@/lib/data";
 import { WhatsappIcon } from "@/lib/icons";
 
 /* Persistent WhatsApp launcher — WhatsApp is the primary contact channel,
-   so it stays reachable from every page. */
-export function WhatsAppFloat() {
+   so it stays reachable from every page. `href` overrides the default link
+   with a CMS-resolved one (falls back to the built-in number). */
+export function WhatsAppFloat({ href }: { href?: string }) {
   return (
     <a
-      href={whatsappUrl()}
+      href={href ?? whatsappUrl()}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with LOOPSOOP on WhatsApp"

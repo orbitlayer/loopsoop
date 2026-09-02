@@ -1,6 +1,7 @@
 import "server-only";
+import { cache } from "react";
 import { query } from "./db";
-import { faqs as defaultFaqs } from "./data";
+import { faqs as defaultFaqs, site } from "./data";
 
 /*
  * CMS content layer (Phase 4). Editable website content lives in `content_blocks`
@@ -56,6 +57,36 @@ function validateContactCopy(raw: unknown): ContactCopy {
   };
 }
 
+/* ---------------------------------------------------------- site.details */
+export type SiteInfo = {
+  email: string;
+  whatsapp: string;
+  phone: string;
+  phoneHref: string;
+  hours: string;
+};
+
+export const DEFAULT_SITE_INFO: SiteInfo = {
+  email: site.email,
+  whatsapp: site.whatsapp,
+  phone: site.phone,
+  phoneHref: site.phoneHref,
+  hours: site.hours,
+};
+
+function validateSiteDetails(raw: unknown): SiteInfo {
+  const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
+  const email = str(r.email, DEFAULT_SITE_INFO.email, 200);
+  const whatsapp = (
+    String(r.whatsapp ?? "").replace(/\D/g, "") || DEFAULT_SITE_INFO.whatsapp
+  ).slice(0, 20);
+  const phone = str(r.phone, DEFAULT_SITE_INFO.phone, 40);
+  const digits = phone.replace(/\D/g, "");
+  const phoneHref = digits ? `+${digits}` : DEFAULT_SITE_INFO.phoneHref;
+  const hours = str(r.hours, DEFAULT_SITE_INFO.hours, 160);
+  return { email, whatsapp, phone, phoneHref, hours };
+}
+
 type BlockDef = {
   label: string;
   description: string;
@@ -73,6 +104,11 @@ export const CONTENT: Record<string, BlockDef> = {
     label: "Contact page copy",
     description: "Hero subtitle and the WhatsApp quote section text.",
     validate: validateContactCopy,
+  },
+  "site.details": {
+    label: "Site details",
+    description: "Contact email, WhatsApp number, phone and hours.",
+    validate: validateSiteDetails,
   },
 };
 
@@ -250,6 +286,77 @@ export async function getContactCopyForEdit(): Promise<ContactCopyEditable> {
     };
   } catch (err) {
     console.error("[content] getContactCopyForEdit failed:", err);
+    return {
+      draft: def,
+      published: def,
+      hasDraft: false,
+      updatedAt: null,
+      updatedBy: null,
+      publishedAt: null,
+    };
+  }
+}
+
+/* Resolved site/contact details for the public site (code defaults merged with
+   the published CMS override). Memoised per request; fail-safe; never throws. */
+export const getSiteInfo = cache(async (): Promise<SiteInfo> => {
+  const rows = await withTimeout<{ published: string | null }[] | null>(
+    query<{ published: string | null }>(
+      "SELECT `published` FROM content_blocks WHERE `key` = 'site.details' LIMIT 1",
+    ),
+    2500,
+    null,
+  );
+  const raw = parse<unknown>(rows?.[0]?.published);
+  if (raw == null) return DEFAULT_SITE_INFO;
+  try {
+    return validateSiteDetails(raw);
+  } catch {
+    return DEFAULT_SITE_INFO;
+  }
+});
+
+export type SiteDetailsEditable = {
+  draft: SiteInfo;
+  published: SiteInfo;
+  hasDraft: boolean;
+  updatedAt: string | null;
+  updatedBy: string | null;
+  publishedAt: string | null;
+};
+
+export async function getSiteDetailsForEdit(): Promise<SiteDetailsEditable> {
+  const def = DEFAULT_SITE_INFO;
+  try {
+    const rows = await query<{
+      draft: string | null;
+      published: string | null;
+      updated_at: string | null;
+      updated_by: string | null;
+      published_at: string | null;
+    }>(
+      "SELECT draft, published, updated_at, updated_by, published_at " +
+        "FROM content_blocks WHERE `key` = 'site.details' LIMIT 1",
+    );
+    const row = rows[0];
+    const publishedRaw = parse<unknown>(row?.published);
+    const published = publishedRaw
+      ? safeValidate(() => validateSiteDetails(publishedRaw), def)
+      : def;
+    const draftRaw = parse<unknown>(row?.draft);
+    const draft = draftRaw
+      ? safeValidate(() => validateSiteDetails(draftRaw), published)
+      : published;
+    return {
+      draft,
+      published,
+      hasDraft: JSON.stringify(draft) !== JSON.stringify(published),
+      updatedAt: row?.updated_at ?? null,
+      updatedBy: row?.updated_by ?? null,
+      publishedAt: row?.published_at ?? null,
+    };
+  } catch (err) {
+    console.error("[content] getSiteDetailsForEdit failed:", err);
     return {
       draft: def,
       published: def,

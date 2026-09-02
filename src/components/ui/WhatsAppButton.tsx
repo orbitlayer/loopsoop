@@ -14,15 +14,17 @@ export function WhatsAppButton({
   label = "Chat on WhatsApp",
   variant = "primary",
   className,
+  href,
 }: {
   message?: string;
   label?: string;
   variant?: Variant;
   className?: string;
+  href?: string;
 }) {
   return (
     <a
-      href={whatsappUrl(message)}
+      href={href ?? whatsappUrl(message)}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(

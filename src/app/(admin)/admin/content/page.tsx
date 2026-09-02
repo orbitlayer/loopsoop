@@ -2,7 +2,11 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, FileText } from "lucide-react";
 import { getSession } from "@/lib/auth";
-import { getContactCopyForEdit, getFaqsForEdit } from "@/lib/content";
+import {
+  getContactCopyForEdit,
+  getFaqsForEdit,
+  getSiteDetailsForEdit,
+} from "@/lib/content";
 import { AdminShell } from "@/components/admin/AdminShell";
 
 export const dynamic = "force-dynamic";
@@ -11,9 +15,10 @@ export default async function ContentHubPage() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const [copy, faqs] = await Promise.all([
+  const [copy, faqs, siteDetails] = await Promise.all([
     getContactCopyForEdit(),
     getFaqsForEdit(),
+    getSiteDetailsForEdit(),
   ]);
 
   const pages = [
@@ -23,6 +28,13 @@ export default async function ContentHubPage() {
       desc: "Hero subtitle, quote section text and FAQs.",
       href: "/admin/content/contact",
       hasDraft: copy.hasDraft || faqs.hasDraft,
+    },
+    {
+      key: "site",
+      title: "Site details",
+      desc: "Email, WhatsApp number, phone and hours.",
+      href: "/admin/content/site",
+      hasDraft: siteDetails.hasDraft,
     },
   ];
 

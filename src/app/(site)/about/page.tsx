@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Mail } from "lucide-react";
 import { processSteps, site, statsMain, team, values } from "@/lib/data";
+import { getSiteInfo } from "@/lib/content";
 import { Icon, InstagramIcon, LinkedinIcon } from "@/lib/icons";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
@@ -22,7 +23,8 @@ export const metadata: Metadata = {
 // "Meet The Team" section is hidden for now — set to true to re-enable it.
 const SHOW_TEAM = false;
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { email } = await getSiteInfo();
   return (
     <>
       <PageHero
@@ -212,7 +214,7 @@ export default function AboutPage() {
                           <InstagramIcon className="h-4 w-4" />
                         </a>
                         <a
-                          href={`mailto:${site.email}`}
+                          href={`mailto:${email}`}
                           aria-label={`Email ${m.name}`}
                           className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-white/10 hover:text-white"
                         >
