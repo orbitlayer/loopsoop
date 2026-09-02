@@ -6,12 +6,15 @@ import {
   Star,
   Clapperboard,
   ScrollText,
+  SlidersHorizontal,
   ExternalLink,
   ArrowRight,
+  AlertTriangle,
   type LucideIcon,
 } from "lucide-react";
 import { site } from "@/lib/data";
 import type { AuditRow } from "@/lib/audit";
+import type { SiteControls } from "@/lib/settings";
 
 /*
  * Admin overview (Dashboard). Read-only, server-rendered summary of the site's
@@ -103,9 +106,11 @@ function QuickLink({
 export function Overview({
   counts,
   recent,
+  controls,
 }: {
   counts: OverviewCounts;
   recent: AuditRow[];
+  controls: SiteControls;
 }) {
   const hidden = Math.max(0, counts.total - counts.active);
   const stats = [
@@ -123,6 +128,33 @@ export function Overview({
       <p className="mt-1 text-sm text-dark-faint">
         Overview of your website content and recent activity.
       </p>
+
+      {(controls.maintenance || controls.killContact) && (
+        <div className="mt-6 space-y-2">
+          {controls.maintenance && (
+            <div className="flex items-center gap-2.5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300">
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              <span className="flex-1">
+                Maintenance mode is ON — the public site is offline to visitors.
+              </span>
+              <Link href="/admin/controls" className="shrink-0 font-medium underline">
+                Manage
+              </Link>
+            </div>
+          )}
+          {controls.killContact && (
+            <div className="flex items-center gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-sm text-amber-200">
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              <span className="flex-1">
+                Public contact (WhatsApp) is currently disabled.
+              </span>
+              <Link href="/admin/controls" className="shrink-0 font-medium underline">
+                Manage
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
         {stats.map((s) => (
@@ -180,6 +212,12 @@ export function Overview({
               icon={Clapperboard}
               title="Manage portfolio"
               desc="Add, edit and reorder videos"
+            />
+            <QuickLink
+              href="/admin/controls"
+              icon={SlidersHorizontal}
+              title="Site controls"
+              desc="Maintenance mode & kill switches"
             />
             <QuickLink
               href="/admin/activity"

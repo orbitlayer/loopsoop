@@ -16,6 +16,7 @@ import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { PageHero } from "@/components/sections/PageHero";
 import { LogoMarquee } from "@/components/sections/LogoStrip";
 import { FaqAccordion } from "@/components/sections/FaqAccordion";
+import { getSiteControls } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -26,7 +27,28 @@ export const metadata: Metadata = {
 
 const quickStart = projectTypes.filter((t) => t !== "Other");
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  // Kill switch: when the public contact channel is disabled, show a calm
+  // "paused" notice instead of the WhatsApp CTAs.
+  const { killContact } = await getSiteControls();
+  if (killContact) {
+    return (
+      <section className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-24 text-center">
+        <Container>
+          <SectionLabel className="justify-center">Contact</SectionLabel>
+          <h1 className="mt-4 font-display text-3xl font-medium tracking-[-0.02em] md:text-[2.6rem]">
+            We&apos;re not taking new inquiries{" "}
+            <span className="text-faint">right now.</span>
+          </h1>
+          <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted">
+            We&apos;ve paused new project inquiries temporarily. Please check
+            back soon — we&apos;d love to hear from you.
+          </p>
+        </Container>
+      </section>
+    );
+  }
+
   return (
     <>
       <PageHero

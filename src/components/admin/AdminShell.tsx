@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Clapperboard,
   ScrollText,
+  SlidersHorizontal,
   LogOut,
   ExternalLink,
   ChevronDown,
@@ -57,6 +58,12 @@ const NAV: NavGroup[] = [
   {
     group: "System",
     items: [
+      {
+        key: "controls",
+        label: "Controls",
+        href: "/admin/controls",
+        icon: SlidersHorizontal,
+      },
       {
         key: "activity",
         label: "Activity",
