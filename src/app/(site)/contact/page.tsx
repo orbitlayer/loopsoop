@@ -17,7 +17,12 @@ import { PageHero } from "@/components/sections/PageHero";
 import { LogoMarquee } from "@/components/sections/LogoStrip";
 import { FaqAccordion } from "@/components/sections/FaqAccordion";
 import { getSiteControls } from "@/lib/settings";
-import { getFaqs, getFaqsForEdit } from "@/lib/content";
+import {
+  getFaqs,
+  getFaqsForEdit,
+  getContactCopy,
+  getContactCopyForEdit,
+} from "@/lib/content";
 import { getSession } from "@/lib/auth";
 
 export const metadata: Metadata = {
@@ -55,14 +60,14 @@ export default async function ContactPage({
     );
   }
 
-  // FAQs come from the CMS (published), with an admin-only draft preview.
+  // Contact copy + FAQs come from the CMS (published), with an admin-only
+  // draft preview via ?preview=1.
   const { preview } = await searchParams;
-  let faqs = await getFaqs();
-  let isPreview = false;
-  if (preview === "1" && (await getSession())) {
-    faqs = (await getFaqsForEdit()).draft;
-    isPreview = true;
-  }
+  const isPreview = preview === "1" && Boolean(await getSession());
+  const copy = isPreview
+    ? (await getContactCopyForEdit()).draft
+    : await getContactCopy();
+  const faqs = isPreview ? (await getFaqsForEdit()).draft : await getFaqs();
 
   return (
     <>
@@ -80,7 +85,7 @@ export default async function ContactPage({
             <span className="text-faint">Extraordinary.</span>
           </>
         }
-        subtitle="Have a project in mind? Message us on WhatsApp — tell us your vision and we'll send over a tailored quote, fast."
+        subtitle={copy.heroSubtitle}
         action={<WhatsAppButton message={WHATSAPP_DEFAULT_MESSAGE} />}
         extra={
           <div className="flex items-center gap-3">
@@ -114,12 +119,10 @@ export default async function ContactPage({
               <WhatsappIcon className="h-8 w-8" />
             </span>
             <h2 className="mt-6 font-display text-3xl font-medium text-white md:text-4xl">
-              Get a quote on WhatsApp
+              {copy.quoteHeading}
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-dark-muted">
-              Skip the forms. Send us your project details — length, style and
-              deadline — and we&apos;ll reply with a tailored quote, usually
-              within a few hours.
+              {copy.quoteBody}
             </p>
 
             <div className="mt-8 flex flex-col items-center gap-4">

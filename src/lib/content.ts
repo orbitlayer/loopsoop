@@ -27,6 +27,35 @@ function validateFaqs(raw: unknown): Faq[] {
   return out;
 }
 
+/* ---------------------------------------------------------- contact.copy */
+export type ContactCopy = {
+  heroSubtitle: string;
+  quoteHeading: string;
+  quoteBody: string;
+};
+
+export const DEFAULT_CONTACT_COPY: ContactCopy = {
+  heroSubtitle:
+    "Have a project in mind? Message us on WhatsApp - tell us your vision and we'll send over a tailored quote, fast.",
+  quoteHeading: "Get a quote on WhatsApp",
+  quoteBody:
+    "Skip the forms. Send us your project details - length, style and deadline - and we'll reply with a tailored quote, usually within a few hours.",
+};
+
+function str(v: unknown, fallback: string, max: number): string {
+  const s = typeof v === "string" ? v.trim() : "";
+  return (s || fallback).slice(0, max);
+}
+
+function validateContactCopy(raw: unknown): ContactCopy {
+  const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
+  return {
+    heroSubtitle: str(r.heroSubtitle, DEFAULT_CONTACT_COPY.heroSubtitle, 2000),
+    quoteHeading: str(r.quoteHeading, DEFAULT_CONTACT_COPY.quoteHeading, 300),
+    quoteBody: str(r.quoteBody, DEFAULT_CONTACT_COPY.quoteBody, 2000),
+  };
+}
+
 type BlockDef = {
   label: string;
   description: string;
@@ -39,6 +68,11 @@ export const CONTENT: Record<string, BlockDef> = {
     label: "FAQs",
     description: "Questions & answers shown on the Contact page.",
     validate: validateFaqs,
+  },
+  "contact.copy": {
+    label: "Contact page copy",
+    description: "Hero subtitle and the WhatsApp quote section text.",
+    validate: validateContactCopy,
   },
 };
 
@@ -76,6 +110,14 @@ function withTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
 function safeValidateFaqs(raw: unknown, fallback: Faq[]): Faq[] {
   try {
     return validateFaqs(raw);
+  } catch {
+    return fallback;
+  }
+}
+
+function safeValidate<T>(fn: () => T, fallback: T): T {
+  try {
+    return fn();
   } catch {
     return fallback;
   }
@@ -142,6 +184,76 @@ export async function getFaqsForEdit(): Promise<FaqsEditable> {
       published: def,
       hasDraft: false,
       isCustom: false,
+      updatedAt: null,
+      updatedBy: null,
+      publishedAt: null,
+    };
+  }
+}
+
+/** Live contact-page copy for the public site. Falls back to code defaults. */
+export async function getContactCopy(): Promise<ContactCopy> {
+  const rows = await withTimeout<{ published: string | null }[] | null>(
+    query<{ published: string | null }>(
+      "SELECT `published` FROM content_blocks WHERE `key` = 'contact.copy' LIMIT 1",
+    ),
+    2500,
+    null,
+  );
+  const raw = parse<unknown>(rows?.[0]?.published);
+  if (raw == null) return DEFAULT_CONTACT_COPY;
+  try {
+    return validateContactCopy(raw);
+  } catch {
+    return DEFAULT_CONTACT_COPY;
+  }
+}
+
+export type ContactCopyEditable = {
+  draft: ContactCopy;
+  published: ContactCopy;
+  hasDraft: boolean;
+  updatedAt: string | null;
+  updatedBy: string | null;
+  publishedAt: string | null;
+};
+
+export async function getContactCopyForEdit(): Promise<ContactCopyEditable> {
+  const def = DEFAULT_CONTACT_COPY;
+  try {
+    const rows = await query<{
+      draft: string | null;
+      published: string | null;
+      updated_at: string | null;
+      updated_by: string | null;
+      published_at: string | null;
+    }>(
+      "SELECT draft, published, updated_at, updated_by, published_at " +
+        "FROM content_blocks WHERE `key` = 'contact.copy' LIMIT 1",
+    );
+    const row = rows[0];
+    const publishedRaw = parse<unknown>(row?.published);
+    const published = publishedRaw
+      ? safeValidate(() => validateContactCopy(publishedRaw), def)
+      : def;
+    const draftRaw = parse<unknown>(row?.draft);
+    const draft = draftRaw
+      ? safeValidate(() => validateContactCopy(draftRaw), published)
+      : published;
+    return {
+      draft,
+      published,
+      hasDraft: JSON.stringify(draft) !== JSON.stringify(published),
+      updatedAt: row?.updated_at ?? null,
+      updatedBy: row?.updated_by ?? null,
+      publishedAt: row?.published_at ?? null,
+    };
+  } catch (err) {
+    console.error("[content] getContactCopyForEdit failed:", err);
+    return {
+      draft: def,
+      published: def,
+      hasDraft: false,
       updatedAt: null,
       updatedBy: null,
       publishedAt: null,
