@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Plus } from "lucide-react";
-import { faqs } from "@/lib/data";
+import { faqs as defaultFaqs } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
-export function FaqAccordion() {
+type Faq = { q: string; a: string };
+
+export function FaqAccordion({ faqs = defaultFaqs }: { faqs?: Faq[] }) {
   const [open, setOpen] = useState<number | null>(0);
 
   return (

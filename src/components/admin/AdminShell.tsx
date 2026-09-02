@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Clapperboard,
+  FileText,
   ScrollText,
   SlidersHorizontal,
   LogOut,
@@ -47,6 +48,12 @@ const NAV: NavGroup[] = [
   {
     group: "Website",
     items: [
+      {
+        key: "content",
+        label: "Content",
+        href: "/admin/content",
+        icon: FileText,
+      },
       {
         key: "portfolio",
         label: "Portfolio",

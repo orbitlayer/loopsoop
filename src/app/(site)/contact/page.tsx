@@ -17,6 +17,8 @@ import { PageHero } from "@/components/sections/PageHero";
 import { LogoMarquee } from "@/components/sections/LogoStrip";
 import { FaqAccordion } from "@/components/sections/FaqAccordion";
 import { getSiteControls } from "@/lib/settings";
+import { getFaqs, getFaqsForEdit } from "@/lib/content";
+import { getSession } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -27,7 +29,11 @@ export const metadata: Metadata = {
 
 const quickStart = projectTypes.filter((t) => t !== "Other");
 
-export default async function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ preview?: string }>;
+}) {
   // Kill switch: when the public contact channel is disabled, show a calm
   // "paused" notice instead of the WhatsApp CTAs.
   const { killContact } = await getSiteControls();
@@ -49,8 +55,22 @@ export default async function ContactPage() {
     );
   }
 
+  // FAQs come from the CMS (published), with an admin-only draft preview.
+  const { preview } = await searchParams;
+  let faqs = await getFaqs();
+  let isPreview = false;
+  if (preview === "1" && (await getSession())) {
+    faqs = (await getFaqsForEdit()).draft;
+    isPreview = true;
+  }
+
   return (
     <>
+      {isPreview && (
+        <div className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-amber-500 px-4 py-1.5 text-center text-xs font-medium text-black shadow-lg shadow-black/20">
+          Preview — showing unpublished FAQ draft
+        </div>
+      )}
       <PageHero
         centered
         label="Contact Us"
@@ -165,7 +185,7 @@ export default async function ContactPage() {
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
-              <FaqAccordion />
+              <FaqAccordion faqs={faqs} />
               <div className="mt-8">
                 <ArrowLink
                   href={whatsappUrl("Hi LOOPSOOP! I have a few questions.")}
