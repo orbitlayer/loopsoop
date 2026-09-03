@@ -16,14 +16,17 @@ import {
 } from "@/lib/inquiries-actions";
 import { Button, IconButton, SelectInput } from "./ui";
 
-function when(s: string): string {
+function when(value: string | Date): string {
   try {
+    const d =
+      value instanceof Date ? value : new Date(String(value).replace(" ", "T"));
+    if (Number.isNaN(d.getTime())) return String(value);
     return new Intl.DateTimeFormat("en-US", {
       dateStyle: "medium",
       timeStyle: "short",
-    }).format(new Date(s.replace(" ", "T")));
+    }).format(d);
   } catch {
-    return s;
+    return String(value);
   }
 }
 

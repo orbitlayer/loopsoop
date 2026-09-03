@@ -23,6 +23,10 @@ export function getPool(): mysql.Pool {
       maxIdle: 5,
       idleTimeout: 60_000,
       enableKeepAlive: true,
+      // Return DATETIME/DATE as strings (not JS Date objects) so they match our
+      // `string` types and are safe to render directly. (mysql2 defaults to Date,
+      // which caused React error #31 when a Date reached the render tree.)
+      dateStrings: true,
     });
   }
   return g._loopsoopPool;
