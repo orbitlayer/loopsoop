@@ -27,10 +27,7 @@ import { site } from "@/lib/data";
  *   top bar   : brand · mobile-nav toggle · profile menu (view site / log out)
  *   sidebar   : app-level navigation, grouped (Overview / Website / System)
  *   main      : the page's own content (passed as children)
- * Visual language matches the public site's dark bands (see ui.tsx).
- *
- * `active` is the current section key so the nav can highlight it. New sections
- * (Media, Inquiries, SEO, …) are added here as they are built — no dead links.
+ * Light visual language matching the public site (see ui.tsx).
  */
 
 type NavItem = { key: string; label: string; href: string; icon: LucideIcon };
@@ -40,69 +37,29 @@ const NAV: NavGroup[] = [
   {
     group: "Overview",
     items: [
-      {
-        key: "dashboard",
-        label: "Dashboard",
-        href: "/admin/dashboard",
-        icon: LayoutDashboard,
-      },
+      { key: "dashboard", label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
     ],
   },
   {
     group: "Website",
     items: [
-      {
-        key: "content",
-        label: "Content",
-        href: "/admin/content",
-        icon: FileText,
-      },
-      {
-        key: "seo",
-        label: "SEO",
-        href: "/admin/seo",
-        icon: Globe,
-      },
-      {
-        key: "media",
-        label: "Media",
-        href: "/admin/media",
-        icon: ImageIcon,
-      },
-      {
-        key: "portfolio",
-        label: "Portfolio",
-        href: "/admin/portfolio",
-        icon: Clapperboard,
-      },
+      { key: "content", label: "Content", href: "/admin/content", icon: FileText },
+      { key: "seo", label: "SEO", href: "/admin/seo", icon: Globe },
+      { key: "media", label: "Media", href: "/admin/media", icon: ImageIcon },
+      { key: "portfolio", label: "Portfolio", href: "/admin/portfolio", icon: Clapperboard },
     ],
   },
   {
     group: "Management",
     items: [
-      {
-        key: "inquiries",
-        label: "Inquiries",
-        href: "/admin/inquiries",
-        icon: Inbox,
-      },
+      { key: "inquiries", label: "Inquiries", href: "/admin/inquiries", icon: Inbox },
     ],
   },
   {
     group: "System",
     items: [
-      {
-        key: "controls",
-        label: "Controls",
-        href: "/admin/controls",
-        icon: SlidersHorizontal,
-      },
-      {
-        key: "activity",
-        label: "Activity",
-        href: "/admin/activity",
-        icon: ScrollText,
-      },
+      { key: "controls", label: "Controls", href: "/admin/controls", icon: SlidersHorizontal },
+      { key: "activity", label: "Activity", href: "/admin/activity", icon: ScrollText },
     ],
   },
 ];
@@ -118,7 +75,7 @@ function NavList({
     <nav className="space-y-6">
       {NAV.map((group) => (
         <div key={group.group}>
-          <p className="px-3 pb-1.5 text-[0.65rem] font-medium uppercase tracking-[0.15em] text-dark-faint">
+          <p className="px-3 pb-1.5 text-[0.65rem] font-medium uppercase tracking-[0.15em] text-faint">
             {group.group}
           </p>
           <div className="space-y-0.5">
@@ -131,14 +88,14 @@ function NavList({
                   href={item.href}
                   onClick={onNavigate}
                   aria-current={isActive ? "page" : undefined}
-                  className={`group flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/30 ${
+                  className={`group flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ink/20 ${
                     isActive
-                      ? "bg-white/[0.08] font-medium text-white"
-                      : "text-dark-muted hover:bg-white/[0.04] hover:text-white"
+                      ? "bg-subtle font-medium text-ink"
+                      : "text-muted hover:bg-subtle hover:text-ink"
                   }`}
                 >
                   <Icon
-                    className={`h-4 w-4 ${isActive ? "text-white" : "text-dark-faint group-hover:text-white"}`}
+                    className={`h-4 w-4 ${isActive ? "text-ink" : "text-faint group-hover:text-ink"}`}
                     strokeWidth={1.75}
                   />
                   {item.label}
@@ -200,22 +157,22 @@ export function AdminShell({
   return (
     <div className="min-h-screen">
       {/* ----------------------------------------------------------- Top bar */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-dark/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur-xl">
         <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
           <button
             type="button"
             onClick={() => setNavOpen(true)}
             aria-label="Open navigation"
-            className="flex h-9 w-9 items-center justify-center rounded-xl text-dark-muted outline-none transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:ring-2 focus-visible:ring-white/30 lg:hidden"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-muted outline-none transition-colors hover:bg-subtle hover:text-ink focus-visible:ring-2 focus-visible:ring-ink/20 lg:hidden"
           >
             <Menu className="h-5 w-5" />
           </button>
 
           <div className="flex items-baseline gap-2">
-            <span className="font-logo text-lg font-bold tracking-[-0.02em] text-white">
+            <span className="font-logo text-lg font-bold tracking-[-0.02em] text-ink">
               Loopsoop
             </span>
-            <span className="rounded-full border border-white/10 px-2 py-0.5 text-[0.6rem] font-medium uppercase tracking-[0.18em] text-dark-faint">
+            <span className="rounded-full border border-line px-2 py-0.5 text-[0.6rem] font-medium uppercase tracking-[0.18em] text-faint">
               Admin
             </span>
           </div>
@@ -227,9 +184,9 @@ export function AdminShell({
               onClick={() => setMenuOpen((v) => !v)}
               aria-haspopup="menu"
               aria-expanded={menuOpen}
-              className="flex items-center gap-2 rounded-full border border-white/10 py-1 pl-1 pr-2.5 text-sm text-dark-muted outline-none transition-colors hover:border-white/20 hover:text-white focus-visible:ring-2 focus-visible:ring-white/30"
+              className="flex items-center gap-2 rounded-full border border-line py-1 pl-1 pr-2.5 text-sm text-muted outline-none transition-colors hover:border-ink/20 hover:text-ink focus-visible:ring-2 focus-visible:ring-ink/20"
             >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-semibold text-dark">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-ink text-xs font-semibold text-white">
                 {initial}
               </span>
               <ChevronDown className="h-4 w-4" />
@@ -238,23 +195,23 @@ export function AdminShell({
             {menuOpen && (
               <div
                 role="menu"
-                className="absolute right-0 top-full z-50 mt-2 w-60 overflow-hidden rounded-2xl border border-white/10 bg-dark-surface p-1.5 shadow-2xl shadow-black/50"
+                className="absolute right-0 top-full z-50 mt-2 w-60 overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-2xl shadow-black/10"
               >
                 <div className="px-3 py-2">
-                  <p className="text-[0.65rem] uppercase tracking-[0.15em] text-dark-faint">
+                  <p className="text-[0.65rem] uppercase tracking-[0.15em] text-faint">
                     Signed in as
                   </p>
-                  <p className="mt-0.5 truncate text-sm text-white">
+                  <p className="mt-0.5 truncate text-sm text-ink">
                     {email ?? "Admin"}
                   </p>
                 </div>
-                <div className="my-1 h-px bg-white/10" />
+                <div className="my-1 h-px bg-line" />
                 <a
                   href={site.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   role="menuitem"
-                  className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-dark-muted outline-none transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:bg-white/[0.06]"
+                  className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-muted outline-none transition-colors hover:bg-subtle hover:text-ink focus-visible:bg-subtle"
                 >
                   <ExternalLink className="h-4 w-4" /> View live site
                 </a>
@@ -265,7 +222,7 @@ export function AdminShell({
                     setMenuOpen(false);
                     logout();
                   }}
-                  className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-dark-muted outline-none transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:bg-white/[0.06]"
+                  className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-muted outline-none transition-colors hover:bg-subtle hover:text-ink focus-visible:bg-subtle"
                 >
                   <LogOut className="h-4 w-4" /> Log out
                 </button>
@@ -277,7 +234,7 @@ export function AdminShell({
 
       <div className="lg:grid lg:grid-cols-[16rem_1fr]">
         {/* --------------------------------------------------- Desktop sidebar */}
-        <aside className="hidden border-r border-white/10 lg:sticky lg:top-16 lg:block lg:h-[calc(100vh-4rem)] lg:overflow-y-auto lg:px-3 lg:py-6">
+        <aside className="hidden border-r border-line lg:sticky lg:top-16 lg:block lg:h-[calc(100vh-4rem)] lg:overflow-y-auto lg:px-3 lg:py-6">
           <NavList active={active} />
         </aside>
 
@@ -285,20 +242,20 @@ export function AdminShell({
         {navOpen && (
           <div className="fixed inset-0 z-50 lg:hidden">
             <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/30 backdrop-blur-sm"
               onClick={() => setNavOpen(false)}
               aria-hidden
             />
-            <div className="absolute inset-y-0 left-0 w-72 max-w-[80%] overflow-y-auto border-r border-white/10 bg-dark-surface px-3 py-4">
+            <div className="absolute inset-y-0 left-0 w-72 max-w-[80%] overflow-y-auto border-r border-line bg-surface px-3 py-4">
               <div className="mb-4 flex items-center justify-between px-3">
-                <span className="font-logo text-lg font-bold tracking-[-0.02em] text-white">
+                <span className="font-logo text-lg font-bold tracking-[-0.02em] text-ink">
                   Loopsoop
                 </span>
                 <button
                   type="button"
                   onClick={() => setNavOpen(false)}
                   aria-label="Close navigation"
-                  className="flex h-9 w-9 items-center justify-center rounded-xl text-dark-muted outline-none transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:ring-2 focus-visible:ring-white/30"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl text-muted outline-none transition-colors hover:bg-subtle hover:text-ink focus-visible:ring-2 focus-visible:ring-ink/20"
                 >
                   <X className="h-5 w-5" />
                 </button>

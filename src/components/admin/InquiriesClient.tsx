@@ -36,8 +36,8 @@ function StatusBadge({ status }: { status: InquiryStatus }) {
     <span
       className={`shrink-0 rounded-full px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.1em] ${
         prominent
-          ? "bg-white text-dark"
-          : "bg-white/[0.06] text-dark-muted ring-1 ring-white/10"
+          ? "bg-ink text-white"
+          : "bg-subtle text-muted ring-1 ring-line"
       }`}
     >
       {INQUIRY_STATUS_LABELS[status]}
@@ -145,14 +145,14 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
   return (
     <div className="mx-auto max-w-4xl">
       <div className="flex items-center gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-dark-muted">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-line bg-subtle text-muted">
           <Inbox className="h-5 w-5" strokeWidth={1.5} />
         </span>
         <div>
-          <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-white">
+          <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
             Inquiries
           </h1>
-          <p className="text-sm text-dark-faint">
+          <p className="text-sm text-faint">
             {items.length} total{unread > 0 ? ` · ${unread} unread` : ""}
           </p>
         </div>
@@ -169,8 +169,8 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
                 onClick={() => setFilter(s)}
                 className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                   active
-                    ? "bg-white text-dark"
-                    : "border border-white/10 text-dark-muted hover:text-white"
+                    ? "bg-ink text-white"
+                    : "border border-line text-muted hover:text-ink"
                 }`}
               >
                 {s === "all" ? "All" : INQUIRY_STATUS_LABELS[s]}
@@ -179,23 +179,23 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
           })}
         </div>
         <div className="relative sm:ml-auto sm:w-64">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-faint" />
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
           <input
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search inquiries…"
             aria-label="Search inquiries"
-            className="h-10 w-full rounded-full border border-white/10 bg-dark-surface pl-10 pr-4 text-sm text-white outline-none transition-colors placeholder:text-dark-faint hover:border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10"
+            className="h-10 w-full rounded-full border border-line bg-surface pl-10 pr-4 text-sm text-ink outline-none transition-colors placeholder:text-faint hover:border-ink/20 focus:border-ink/40 focus:ring-2 focus:ring-ink/10"
           />
         </div>
       </div>
 
       {/* List */}
       {list.length === 0 ? (
-        <div className="mt-8 rounded-2xl border border-dashed border-white/10 px-4 py-14 text-center">
-          <p className="text-sm text-dark-muted">No inquiries</p>
-          <p className="mt-1 text-xs text-dark-faint">
+        <div className="mt-8 rounded-2xl border border-dashed border-line px-4 py-14 text-center">
+          <p className="text-sm text-muted">No inquiries</p>
+          <p className="mt-1 text-xs text-faint">
             Messages from the contact form appear here.
           </p>
         </div>
@@ -205,28 +205,28 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
             <li key={i.id}>
               <button
                 onClick={() => open(i)}
-                className={`flex w-full items-center gap-3 rounded-2xl border p-3.5 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/30 ${
+                className={`flex w-full items-center gap-3 rounded-2xl border p-3.5 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ink/20 ${
                   i.is_read
-                    ? "border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
-                    : "border-white/15 bg-white/[0.05] hover:border-white/25"
+                    ? "border-line bg-surface hover:border-ink/20 hover:bg-subtle"
+                    : "border-line bg-subtle hover:border-ink/25"
                 }`}
               >
                 <span
-                  className={`h-2 w-2 shrink-0 rounded-full ${i.is_read ? "bg-transparent" : "bg-white"}`}
+                  className={`h-2 w-2 shrink-0 rounded-full ${i.is_read ? "bg-transparent" : "bg-ink"}`}
                   aria-hidden
                 />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className={`truncate text-sm ${i.is_read ? "text-white" : "font-semibold text-white"}`}>
+                    <span className={`truncate text-sm ${i.is_read ? "text-ink" : "font-semibold text-ink"}`}>
                       {i.name}
                     </span>
                     <StatusBadge status={i.status} />
                   </div>
-                  <p className="mt-0.5 truncate text-xs text-dark-faint">
+                  <p className="mt-0.5 truncate text-xs text-faint">
                     {i.email}
                     {i.project_type ? ` · ${i.project_type}` : ""} · {when(i.created_at)}
                   </p>
-                  <p className="mt-1 truncate text-xs text-dark-muted">{i.message}</p>
+                  <p className="mt-1 truncate text-xs text-muted">{i.message}</p>
                 </div>
               </button>
             </li>
@@ -237,21 +237,21 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
       {/* Detail modal */}
       {selected && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm sm:items-center"
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4 backdrop-blur-sm sm:items-center"
           role="dialog"
           aria-modal="true"
           onClick={() => !pending && setSelected(null)}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="my-8 w-full max-w-lg rounded-[20px] border border-white/10 bg-dark-surface p-6 shadow-2xl shadow-black/50"
+            className="my-8 w-full max-w-lg rounded-[20px] border border-line bg-surface p-6 shadow-2xl shadow-black/10"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h2 className="font-display text-lg font-medium tracking-[-0.02em] text-white">
+                <h2 className="font-display text-lg font-medium tracking-[-0.02em] text-ink">
                   {selected.name}
                 </h2>
-                <p className="mt-0.5 text-xs text-dark-faint">{when(selected.created_at)}</p>
+                <p className="mt-0.5 text-xs text-faint">{when(selected.created_at)}</p>
               </div>
               <IconButton label="Close" onClick={() => setSelected(null)}>
                 <X className="h-4 w-4" />
@@ -261,29 +261,29 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
             <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
               <a
                 href={`mailto:${selected.email}`}
-                className="inline-flex items-center gap-1.5 text-white underline-offset-4 hover:underline"
+                className="inline-flex items-center gap-1.5 text-ink underline-offset-4 hover:underline"
               >
                 <Mail className="h-3.5 w-3.5" /> {selected.email}
               </a>
               {selected.phone && (
-                <a href={`tel:${selected.phone}`} className="text-dark-muted hover:text-white">
+                <a href={`tel:${selected.phone}`} className="text-muted hover:text-ink">
                   {selected.phone}
                 </a>
               )}
               {selected.project_type && (
-                <span className="text-dark-muted">{selected.project_type}</span>
+                <span className="text-muted">{selected.project_type}</span>
               )}
             </div>
 
-            <div className="mt-4 rounded-xl border border-white/10 bg-black/20 p-3.5">
-              <p className="whitespace-pre-wrap text-sm leading-relaxed text-dark-muted">
+            <div className="mt-4 rounded-xl border border-line bg-subtle p-3.5">
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted">
                 {selected.message}
               </p>
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <label className="block">
-                <span className="mb-1.5 block text-xs font-medium text-dark-muted">Status</span>
+                <span className="mb-1.5 block text-xs font-medium text-muted">Status</span>
                 <SelectInput
                   value={selected.status}
                   disabled={pending}
@@ -300,7 +300,7 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
                 <button
                   type="button"
                   onClick={markUnread}
-                  className="text-sm text-dark-faint underline-offset-4 transition-colors hover:text-white hover:underline"
+                  className="text-sm text-faint underline-offset-4 transition-colors hover:text-ink hover:underline"
                 >
                   Mark as unread
                 </button>
@@ -308,7 +308,7 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
             </div>
 
             <label className="mt-4 block">
-              <span className="mb-1.5 block text-xs font-medium text-dark-muted">
+              <span className="mb-1.5 block text-xs font-medium text-muted">
                 Internal notes
               </span>
               <textarea
@@ -316,12 +316,12 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
                 onChange={(e) => setNotesDraft(e.target.value)}
                 rows={3}
                 placeholder="Add a private note…"
-                className="w-full rounded-xl border border-white/10 bg-dark-surface px-3.5 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-dark-faint hover:border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10"
+                className="w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-faint hover:border-ink/20 focus:border-ink/40 focus:ring-2 focus:ring-ink/10"
               />
             </label>
 
             {error && (
-              <p className="mt-3 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+              <p className="mt-3 rounded-xl border border-red-500/30 bg-red-500/5 px-3 py-2 text-sm text-red-600">
                 {error}
               </p>
             )}
@@ -329,7 +329,7 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
             <div className="mt-6 flex items-center justify-between gap-3">
               {confirmDelete ? (
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-dark-muted">Delete permanently?</span>
+                  <span className="text-xs text-muted">Delete permanently?</span>
                   <Button variant="danger" onClick={remove} disabled={pending}>
                     {pending ? "…" : "Delete"}
                   </Button>
@@ -341,7 +341,7 @@ export function InquiriesClient({ initial }: { initial: Inquiry[] }) {
                 <button
                   type="button"
                   onClick={() => setConfirmDelete(true)}
-                  className="inline-flex items-center gap-1.5 text-sm text-dark-faint transition-colors hover:text-red-300"
+                  className="inline-flex items-center gap-1.5 text-sm text-faint transition-colors hover:text-red-600"
                 >
                   <Trash2 className="h-4 w-4" /> Delete
                 </button>

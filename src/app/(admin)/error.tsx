@@ -22,13 +22,13 @@ export default function AdminError({
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 py-16 text-center">
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/15 text-amber-300">
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/15 text-amber-600">
         <AlertTriangle className="h-6 w-6" />
       </span>
-      <h1 className="mt-6 font-display text-2xl font-medium tracking-[-0.02em] text-white">
+      <h1 className="mt-6 font-display text-2xl font-medium tracking-[-0.02em] text-ink">
         Something went wrong
       </h1>
-      <p className="mt-2 max-w-sm text-sm text-dark-muted">
+      <p className="mt-2 max-w-sm text-sm text-muted">
         This admin page hit an unexpected error. Try again, or head back to the
         sign-in screen.
       </p>
@@ -37,20 +37,20 @@ export default function AdminError({
         <button
           type="button"
           onClick={reset}
-          className="rounded-full bg-white px-5 py-2.5 text-sm font-medium text-dark transition-colors hover:bg-white/90"
+          className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-black"
         >
           Try again
         </button>
         <Link
           href="/admin/login"
-          className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-dark-muted transition-colors hover:border-white/25 hover:text-white"
+          className="rounded-full border border-line px-5 py-2.5 text-sm font-medium text-muted transition-colors hover:border-ink/20 hover:text-ink"
         >
           Back to sign in
         </Link>
       </div>
 
       {error.digest && (
-        <p className="mt-8 text-xs text-dark-faint">
+        <p className="mt-8 text-xs text-faint">
           Reference: <span className="font-mono">{error.digest}</span>
         </p>
       )}

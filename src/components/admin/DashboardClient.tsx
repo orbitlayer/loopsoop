@@ -142,22 +142,22 @@ export function DashboardClient({
     <div className="mx-auto max-w-5xl">
       <nav
         aria-label="Breadcrumb"
-        className="mb-3 flex items-center gap-1.5 text-xs text-dark-faint"
+        className="mb-3 flex items-center gap-1.5 text-xs text-faint"
       >
         <span>Portfolio</span>
         <span aria-hidden>/</span>
-        <span className="text-dark-muted">{activeCategory?.name ?? "All"}</span>
+        <span className="text-muted">{activeCategory?.name ?? "All"}</span>
       </nav>
 
       <div className="flex items-center gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-dark-muted">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-line bg-subtle text-muted">
           <Clapperboard className="h-5 w-5" strokeWidth={1.5} />
         </span>
         <div>
-          <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-white">
+          <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
             {activeCategory?.name ?? "Portfolio"}
           </h1>
-          <p className="text-sm text-dark-faint">
+          <p className="text-sm text-faint">
             {items.length} {items.length === 1 ? "video" : "videos"} · manage
             what appears on the public site
           </p>
@@ -174,8 +174,8 @@ export function DashboardClient({
               onClick={() => setCategoryId(c.id)}
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
                 active
-                  ? "bg-white text-dark"
-                  : "border border-white/10 text-dark-muted hover:text-white"
+                  ? "bg-ink text-white"
+                  : "border border-line text-muted hover:text-ink"
               }`}
             >
               {c.name}
@@ -186,21 +186,21 @@ export function DashboardClient({
 
       {/* Search within the category */}
       <div className="relative mt-4 max-w-md">
-        <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-faint" />
+        <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
         <input
           type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search videos in this category…"
           aria-label="Search videos"
-          className="h-11 w-full rounded-full border border-white/10 bg-dark-surface pl-10 pr-4 text-sm text-white outline-none transition-colors placeholder:text-dark-faint hover:border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10"
+          className="h-11 w-full rounded-full border border-line bg-surface pl-10 pr-4 text-sm text-ink outline-none transition-colors placeholder:text-faint hover:border-ink/20 focus:border-ink/40 focus:ring-2 focus:ring-ink/10"
         />
       </div>
 
       {error && (
         <p
           role="alert"
-          className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300"
+          className="mt-6 rounded-xl border border-red-500/30 bg-red-500/5 px-4 py-2.5 text-sm text-red-600"
         >
           {error}
         </p>
@@ -292,11 +292,11 @@ function Section({
     <section>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="flex items-baseline gap-2">
-          <span className="text-sm font-semibold text-white">{title}</span>
-          <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[0.65rem] font-medium text-dark-muted">
+          <span className="text-sm font-semibold text-ink">{title}</span>
+          <span className="rounded-full bg-subtle px-2 py-0.5 text-[0.65rem] font-medium text-muted">
             {items.length}
           </span>
-          <span className="hidden text-xs text-dark-faint sm:inline">{hint}</span>
+          <span className="hidden text-xs text-faint sm:inline">{hint}</span>
         </h2>
         <SmallButton onClick={onAdd}>
           <Plus className="h-3.5 w-3.5" strokeWidth={2.5} /> Add
@@ -308,27 +308,27 @@ function Section({
           {Array.from({ length: 2 }).map((_, i) => (
             <div
               key={i}
-              className="h-[76px] animate-pulse rounded-2xl border border-white/[0.05] bg-white/[0.02]"
+              className="h-[76px] animate-pulse rounded-2xl border border-line bg-surface"
             />
           ))}
         </div>
       ) : items.length === 0 ? (
         searching ? (
-          <div className="rounded-2xl border border-dashed border-white/10 px-4 py-9 text-center">
-            <p className="text-sm text-dark-muted">No matching videos</p>
-            <p className="mt-1 text-xs text-dark-faint">
+          <div className="rounded-2xl border border-dashed border-line px-4 py-9 text-center">
+            <p className="text-sm text-muted">No matching videos</p>
+            <p className="mt-1 text-xs text-faint">
               Try a different search term.
             </p>
           </div>
         ) : (
           <button
             onClick={onAdd}
-            className="flex w-full flex-col items-center gap-1 rounded-2xl border border-dashed border-white/10 px-4 py-9 text-center outline-none transition-colors hover:border-white/25 hover:bg-white/[0.02] focus-visible:ring-2 focus-visible:ring-white/30"
+            className="flex w-full flex-col items-center gap-1 rounded-2xl border border-dashed border-line px-4 py-9 text-center outline-none transition-colors hover:border-ink/25 hover:bg-surface focus-visible:ring-2 focus-visible:ring-ink/20"
           >
-            <span className="text-sm text-dark-muted">
+            <span className="text-sm text-muted">
               No {title.toLowerCase()} videos yet
             </span>
-            <span className="text-xs text-dark-faint">
+            <span className="text-xs text-faint">
               Click to add the first one
             </span>
           </button>
@@ -384,11 +384,11 @@ function Row({
 
   return (
     <li
-      className={`group flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.02] p-3 transition-colors hover:border-white/20 hover:bg-white/[0.04] ${
+      className={`group flex items-center gap-3.5 rounded-2xl border border-line bg-surface p-3 transition-colors hover:border-ink/20 hover:bg-subtle ${
         item.is_active ? "" : "opacity-60"
       }`}
     >
-      <div className="relative aspect-video h-14 shrink-0 overflow-hidden rounded-lg ring-1 ring-white/10">
+      <div className="relative aspect-video h-14 shrink-0 overflow-hidden rounded-lg ring-1 ring-line">
         <MediaPlaceholder src={thumb} seed={index + 1} />
         {item.is_featured && (
           <span className="absolute left-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-black/70 text-amber-300">
@@ -398,12 +398,12 @@ function Row({
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-white">
+        <p className="truncate text-sm font-medium text-ink">
           {item.title?.trim() || item.subtitle?.trim() || "Untitled"}
         </p>
-        <div className="mt-1 flex items-center gap-2 text-xs text-dark-faint">
+        <div className="mt-1 flex items-center gap-2 text-xs text-faint">
           {item.subtitle && <span className="truncate">{item.subtitle}</span>}
-          <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-[0.6rem] uppercase tracking-wide text-dark-muted">
+          <span className="shrink-0 rounded bg-subtle px-1.5 py-0.5 text-[0.6rem] uppercase tracking-wide text-muted">
             {isDrive ? "Drive" : "YouTube"}
           </span>
           {openUrl && (
@@ -411,7 +411,7 @@ function Row({
               href={openUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex shrink-0 items-center gap-1 text-dark-faint transition-colors hover:text-white"
+              className="inline-flex shrink-0 items-center gap-1 text-faint transition-colors hover:text-ink"
             >
               <ExternalLink className="h-3 w-3" /> open
             </a>
@@ -467,22 +467,22 @@ function ConfirmDialog({
 }) {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
       onClick={onCancel}
       role="dialog"
       aria-modal="true"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-[20px] border border-white/10 bg-dark-surface p-6 shadow-2xl shadow-black/50"
+        className="w-full max-w-sm rounded-[20px] border border-line bg-surface p-6 shadow-2xl shadow-black/10"
       >
-        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-red-500/15 text-red-300">
+        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-red-500/10 text-red-600">
           <Trash2 className="h-5 w-5" />
         </div>
-        <h2 className="font-display text-base font-medium tracking-[-0.02em] text-white">
+        <h2 className="font-display text-base font-medium tracking-[-0.02em] text-ink">
           {title}
         </h2>
-        <p className="mt-2 text-sm text-dark-muted">{body}</p>
+        <p className="mt-2 text-sm text-muted">{body}</p>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="ghost" onClick={onCancel}>
             Cancel

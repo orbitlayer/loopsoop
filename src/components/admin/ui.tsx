@@ -8,11 +8,11 @@ import { cn } from "@/lib/cn";
  * and selects so every control in the dashboard + modals is visually and
  * behaviourally consistent.
  *
- * Visual language mirrors the public site's dark bands (globals.css tokens):
- *   surfaces  bg-dark / bg-dark-surface / bg-dark-elevated
- *   text      white / text-dark-muted / text-dark-faint
- *   hairlines border-white/10  (== --dark-line)
- *   pills     rounded-full, primary = white-on-ink (like the site's `invert`)
+ * Light visual language matching the public site (globals.css tokens):
+ *   surfaces  bg-bg (page) / bg-surface (cards) / bg-subtle (insets, hovers)
+ *   text      text-ink / text-muted / text-faint
+ *   hairlines border-line
+ *   pills     rounded-full, primary = ink-on-white (the site's black button)
  * Monochrome to match the brand; red is reserved for errors + destructive acts.
  */
 
@@ -39,20 +39,20 @@ export function Switch({
       disabled={disabled}
       onClick={() => onChange(!checked)}
       className={cn(
-        "group inline-flex items-center gap-2.5 rounded-full text-sm text-dark-muted outline-none disabled:opacity-50",
-        "focus-visible:ring-2 focus-visible:ring-white/30",
+        "group inline-flex items-center gap-2.5 rounded-full text-sm text-muted outline-none disabled:opacity-50",
+        "focus-visible:ring-2 focus-visible:ring-ink/20",
       )}
     >
       <span
         className={cn(
           "relative inline-flex h-5 w-9 shrink-0 items-center rounded-full px-0.5 transition-colors duration-200",
-          checked ? "bg-white" : "bg-white/15",
+          checked ? "bg-ink" : "bg-ink/15",
         )}
       >
         <span
           className={cn(
-            "inline-block h-4 w-4 transform rounded-full shadow-sm transition-transform duration-200",
-            checked ? "translate-x-4 bg-dark" : "translate-x-0 bg-white",
+            "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-1 ring-black/5 transition-transform duration-200",
+            checked ? "translate-x-4" : "translate-x-0",
           )}
         />
       </span>
@@ -65,10 +65,10 @@ export function Switch({
 type ButtonVariant = "primary" | "ghost" | "danger";
 
 const BTN_BASE =
-  "inline-flex items-center justify-center gap-1.5 rounded-full text-sm font-medium outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-white/30 disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center justify-center gap-1.5 rounded-full text-sm font-medium outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-ink/20 disabled:cursor-not-allowed disabled:opacity-50";
 const BTN_VARIANT: Record<ButtonVariant, string> = {
-  primary: "bg-white text-dark hover:bg-white/90",
-  ghost: "border border-white/15 text-dark-muted hover:bg-white/[0.06] hover:text-white",
+  primary: "bg-ink text-white hover:bg-black",
+  ghost: "border border-line text-ink hover:bg-subtle",
   danger: "bg-red-500 text-white hover:bg-red-600",
 };
 
@@ -126,10 +126,10 @@ export function IconButton({
       aria-label={label}
       title={label}
       className={cn(
-        "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-dark-faint outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/30 disabled:opacity-25",
+        "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-faint outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ink/20 disabled:opacity-30",
         danger
-          ? "hover:bg-red-500/15 hover:text-red-300"
-          : "hover:bg-white/10 hover:text-white",
+          ? "hover:bg-red-500/10 hover:text-red-600"
+          : "hover:bg-subtle hover:text-ink",
         className,
       )}
       {...props}
@@ -141,7 +141,7 @@ export function IconButton({
 
 /* ----------------------------------------------------------------- Fields */
 const CONTROL =
-  "h-11 w-full rounded-xl border border-white/10 bg-dark-surface px-3.5 text-sm text-white outline-none transition-colors placeholder:text-dark-faint hover:border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10";
+  "h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-ink outline-none transition-colors placeholder:text-faint hover:border-ink/20 focus:border-ink/40 focus:ring-2 focus:ring-ink/10";
 
 export function Field({
   label,
@@ -156,11 +156,11 @@ export function Field({
 }) {
   return (
     <label className={cn("block", className)}>
-      <span className="mb-1.5 block text-xs font-medium text-dark-muted">
+      <span className="mb-1.5 block text-xs font-medium text-muted">
         {label}
       </span>
       {children}
-      {hint && <span className="mt-1 block text-xs text-dark-faint">{hint}</span>}
+      {hint && <span className="mt-1 block text-xs text-faint">{hint}</span>}
     </label>
   );
 }
@@ -184,7 +184,7 @@ export function SelectInput({
       >
         {children}
       </select>
-      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-faint" />
+      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
     </div>
   );
 }

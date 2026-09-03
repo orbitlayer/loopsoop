@@ -18,11 +18,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="on-dark relative min-h-screen bg-dark text-dark-muted [color-scheme:dark]">
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 bg-[radial-gradient(70%_55%_at_50%_-10%,rgba(255,255,255,0.05),transparent_70%)]"
-      />
+    <div className="relative min-h-screen bg-bg text-muted">
       <div className="relative">{children}</div>
     </div>
   );

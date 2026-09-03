@@ -90,14 +90,14 @@ export function MediaClient({ initial }: { initial: MediaItem[] }) {
     <div className="mx-auto max-w-4xl">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-dark-muted">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-line bg-subtle text-muted">
             <ImageIcon className="h-5 w-5" strokeWidth={1.5} />
           </span>
           <div>
-            <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-white">
+            <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
               Media
             </h1>
-            <p className="text-sm text-dark-faint">
+            <p className="text-sm text-faint">
               {items.length} {items.length === 1 ? "file" : "files"} · images up
               to 5MB
             </p>
@@ -119,7 +119,7 @@ export function MediaClient({ initial }: { initial: MediaItem[] }) {
       </div>
 
       {error && (
-        <p role="alert" className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300">
+        <p role="alert" className="mt-6 rounded-xl border border-red-500/30 bg-red-500/5 px-4 py-2.5 text-sm text-red-600">
           {error}
         </p>
       )}
@@ -127,22 +127,22 @@ export function MediaClient({ initial }: { initial: MediaItem[] }) {
       {items.length === 0 ? (
         <button
           onClick={() => inputRef.current?.click()}
-          className="mt-8 flex w-full flex-col items-center gap-1 rounded-2xl border border-dashed border-white/10 px-4 py-16 text-center outline-none transition-colors hover:border-white/25 hover:bg-white/[0.02] focus-visible:ring-2 focus-visible:ring-white/30"
+          className="mt-8 flex w-full flex-col items-center gap-1 rounded-2xl border border-dashed border-line px-4 py-16 text-center outline-none transition-colors hover:border-ink/25 hover:bg-surface focus-visible:ring-2 focus-visible:ring-ink/20"
         >
-          <Upload className="h-6 w-6 text-dark-faint" strokeWidth={1.5} />
-          <span className="mt-2 text-sm text-dark-muted">
+          <Upload className="h-6 w-6 text-faint" strokeWidth={1.5} />
+          <span className="mt-2 text-sm text-muted">
             Upload your first image
           </span>
-          <span className="text-xs text-dark-faint">JPG, PNG, WebP, GIF or AVIF</span>
+          <span className="text-xs text-faint">JPG, PNG, WebP, GIF or AVIF</span>
         </button>
       ) : (
         <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           {items.map((item) => (
             <li
               key={item.id}
-              className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]"
+              className="overflow-hidden rounded-2xl border border-line bg-surface"
             >
-              <div className="relative aspect-square bg-black/30">
+              <div className="relative aspect-square bg-subtle">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/media/${item.filename}`}
@@ -152,10 +152,10 @@ export function MediaClient({ initial }: { initial: MediaItem[] }) {
                 />
               </div>
               <div className="p-2.5">
-                <p className="truncate text-xs font-medium text-white" title={item.original_name}>
+                <p className="truncate text-xs font-medium text-ink" title={item.original_name}>
                   {item.original_name}
                 </p>
-                <p className="mt-0.5 text-[0.65rem] text-dark-faint">
+                <p className="mt-0.5 text-[0.65rem] text-faint">
                   {fmtSize(item.size)}
                 </p>
                 {confirmId === item.id ? (
@@ -169,7 +169,7 @@ export function MediaClient({ initial }: { initial: MediaItem[] }) {
                     </button>
                     <button
                       onClick={() => setConfirmId(null)}
-                      className="rounded-lg px-2 py-1 text-[0.65rem] text-dark-muted hover:text-white"
+                      className="rounded-lg px-2 py-1 text-[0.65rem] text-muted hover:text-ink"
                     >
                       Cancel
                     </button>
@@ -178,7 +178,7 @@ export function MediaClient({ initial }: { initial: MediaItem[] }) {
                   <div className="mt-2 flex items-center gap-0.5">
                     <button
                       onClick={() => copy(item)}
-                      className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border border-white/10 px-2 py-1 text-[0.65rem] text-dark-muted transition-colors hover:border-white/20 hover:text-white"
+                      className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border border-line px-2 py-1 text-[0.65rem] text-muted transition-colors hover:border-ink/20 hover:text-ink"
                     >
                       {copiedId === item.id ? (
                         <>

@@ -28,8 +28,8 @@ function StatusPill({ on, onLabel, offLabel }: { on: boolean; onLabel: string; o
     <span
       className={`rounded-full px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.12em] ${
         on
-          ? "bg-red-500/15 text-red-300 ring-1 ring-red-500/30"
-          : "bg-white/[0.06] text-dark-muted ring-1 ring-white/10"
+          ? "bg-red-500/10 text-red-600 ring-1 ring-red-500/30"
+          : "bg-subtle text-muted ring-1 ring-line"
       }`}
     >
       {on ? onLabel : offLabel}
@@ -103,15 +103,15 @@ export function ControlsClient({
 
   return (
     <div className="mx-auto max-w-3xl">
-      <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-white">
+      <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
         Site Controls
       </h1>
-      <p className="mt-1 text-sm text-dark-faint">
+      <p className="mt-1 text-sm text-faint">
         Maintenance mode and emergency kill switches for the public website.
       </p>
 
       {notice && (
-        <p className="mt-6 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2.5 text-sm text-white">
+        <p className="mt-6 rounded-xl border border-line bg-subtle px-4 py-2.5 text-sm text-ink">
           {notice}
         </p>
       )}
@@ -120,27 +120,27 @@ export function ControlsClient({
       {error && !confirm && (
         <p
           role="alert"
-          className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300"
+          className="mt-6 rounded-xl border border-red-500/30 bg-red-500/5 px-4 py-2.5 text-sm text-red-600"
         >
           {error}
         </p>
       )}
 
       {/* Maintenance mode */}
-      <section className="mt-6 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+      <section className="mt-6 rounded-2xl border border-line bg-surface p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-dark-muted">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-subtle text-muted">
               <Power className="h-5 w-5" strokeWidth={1.75} />
             </span>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-sm font-semibold text-white">
+                <h2 className="text-sm font-semibold text-ink">
                   Maintenance Mode
                 </h2>
                 <StatusPill on={maintenance} onLabel="Active" offLabel="Off" />
               </div>
-              <p className="mt-1 max-w-md text-xs leading-relaxed text-dark-faint">
+              <p className="mt-1 max-w-md text-xs leading-relaxed text-faint">
                 When ON, visitors see a maintenance page. You and other signed-in
                 admins keep full access to the admin panel and can still preview
                 the live site.
@@ -155,14 +155,14 @@ export function ControlsClient({
         </div>
 
         <div className="mt-5">
-          <label className="mb-1.5 block text-xs font-medium text-dark-muted">
+          <label className="mb-1.5 block text-xs font-medium text-muted">
             Maintenance message (shown to visitors)
           </label>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={3}
-            className="w-full rounded-xl border border-white/10 bg-dark-surface px-3.5 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-dark-faint hover:border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10"
+            className="w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-faint hover:border-ink/20 focus:border-ink/40 focus:ring-2 focus:ring-ink/10"
           />
           <div className="mt-2 flex justify-end">
             <Button variant="ghost" onClick={saveMessage} disabled={pending}>
@@ -173,26 +173,26 @@ export function ControlsClient({
       </section>
 
       {/* Kill switches */}
-      <section className="mt-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-        <h2 className="text-sm font-semibold text-white">Kill switches</h2>
-        <p className="mt-1 text-xs text-dark-faint">
+      <section className="mt-4 rounded-2xl border border-line bg-surface p-5">
+        <h2 className="text-sm font-semibold text-ink">Kill switches</h2>
+        <p className="mt-1 text-xs text-faint">
           Instantly disable a specific public capability without taking the whole
           site down.
         </p>
 
-        <div className="mt-4 flex items-start justify-between gap-4 rounded-xl border border-white/10 bg-black/20 p-4">
+        <div className="mt-4 flex items-start justify-between gap-4 rounded-xl border border-line bg-subtle p-4">
           <div className="flex items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-dark-muted">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-subtle text-muted">
               <MessageSquareOff className="h-5 w-5" strokeWidth={1.75} />
             </span>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-medium text-white">
+                <h3 className="text-sm font-medium text-ink">
                   Public contact (WhatsApp)
                 </h3>
                 <StatusPill on={killContact} onLabel="Disabled" offLabel="Active" />
               </div>
-              <p className="mt-1 max-w-md text-xs leading-relaxed text-dark-faint">
+              <p className="mt-1 max-w-md text-xs leading-relaxed text-faint">
                 Hides the floating WhatsApp button site-wide and shows a
                 &ldquo;not taking new inquiries&rdquo; notice on the contact page.
               </p>
@@ -210,19 +210,19 @@ export function ControlsClient({
       {/* Confirmation dialog */}
       {confirm && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           onClick={() => !pending && setConfirm(null)}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md rounded-[20px] border border-white/10 bg-dark-surface p-6 shadow-2xl shadow-black/50"
+            className="w-full max-w-md rounded-[20px] border border-line bg-surface p-6 shadow-2xl shadow-black/10"
           >
-            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-amber-500/15 text-amber-300">
+            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-amber-500/15 text-amber-600">
               <AlertTriangle className="h-5 w-5" />
             </div>
-            <h2 className="font-display text-base font-medium tracking-[-0.02em] text-white">
+            <h2 className="font-display text-base font-medium tracking-[-0.02em] text-ink">
               {confirm.kind === "maintenance"
                 ? confirm.next
                   ? "Take the public site offline?"
@@ -231,7 +231,7 @@ export function ControlsClient({
                   ? "Disable the public contact channel?"
                   : "Re-enable the public contact channel?"}
             </h2>
-            <p className="mt-2 text-sm text-dark-muted">
+            <p className="mt-2 text-sm text-muted">
               {confirm.kind === "maintenance"
                 ? confirm.next
                   ? "Visitors will see the maintenance page until you turn this off. The admin panel stays available to you."
@@ -243,8 +243,8 @@ export function ControlsClient({
 
             {maintEnabling && (
               <div className="mt-4">
-                <label className="mb-1.5 block text-xs font-medium text-dark-muted">
-                  Type <span className="font-semibold text-white">{ENABLE_PHRASE}</span> to confirm
+                <label className="mb-1.5 block text-xs font-medium text-muted">
+                  Type <span className="font-semibold text-ink">{ENABLE_PHRASE}</span> to confirm
                 </label>
                 <TextInput
                   value={phrase}
@@ -256,7 +256,7 @@ export function ControlsClient({
             )}
 
             {error && (
-              <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+              <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/5 px-3 py-2 text-sm text-red-600">
                 {error}
               </p>
             )}

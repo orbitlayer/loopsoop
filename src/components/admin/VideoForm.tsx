@@ -132,7 +132,7 @@ export function VideoForm({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm transition-opacity duration-200 sm:items-center ${
+      className={`fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4 backdrop-blur-sm transition-opacity duration-200 sm:items-center ${
         mounted ? "opacity-100" : "opacity-0"
       }`}
       onClick={onClose}
@@ -143,14 +143,14 @@ export function VideoForm({
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
-        className={`my-8 w-full max-w-lg rounded-[20px] border border-white/10 bg-dark-surface p-6 shadow-2xl shadow-black/50 transition-all duration-200 ${
+        className={`my-8 w-full max-w-lg rounded-[20px] border border-line bg-surface p-6 shadow-2xl shadow-black/10 transition-all duration-200 ${
           mounted ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-[0.98] opacity-0"
         }`}
       >
-        <h2 className="font-display text-lg font-medium tracking-[-0.02em] text-white">
+        <h2 className="font-display text-lg font-medium tracking-[-0.02em] text-ink">
           {editing ? "Edit video" : "Add video"}
         </h2>
-        <p className="mt-0.5 text-sm text-dark-faint">
+        <p className="mt-0.5 text-sm text-faint">
           Paste a link - the thumbnail and player are generated for you.
         </p>
 
@@ -208,25 +208,25 @@ export function VideoForm({
             {url.trim() && (
               <div className="mt-2.5">
                 {urlValid ? (
-                  <div className="flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/[0.04] p-2">
+                  <div className="flex items-center gap-2.5 rounded-xl border border-line bg-subtle p-2">
                     {previewThumb && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={previewThumb}
                         alt=""
                         onError={(e) => (e.currentTarget.style.display = "none")}
-                        className="h-10 w-[71px] rounded bg-black/40 object-cover"
+                        className="h-10 w-[71px] rounded bg-subtle object-cover"
                       />
                     )}
-                    <span className="text-xs text-white">
+                    <span className="text-xs text-ink">
                       Valid {isDrive ? "Drive file" : "video"}
-                      <span className="ml-1 text-dark-faint">
+                      <span className="ml-1 text-faint">
                         {isDrive ? drId : ytId}
                       </span>
                     </span>
                   </div>
                 ) : (
-                  <p className="text-xs text-amber-400">
+                  <p className="text-xs text-amber-600">
                     Not a recognizable {isDrive ? "Google Drive" : "YouTube"} link
                     yet.
                   </p>
@@ -278,7 +278,7 @@ export function VideoForm({
             />
           </Field>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-lg border border-white/10 bg-black/20 px-4 py-3">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-lg border border-line bg-subtle px-4 py-3">
             <Switch
               label="Show on portfolio"
               checked={isActive}
@@ -295,7 +295,7 @@ export function VideoForm({
         {error && (
           <p
             role="alert"
-            className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300"
+            className="mt-4 rounded-lg border border-red-500/30 bg-red-500/5 px-3 py-2 text-sm text-red-600"
           >
             {error}
           </p>

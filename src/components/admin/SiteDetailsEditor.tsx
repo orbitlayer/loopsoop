@@ -105,45 +105,45 @@ export function SiteDetailsEditor({
 
   return (
     <div className="mx-auto max-w-2xl">
-      <nav aria-label="Breadcrumb" className="mb-3 flex items-center gap-1.5 text-xs text-dark-faint">
-        <a href="/admin/content" className="transition-colors hover:text-white">
+      <nav aria-label="Breadcrumb" className="mb-3 flex items-center gap-1.5 text-xs text-faint">
+        <a href="/admin/content" className="transition-colors hover:text-ink">
           Content
         </a>
         <span aria-hidden>/</span>
-        <span className="text-dark-muted">Site details</span>
+        <span className="text-muted">Site details</span>
       </nav>
 
       <div className="flex items-center gap-2">
-        <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-white">
+        <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
           Site details
         </h1>
         <span
           className={`rounded-full px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.12em] ${
             dirty
-              ? "bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30"
-              : "bg-white/[0.06] text-dark-muted ring-1 ring-white/10"
+              ? "bg-amber-500/15 text-amber-700 ring-1 ring-amber-500/30"
+              : "bg-subtle text-muted ring-1 ring-line"
           }`}
         >
           {dirty ? "Unpublished changes" : "Published"}
         </span>
       </div>
-      <p className="mt-1 text-sm text-dark-faint">
+      <p className="mt-1 text-sm text-faint">
         Used across the footer, contact page and WhatsApp buttons.
         {updatedBy ? ` Last edited by ${updatedBy}.` : ""}
       </p>
 
       {notice && (
-        <p className="mt-6 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2.5 text-sm text-white">
+        <p className="mt-6 rounded-xl border border-line bg-subtle px-4 py-2.5 text-sm text-ink">
           {notice}
         </p>
       )}
       {error && (
-        <p role="alert" className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300">
+        <p role="alert" className="mt-6 rounded-xl border border-red-500/30 bg-red-500/5 px-4 py-2.5 text-sm text-red-600">
           {error}
         </p>
       )}
 
-      <section className="mt-6 space-y-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+      <section className="mt-6 space-y-4 rounded-2xl border border-line bg-surface p-5">
         <Field label="Contact email">
           <TextInput
             type="email"
@@ -179,7 +179,7 @@ export function SiteDetailsEditor({
         </Field>
       </section>
 
-      <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-6">
+      <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-line pt-6">
         <Button onClick={() => setConfirm("publish")} disabled={pending}>
           Publish
         </Button>
@@ -194,7 +194,7 @@ export function SiteDetailsEditor({
             type="button"
             onClick={() => setConfirm("discard")}
             disabled={pending}
-            className="ml-auto text-sm text-dark-faint underline-offset-4 transition-colors hover:text-white hover:underline disabled:opacity-50"
+            className="ml-auto text-sm text-faint underline-offset-4 transition-colors hover:text-ink hover:underline disabled:opacity-50"
           >
             Discard changes
           </button>
@@ -203,30 +203,30 @@ export function SiteDetailsEditor({
 
       {confirm && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           onClick={() => !pending && setConfirm(null)}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md rounded-[20px] border border-white/10 bg-dark-surface p-6 shadow-2xl shadow-black/50"
+            className="w-full max-w-md rounded-[20px] border border-line bg-surface p-6 shadow-2xl shadow-black/10"
           >
-            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-amber-500/15 text-amber-300">
+            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-amber-500/15 text-amber-600">
               <AlertTriangle className="h-5 w-5" />
             </div>
-            <h2 className="font-display text-base font-medium tracking-[-0.02em] text-white">
+            <h2 className="font-display text-base font-medium tracking-[-0.02em] text-ink">
               {confirm === "publish"
                 ? "Publish site details?"
                 : "Discard unpublished changes?"}
             </h2>
-            <p className="mt-2 text-sm text-dark-muted">
+            <p className="mt-2 text-sm text-muted">
               {confirm === "publish"
                 ? "These details will go live across the footer, contact page and WhatsApp buttons."
                 : "Your unpublished edits will be reverted to what's currently live."}
             </p>
             {error && (
-              <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+              <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/5 px-3 py-2 text-sm text-red-600">
                 {error}
               </p>
             )}

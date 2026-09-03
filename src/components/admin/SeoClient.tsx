@@ -24,7 +24,7 @@ type SeoPage = {
 };
 
 const textareaCls =
-  "w-full rounded-xl border border-white/10 bg-dark-surface px-3.5 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-dark-faint hover:border-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10";
+  "w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-faint hover:border-ink/20 focus:border-ink/40 focus:ring-2 focus:ring-ink/10";
 
 /*
  * SEO manager. Per-page title/description/OG-image/no-index overrides. Empty
@@ -92,14 +92,14 @@ export function SeoClient({
   return (
     <div className="mx-auto max-w-3xl">
       <div className="flex items-center gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-dark-muted">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-line bg-subtle text-muted">
           <Search className="h-5 w-5" strokeWidth={1.5} />
         </span>
         <div>
-          <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-white">
+          <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
             SEO
           </h1>
-          <p className="text-sm text-dark-faint">
+          <p className="text-sm text-faint">
             Search &amp; social metadata per page. Blank fields use the built-in
             defaults.
           </p>
@@ -126,29 +126,29 @@ export function SeoClient({
       </div>
 
       {notice && (
-        <p className="mt-6 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2.5 text-sm text-white">
+        <p className="mt-6 rounded-xl border border-line bg-subtle px-4 py-2.5 text-sm text-ink">
           {notice}
         </p>
       )}
       {error && (
-        <p role="alert" className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300">
+        <p role="alert" className="mt-6 rounded-xl border border-red-500/30 bg-red-500/5 px-4 py-2.5 text-sm text-red-600">
           {error}
         </p>
       )}
 
       {/* Search preview */}
-      <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-        <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-dark-faint">
+      <div className="mt-6 rounded-2xl border border-line bg-surface p-5">
+        <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-faint">
           Search preview
         </p>
-        <p className="truncate text-xs text-dark-muted">{previewUrl}</p>
-        <p className="mt-1 truncate text-lg font-medium text-white">
+        <p className="truncate text-xs text-muted">{previewUrl}</p>
+        <p className="mt-1 truncate text-lg font-medium text-ink">
           {previewTitle}
         </p>
-        <p className="mt-1 line-clamp-2 text-sm text-dark-muted">{previewDesc}</p>
+        <p className="mt-1 line-clamp-2 text-sm text-muted">{previewDesc}</p>
       </div>
 
-      <section className="mt-4 space-y-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+      <section className="mt-4 space-y-4 rounded-2xl border border-line bg-surface p-5">
         <Field label="SEO title" hint={`Default: ${page?.defaultTitle}`}>
           <TextInput
             value={v.title}
@@ -157,7 +157,7 @@ export function SeoClient({
           />
         </Field>
         <label className="block">
-          <span className="mb-1.5 block text-xs font-medium text-dark-muted">
+          <span className="mb-1.5 block text-xs font-medium text-muted">
             Meta description
           </span>
           <textarea
@@ -178,7 +178,7 @@ export function SeoClient({
             placeholder="https://…/share-image.jpg"
           />
         </Field>
-        <div className="rounded-xl border border-white/10 bg-black/20 px-4 py-3">
+        <div className="rounded-xl border border-line bg-subtle px-4 py-3">
           <Switch
             label="Hide this page from search engines (no-index)"
             checked={v.noindex}
@@ -187,11 +187,11 @@ export function SeoClient({
         </div>
       </section>
 
-      <div className="mt-8 flex items-center gap-3 border-t border-white/10 pt-6">
+      <div className="mt-8 flex items-center gap-3 border-t border-line pt-6">
         <Button onClick={save} disabled={pending || !dirty}>
           {pending ? "Saving…" : "Save & publish"}
         </Button>
-        {dirty && <span className="text-xs text-dark-faint">Unsaved changes</span>}
+        {dirty && <span className="text-xs text-faint">Unsaved changes</span>}
       </div>
     </div>
   );

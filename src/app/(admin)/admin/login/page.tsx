@@ -11,22 +11,22 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <p className="font-logo text-2xl font-bold tracking-[-0.02em] text-white">
+          <p className="font-logo text-2xl font-bold tracking-[-0.02em] text-ink">
             Loopsoop
           </p>
-          <p className="mt-2 text-[0.7rem] font-medium uppercase tracking-[0.22em] text-dark-muted">
+          <p className="mt-2 text-[0.7rem] font-medium uppercase tracking-[0.22em] text-muted">
             Admin Panel
           </p>
         </div>
 
         <form
           action={action}
-          className="rounded-[20px] border border-white/10 bg-dark-surface p-6 shadow-2xl shadow-black/40 sm:p-7"
+          className="rounded-[20px] border border-line bg-surface p-6 shadow-xl shadow-black/5 sm:p-7"
         >
-          <h1 className="font-display text-xl font-medium tracking-[-0.02em] text-white">
+          <h1 className="font-display text-xl font-medium tracking-[-0.02em] text-ink">
             Sign in
           </h1>
-          <p className="mt-1 text-sm text-dark-muted">
+          <p className="mt-1 text-sm text-muted">
             Manage the Loopsoop website.
           </p>
 
@@ -54,7 +54,7 @@ export default function AdminLoginPage() {
           {state?.error && (
             <p
               role="alert"
-              className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300"
+              className="mt-4 rounded-xl border border-red-500/30 bg-red-500/5 px-3 py-2 text-sm text-red-600"
             >
               {state.error}
             </p>
@@ -65,7 +65,7 @@ export default function AdminLoginPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-dark-faint">
+        <p className="mt-6 text-center text-xs text-faint">
           Protected area · authorised administrators only
         </p>
       </div>

@@ -53,12 +53,12 @@ function StatCard({
   icon: LucideIcon;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+    <div className="rounded-2xl border border-line bg-surface p-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-dark-muted">{label}</span>
-        <Icon className="h-4 w-4 text-dark-faint" strokeWidth={1.75} />
+        <span className="text-xs text-muted">{label}</span>
+        <Icon className="h-4 w-4 text-faint" strokeWidth={1.75} />
       </div>
-      <p className="mt-3 font-display text-3xl font-medium tracking-[-0.02em] text-white">
+      <p className="mt-3 font-display text-3xl font-medium tracking-[-0.02em] text-ink">
         {value}
       </p>
     </div>
@@ -80,22 +80,22 @@ function QuickLink({
 }) {
   const inner = (
     <>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-dark-muted">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-subtle text-muted">
         <Icon className="h-4 w-4" strokeWidth={1.75} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-sm font-medium text-white">{title}</span>
-        <span className="block truncate text-xs text-dark-faint">{desc}</span>
+        <span className="block text-sm font-medium text-ink">{title}</span>
+        <span className="block truncate text-xs text-faint">{desc}</span>
       </span>
       {external ? (
-        <ExternalLink className="h-4 w-4 shrink-0 text-dark-faint" />
+        <ExternalLink className="h-4 w-4 shrink-0 text-faint" />
       ) : (
-        <ArrowRight className="h-4 w-4 shrink-0 text-dark-faint transition-transform group-hover:translate-x-0.5" />
+        <ArrowRight className="h-4 w-4 shrink-0 text-faint transition-transform group-hover:translate-x-0.5" />
       )}
     </>
   );
   const cls =
-    "group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-3 outline-none transition-colors hover:border-white/20 hover:bg-white/[0.04] focus-visible:ring-2 focus-visible:ring-white/30";
+    "group flex items-center gap-3 rounded-2xl border border-line bg-surface p-3 outline-none transition-colors hover:border-ink/20 hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ink/20";
   return external ? (
     <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
       {inner}
@@ -128,17 +128,17 @@ export function Overview({
 
   return (
     <div className="mx-auto max-w-5xl">
-      <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-white">
+      <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
         Dashboard
       </h1>
-      <p className="mt-1 text-sm text-dark-faint">
+      <p className="mt-1 text-sm text-faint">
         Overview of your website content and recent activity.
       </p>
 
       {(controls.maintenance || controls.killContact) && (
         <div className="mt-6 space-y-2">
           {controls.maintenance && (
-            <div className="flex items-center gap-2.5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300">
+            <div className="flex items-center gap-2.5 rounded-xl border border-red-500/30 bg-red-500/5 px-4 py-2.5 text-sm text-red-600">
               <AlertTriangle className="h-4 w-4 shrink-0" />
               <span className="flex-1">
                 Maintenance mode is ON - the public site is offline to visitors.
@@ -149,7 +149,7 @@ export function Overview({
             </div>
           )}
           {controls.killContact && (
-            <div className="flex items-center gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-sm text-amber-200">
+            <div className="flex items-center gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-sm text-amber-700">
               <AlertTriangle className="h-4 w-4 shrink-0" />
               <span className="flex-1">
                 Public contact (WhatsApp) is currently disabled.
@@ -163,7 +163,7 @@ export function Overview({
       )}
 
       {inbox.unread > 0 && (
-        <div className="mt-6 flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2.5 text-sm text-white">
+        <div className="mt-6 flex items-center gap-2.5 rounded-xl border border-line bg-subtle px-4 py-2.5 text-sm text-ink">
           <Inbox className="h-4 w-4 shrink-0" />
           <span className="flex-1">
             {inbox.unread} unread {inbox.unread === 1 ? "inquiry" : "inquiries"}.
@@ -184,18 +184,18 @@ export function Overview({
         {/* Recent activity */}
         <section className="lg:col-span-2">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-white">Recent activity</h2>
+            <h2 className="text-sm font-semibold text-ink">Recent activity</h2>
             <Link
               href="/admin/activity"
-              className="text-xs text-dark-muted transition-colors hover:text-white"
+              className="text-xs text-muted transition-colors hover:text-ink"
             >
               View all
             </Link>
           </div>
           {recent.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-white/10 px-4 py-10 text-center">
-              <p className="text-sm text-dark-muted">No recent activity</p>
-              <p className="mt-1 text-xs text-dark-faint">
+            <div className="rounded-2xl border border-dashed border-line px-4 py-10 text-center">
+              <p className="text-sm text-muted">No recent activity</p>
+              <p className="mt-1 text-xs text-faint">
                 Sign-ins, edits and deletions will appear here.
               </p>
             </div>
@@ -204,14 +204,14 @@ export function Overview({
               {recent.map((r) => (
                 <li
                   key={r.id}
-                  className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-3"
+                  className="flex items-start gap-3 rounded-2xl border border-line bg-surface p-3"
                 >
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white/40" />
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-ink/30" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-white">
+                    <p className="text-sm text-ink">
                       {r.summary ?? r.action}
                     </p>
-                    <p className="mt-0.5 truncate text-xs text-dark-faint">
+                    <p className="mt-0.5 truncate text-xs text-faint">
                       {r.actor_email ?? "Unknown"} · {when(r.created_at)}
                     </p>
                   </div>
@@ -223,7 +223,7 @@ export function Overview({
 
         {/* Quick actions */}
         <section>
-          <h2 className="mb-3 text-sm font-semibold text-white">Quick actions</h2>
+          <h2 className="mb-3 text-sm font-semibold text-ink">Quick actions</h2>
           <div className="space-y-2">
             <QuickLink
               href="/admin/inquiries"
