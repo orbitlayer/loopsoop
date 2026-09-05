@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { categories, statsMain, stylesShort, trustedHome } from "@/lib/data";
+import { categories, processSteps, statsMain, stylesShort, trustedHome } from "@/lib/data";
 import { getFeaturedProjects } from "@/lib/portfolio";
 import { resolvePageMetadata } from "@/lib/content";
 import { cn } from "@/lib/cn";
@@ -15,6 +15,7 @@ import { SectionHeading } from "@/components/sections/SectionHeading";
 import { ProjectCard } from "@/components/sections/ProjectCard";
 import { LogoRow } from "@/components/sections/LogoStrip";
 import { StatsBand } from "@/components/sections/StatsBand";
+import { Testimonials } from "@/components/sections/Testimonials";
 import { CtaBand } from "@/components/sections/CtaBand";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -152,10 +153,55 @@ export default async function HomePage() {
         </Container>
       </section>
 
+      {/* -------------------------------------------------------- How it works */}
+      <section className="py-20 md:py-28">
+        <Container>
+          <Reveal className="mx-auto max-w-2xl text-center">
+            <SectionLabel className="mb-4">How It Works</SectionLabel>
+            <h2 className="font-display text-3xl font-medium leading-tight md:text-[2.6rem]">
+              From Brief to <span className="text-faint">Final Cut.</span>
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-muted">
+              A simple, transparent process that keeps you in the loop from the
+              first conversation to the final export.
+            </p>
+          </Reveal>
+
+          <div className="mt-16 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-5">
+            {processSteps.map((step, i) => (
+              <Reveal
+                key={step.n}
+                delay={(i % 5) * 0.07}
+                className="group flex flex-col items-center px-4 text-center"
+              >
+                <span
+                  aria-hidden
+                  className="select-none font-display text-5xl font-semibold leading-none text-ink/[0.08]"
+                >
+                  {step.n}
+                </span>
+                <span className="mt-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-line bg-surface text-ink transition-colors group-hover:border-ink/25">
+                  <Icon name={step.icon} className="h-6 w-6" strokeWidth={1.5} />
+                </span>
+                <h3 className="mt-5 text-base font-semibold text-ink">
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {step.description}
+                </p>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
       {/* --------------------------------------------------------------- Stats */}
       <section className="py-4 md:py-6">
         <StatsBand stats={statsMain} />
       </section>
+
+      {/* -------------------------------------------------------- Testimonials */}
+      <Testimonials />
 
       {/* ----------------------------------------------------------------- CTA */}
       <section className="py-20 md:py-28">
