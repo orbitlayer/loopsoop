@@ -6,6 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { categoryNameToSlug, workFilters, type Project } from "@/lib/data";
 import { cn } from "@/lib/cn";
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
+import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ProjectCard } from "@/components/sections/ProjectCard";
 
 /* A titled group of project cards (Long-form or Short-form). */
@@ -22,9 +24,9 @@ function Subsection({
   return (
     <div>
       <div className="mb-6 flex items-baseline gap-3">
-        <h3 className="font-display text-lg font-medium text-ink md:text-xl">
+        <h2 className="font-display text-lg font-medium text-ink md:text-xl">
           {title}
-        </h3>
+        </h2>
         <span className="text-sm text-muted">{items.length}</span>
       </div>
       <motion.div
@@ -60,11 +62,15 @@ export function WorkGrid({
   className,
   projects = [],
   loadError = false,
+  heading,
+  intro,
 }: {
   initialCategory?: string;
   className?: string;
   projects?: Project[];
   loadError?: boolean;
+  heading?: string;
+  intro?: string;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -97,6 +103,21 @@ export function WorkGrid({
   return (
     <section className={cn("pb-8", className)}>
       <Container>
+        {/* Page heading (SEO H1 + crawlable intro) — rendered only when passed */}
+        {heading && (
+          <Reveal immediate className="mb-10 max-w-2xl">
+            <SectionLabel className="mb-4">Portfolio</SectionLabel>
+            <h1 className="font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl">
+              {heading}
+            </h1>
+            {intro && (
+              <p className="mt-5 text-base leading-relaxed text-muted md:text-lg">
+                {intro}
+              </p>
+            )}
+          </Reveal>
+        )}
+
         {/* Category filters */}
         <div className="no-scrollbar -mx-6 flex gap-2 overflow-x-auto border-b border-line px-6 pb-4 md:mx-0 md:px-0">
           {orderedFilters.map((f) => {

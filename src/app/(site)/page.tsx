@@ -1,5 +1,14 @@
 import type { Metadata } from "next";
-import { categories, processSteps, statsMain, stylesShort, trustedHome } from "@/lib/data";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import {
+  categories,
+  editingCategories,
+  processSteps,
+  statsMain,
+  stylesShort,
+  trustedHome,
+} from "@/lib/data";
 import { getFeaturedProjects } from "@/lib/portfolio";
 import { resolvePageMetadata } from "@/lib/content";
 import { cn } from "@/lib/cn";
@@ -35,29 +44,30 @@ export default async function HomePage() {
         <HeroAurora />
         <Container className="relative z-10">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-            <Reveal>
+            <Reveal immediate>
               <ParentBadge className="mb-6" />
             </Reveal>
-            <Reveal delay={0.04}>
+            <Reveal immediate delay={0.04}>
               <SectionLabel className="mb-5">
                 Video Editing &amp; Graphic Design
               </SectionLabel>
             </Reveal>
-            <Reveal delay={0.08}>
+            <Reveal immediate delay={0.08}>
               <h1 className="font-display text-5xl font-medium leading-[1.0] tracking-tight sm:text-6xl md:text-7xl">
                 Crafted Edits.
                 <br />
                 <span className="text-faint">Real Impact.</span>
               </h1>
             </Reveal>
-            <Reveal delay={0.14}>
+            <Reveal immediate delay={0.14}>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-muted md:text-lg">
                 Professional Video Editing &amp; Graphic Design for Creators,
                 Brands &amp; Businesses.
               </p>
             </Reveal>
-            <Reveal delay={0.18} className="mt-8">
-              <Button href="/our-work">Explore Portfolio</Button>
+            <Reveal immediate delay={0.18} className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
+              <Button href="/our-work">Explore Our Work</Button>
+              <ArrowLink href="/contact">Start your project</ArrowLink>
             </Reveal>
           </div>
         </Container>
@@ -111,6 +121,47 @@ export default async function HomePage() {
             {featured.map((p, i) => (
               <Reveal key={p.id} delay={(i % 3) * 0.08}>
                 <ProjectCard project={p} />
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ------------------------------------------------------------ Services */}
+      <section className="py-20 md:py-28">
+        <Container>
+          <Reveal className="max-w-2xl">
+            <SectionLabel className="mb-4">What We Do</SectionLabel>
+            <h2 className="font-display text-3xl font-medium leading-tight md:text-[2.6rem]">
+              Editing services built <span className="text-faint">around your story.</span>
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-muted">
+              From documentaries to motion graphics, we craft every format your
+              brand needs. Explore the work behind each.
+            </p>
+          </Reveal>
+
+          <div className="mt-14 grid gap-4 sm:grid-cols-2">
+            {editingCategories.map((c, i) => (
+              <Reveal key={c.slug} delay={(i % 2) * 0.06}>
+                <Link
+                  href={`/portfolio?category=${c.slug}`}
+                  className="group flex h-full items-start justify-between gap-5 rounded-[20px] border border-line bg-surface p-6 transition-colors hover:border-ink/20 md:p-7"
+                >
+                  <div>
+                    <h3 className="font-display text-lg font-medium text-ink md:text-xl">
+                      {c.name}
+                    </h3>
+                    <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted">
+                      {c.description}
+                    </p>
+                  </div>
+                  <ArrowUpRight
+                    className="mt-1 h-5 w-5 shrink-0 text-faint transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink"
+                    strokeWidth={1.5}
+                    aria-hidden
+                  />
+                </Link>
               </Reveal>
             ))}
           </div>

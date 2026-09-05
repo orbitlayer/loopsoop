@@ -19,6 +19,7 @@ const socialBase =
 const exploreLinks = [
   { label: "Home", href: "/" },
   { label: "Our Work", href: "/our-work" },
+  { label: "Portfolio", href: "/portfolio" },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
 ];

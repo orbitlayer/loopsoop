@@ -1,12 +1,23 @@
 import { site } from "@/lib/data";
+import type { SiteInfo } from "@/lib/content";
 
 /*
  * Site-wide JSON-LD structured data (Organization + WebSite), server-rendered
  * into the initial HTML per the seo-schema guidance (JSON-LD preferred, absolute
  * URLs, only truthful data). Rendered by the public (site) layout so it appears
  * on every public page. Helps Google/AI understand the brand entity.
+ *
+ * `info` is the CMS-resolved site details (email/phone) from the layout, so an
+ * admin edit to those keeps the structured data accurate; it falls back to the
+ * static defaults, so this never throws and stays fail-safe.
+ *
+ * Note: `sameAs` is intentionally omitted until the social profiles are live —
+ * asserting profiles that don't exist yet would be untruthful markup. Re-add a
+ * `sameAs: [...]` of confirmed-live URLs once the accounts are published.
  */
-export function StructuredData() {
+export function StructuredData({ info }: { info?: SiteInfo } = {}) {
+  const email = info?.email ?? site.email;
+  const telephone = info?.phoneHref ?? site.phoneHref;
   const graph = [
     {
       "@type": "Organization",
@@ -15,12 +26,11 @@ export function StructuredData() {
       url: site.url,
       logo: `${site.url}/loopmark.png`,
       description: site.description,
-      email: site.email,
-      sameAs: Object.values(site.socials),
+      email,
       contactPoint: {
         "@type": "ContactPoint",
-        telephone: site.phoneHref,
-        email: site.email,
+        telephone,
+        email,
         contactType: "customer service",
         areaServed: "Worldwide",
         availableLanguage: ["English"],

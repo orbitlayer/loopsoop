@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   description:
     "We've partnered with creators, startups, brands and businesses to produce videos that drive attention, engagement and results. See our client work and testimonials.",
   alternates: { canonical: "/clients" },
+  // This route is intentionally hidden (not in nav/footer/sitemap) and its
+  // content largely overlaps the home page. Keep it reachable but out of the
+  // index so it isn't an indexable orphan / duplicate. Remove this when the
+  // page is promoted (linked + added to the sitemap).
+  robots: { index: false, follow: true },
 };
 
 export default function ClientsPage() {

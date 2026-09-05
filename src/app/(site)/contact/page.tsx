@@ -16,6 +16,7 @@ import { PageHero } from "@/components/sections/PageHero";
 import { LogoMarquee } from "@/components/sections/LogoStrip";
 import { FaqAccordion } from "@/components/sections/FaqAccordion";
 import { ContactForm } from "@/components/sections/ContactForm";
+import { PageStructuredData } from "@/components/PageStructuredData";
 import { getSiteControls } from "@/lib/settings";
 import {
   getFaqs,
@@ -74,6 +75,16 @@ export default async function ContactPage({
 
   return (
     <>
+      <PageStructuredData
+        type="ContactPage"
+        name="Contact Us"
+        description="Have a project in mind? Message Loopsoop on WhatsApp and get a tailored quote, usually within a few hours."
+        path="/contact"
+        crumbs={[
+          { name: "Home", path: "" },
+          { name: "Contact Us", path: "/contact" },
+        ]}
+      />
       {isPreview && (
         <div className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-amber-500 px-4 py-1.5 text-center text-xs font-medium text-black shadow-lg shadow-black/20">
           Preview - showing unpublished draft content

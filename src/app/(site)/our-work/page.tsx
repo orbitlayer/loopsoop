@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { PageHero } from "@/components/sections/PageHero";
 import { CategoryCard } from "@/components/sections/CategoryCard";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { PageStructuredData } from "@/components/PageStructuredData";
 
 export async function generateMetadata(): Promise<Metadata> {
   return resolvePageMetadata("our-work");
@@ -28,6 +29,15 @@ const checklist = [
 export default function OurWorkPage() {
   return (
     <>
+      <PageStructuredData
+        name="Our Work"
+        description="Explore Loopsoop's work by category - documentary, commercial, motion graphics, highlight edits, real estate, social media and more."
+        path="/our-work"
+        crumbs={[
+          { name: "Home", path: "" },
+          { name: "Our Work", path: "/our-work" },
+        ]}
+      />
       <PageHero
         centered
         label="Our Work"

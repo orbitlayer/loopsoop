@@ -11,10 +11,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/privacy", priority: 0.3 },
     { path: "/terms", priority: 0.3 },
   ];
-  const now = new Date();
+  // A fixed date, not new Date(): the (site) group is force-dynamic, so a
+  // per-request timestamp would stamp every URL with the crawl time and Google
+  // treats such uniform, always-changing <lastmod> values as noise. Bump this
+  // when the site's content meaningfully changes.
+  const lastModified = "2026-09-05";
   return routes.map(({ path, priority }) => ({
     url: `${site.url}${path}`,
-    lastModified: now,
+    lastModified,
     changeFrequency: "monthly",
     priority,
   }));

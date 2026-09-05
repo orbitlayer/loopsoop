@@ -36,26 +36,26 @@ export function PageHero({
         <HeroAurora />
         <Container className="relative z-10">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-            <Reveal>
+            <Reveal immediate>
               <SectionLabel className="mb-5">{label}</SectionLabel>
             </Reveal>
-            <Reveal delay={0.05}>
+            <Reveal immediate delay={0.05}>
               <h1 className="font-display text-4xl font-medium leading-[1.02] tracking-tight sm:text-6xl">
                 {title}
               </h1>
             </Reveal>
-            <Reveal delay={0.12}>
+            <Reveal immediate delay={0.12}>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-muted md:text-lg">
                 {subtitle}
               </p>
             </Reveal>
             {action && (
-              <Reveal delay={0.18} className="mt-8">
+              <Reveal immediate delay={0.18} className="mt-8">
                 {action}
               </Reveal>
             )}
             {extra && (
-              <Reveal delay={0.24} className="mt-8">
+              <Reveal immediate delay={0.24} className="mt-8">
                 {extra}
               </Reveal>
             )}
@@ -83,26 +83,26 @@ export function PageHero({
 
       <Container className="relative z-10">
         <div className="max-w-xl">
-          <Reveal>
+          <Reveal immediate>
             <SectionLabel className="mb-5">{label}</SectionLabel>
           </Reveal>
-          <Reveal delay={0.05}>
+          <Reveal immediate delay={0.05}>
             <h1 className="font-display text-4xl font-medium leading-[1.02] tracking-tight sm:text-6xl">
               {title}
             </h1>
           </Reveal>
-          <Reveal delay={0.12}>
+          <Reveal immediate delay={0.12}>
             <p className="mt-6 max-w-md text-base leading-relaxed text-muted md:text-lg">
               {subtitle}
             </p>
           </Reveal>
           {action && (
-            <Reveal delay={0.18} className="mt-8">
+            <Reveal immediate delay={0.18} className="mt-8">
               {action}
             </Reveal>
           )}
           {extra && (
-            <Reveal delay={0.24} className="mt-8">
+            <Reveal immediate delay={0.24} className="mt-8">
               {extra}
             </Reveal>
           )}

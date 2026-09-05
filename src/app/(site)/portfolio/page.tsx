@@ -5,6 +5,7 @@ import { resolvePageMetadata } from "@/lib/content";
 import { WorkGrid } from "@/components/sections/WorkGrid";
 import { StatsBand } from "@/components/sections/StatsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { PageStructuredData } from "@/components/PageStructuredData";
 
 export async function generateMetadata(): Promise<Metadata> {
   return resolvePageMetadata("portfolio");
@@ -25,11 +26,23 @@ export default async function PortfolioPage({
 
   return (
     <>
+      <PageStructuredData
+        name="Video Editing Portfolio"
+        description="From raw footage to real impact - explore Loopsoop's portfolio of long-form and short-form video edits crafted for brands, creators, startups and businesses."
+        path="/portfolio"
+        crumbs={[
+          { name: "Home", path: "" },
+          { name: "Our Work", path: "/our-work" },
+          { name: "Portfolio", path: "/portfolio" },
+        ]}
+      />
       <WorkGrid
         initialCategory={initialCategory}
         className="pt-32 md:pt-36"
         projects={projects}
         loadError={error}
+        heading="Video Editing Portfolio"
+        intro="From raw footage to real impact - explore Loopsoop's portfolio of long-form and short-form video edits crafted for brands, creators, startups and businesses."
       />
 
       <section className="py-16 md:py-20">

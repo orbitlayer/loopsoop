@@ -12,6 +12,7 @@ import { PageHero } from "@/components/sections/PageHero";
 import { StatsBand } from "@/components/sections/StatsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { OrbitLayerCard } from "@/components/sections/OrbitLayerCard";
+import { PageStructuredData } from "@/components/PageStructuredData";
 
 export async function generateMetadata(): Promise<Metadata> {
   return resolvePageMetadata("about");
@@ -24,6 +25,16 @@ export default async function AboutPage() {
   const { email } = await getSiteInfo();
   return (
     <>
+      <PageStructuredData
+        type="AboutPage"
+        name="About Loopsoop"
+        description="Loopsoop transforms raw footage into cinematic, engaging and high-performing content. Meet the studio and the philosophy behind the edits."
+        path="/about"
+        crumbs={[
+          { name: "Home", path: "" },
+          { name: "About", path: "/about" },
+        ]}
+      />
       <PageHero
         centered
         label="About Loopsoop"

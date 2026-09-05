@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { faqs as defaultFaqs } from "@/lib/data";
 import { cn } from "@/lib/cn";
@@ -37,24 +36,25 @@ export function FaqAccordion({ faqs = defaultFaqs }: { faqs?: Faq[] }) {
                 aria-hidden
               />
             </button>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  id={`faq-panel-${i}`}
-                  role="region"
-                  aria-labelledby={`faq-trigger-${i}`}
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="overflow-hidden"
-                >
-                  <p className="max-w-2xl pb-6 text-[0.95rem] leading-relaxed text-muted">
-                    {item.a}
-                  </p>
-                </motion.div>
+            {/* The answer is ALWAYS in the DOM (server-rendered) so search and
+                AI crawlers can read every Q&A; it is only visually collapsed
+                via a CSS grid-rows transition. */}
+            <div
+              id={`faq-panel-${i}`}
+              role="region"
+              aria-labelledby={`faq-trigger-${i}`}
+              aria-hidden={!isOpen}
+              className={cn(
+                "grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
               )}
-            </AnimatePresence>
+            >
+              <div className="min-h-0 overflow-hidden">
+                <p className="max-w-2xl pb-6 text-[0.95rem] leading-relaxed text-muted">
+                  {item.a}
+                </p>
+              </div>
+            </div>
           </div>
         );
       })}

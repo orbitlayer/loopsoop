@@ -136,6 +136,26 @@ body {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Above-the-fold reveal (CSS-only, SSR-visible — used by <Reveal    */
+/*  immediate>). Element paints at full opacity in the server HTML and */
+/*  fades in via animation; the reduced-motion block below makes it    */
+/*  instant. This keeps the LCP hero out of client-JS gating.          */
+/* ------------------------------------------------------------------ */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.reveal-up {
+  animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Media placeholder (self-contained, swap for real images later)     */
 /* ------------------------------------------------------------------ */
 .media {
