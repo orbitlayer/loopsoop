@@ -2,6 +2,7 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
+import { HeroAurora } from "@/components/ui/HeroAurora";
 
 /* Shared inner-page hero.
    Default: label + headline + copy on the left, a large edge-bleeding image
@@ -31,8 +32,9 @@ export function PageHero({
 }) {
   if (centered) {
     return (
-      <section className="pb-16 pt-32 md:pb-20 md:pt-44">
-        <Container>
+      <section className="relative overflow-hidden pb-16 pt-32 md:pb-20 md:pt-44">
+        <HeroAurora />
+        <Container className="relative z-10">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
             <Reveal>
               <SectionLabel className="mb-5">{label}</SectionLabel>
@@ -65,6 +67,7 @@ export function PageHero({
 
   return (
     <section className="relative overflow-hidden pb-16 pt-32 md:pb-20 md:pt-40 lg:min-h-[600px]">
+      <HeroAurora />
       {/* Edge-bleed image (desktop) */}
       <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-[48%] lg:block">
         <MediaPlaceholder

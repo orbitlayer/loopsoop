@@ -10,6 +10,7 @@ import { Button, ArrowLink } from "@/components/ui/Button";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ParentBadge } from "@/components/ui/ParentBadge";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
+import { HeroAurora } from "@/components/ui/HeroAurora";
 import { SectionHeading } from "@/components/sections/SectionHeading";
 import { ProjectCard } from "@/components/sections/ProjectCard";
 import { LogoRow } from "@/components/sections/LogoStrip";
@@ -29,8 +30,9 @@ export default async function HomePage() {
   return (
     <>
       {/* ---------------------------------------------------------------- Hero */}
-      <section className="pb-16 pt-32 md:pb-20 md:pt-44">
-        <Container>
+      <section className="relative overflow-hidden pb-16 pt-32 md:pb-20 md:pt-44">
+        <HeroAurora />
+        <Container className="relative z-10">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
             <Reveal>
               <ParentBadge className="mb-6" />
