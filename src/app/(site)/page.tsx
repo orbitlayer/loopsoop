@@ -10,7 +10,7 @@ import {
   trustedHome,
 } from "@/lib/data";
 import { getFeaturedProjects } from "@/lib/portfolio";
-import { resolvePageMetadata } from "@/lib/content";
+import { getFaqs, resolvePageMetadata } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/lib/icons";
 import { Container } from "@/components/ui/Container";
@@ -25,6 +25,7 @@ import { ProjectCard } from "@/components/sections/ProjectCard";
 import { LogoRow } from "@/components/sections/LogoStrip";
 import { StatsBand } from "@/components/sections/StatsBand";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { FaqAccordion } from "@/components/sections/FaqAccordion";
 import { CtaBand } from "@/components/sections/CtaBand";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -36,6 +37,7 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const featured = await getFeaturedProjects();
+  const faqs = await getFaqs();
 
   return (
     <>
@@ -253,6 +255,30 @@ export default async function HomePage() {
 
       {/* -------------------------------------------------------- Testimonials */}
       <Testimonials />
+
+      {/* ----------------------------------------------------------------- FAQ */}
+      <section className="py-20 md:py-28">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+            <Reveal>
+              <SectionLabel className="mb-4">FAQ</SectionLabel>
+              <h2 className="font-display text-3xl font-medium leading-[1.1] md:text-[2.6rem]">
+                Quick Answers To Common{" "}
+                <span className="text-faint">Questions.</span>
+              </h2>
+              <p className="mt-5 max-w-sm text-base leading-relaxed text-muted">
+                Everything you need to know before we start. Still curious?{" "}
+                <Link href="/contact" className="text-ink underline-offset-4 hover:underline">
+                  Get in touch.
+                </Link>
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <FaqAccordion faqs={faqs} />
+            </Reveal>
+          </div>
+        </Container>
+      </section>
 
       {/* ----------------------------------------------------------------- CTA */}
       <section className="py-20 md:py-28">

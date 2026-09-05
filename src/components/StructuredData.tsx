@@ -1,4 +1,4 @@
-import { site } from "@/lib/data";
+import { editingCategories, site } from "@/lib/data";
 import type { SiteInfo } from "@/lib/content";
 
 /*
@@ -39,6 +39,23 @@ export function StructuredData({ info }: { info?: SiteInfo } = {}) {
         "@type": "Organization",
         name: site.parent.name,
         url: site.parent.url,
+      },
+      // The services actually offered (no prices — those are quoted per project).
+      // Names/descriptions come straight from the editing-category taxonomy, so
+      // this stays truthful and in sync with the rest of the site.
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Video Editing & Graphic Design Services",
+        itemListElement: editingCategories.map((c) => ({
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: c.name,
+            description: c.description,
+            serviceType: c.name,
+            provider: { "@id": `${site.url}/#organization` },
+          },
+        })),
       },
     },
     {

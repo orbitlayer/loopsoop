@@ -50,7 +50,11 @@ export function ProjectCard({
         <MediaPlaceholder
           seed={project.seed}
           src={thumb}
-          alt={hasVideo ? `${project.title} - play video` : undefined}
+          alt={
+            project.title
+              ? `${project.title}${hasVideo ? " - play video" : ""}`
+              : undefined
+          }
           vignette
           play={hasVideo}
           playSize={portrait ? "sm" : "md"}
