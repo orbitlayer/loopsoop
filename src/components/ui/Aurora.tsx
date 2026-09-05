@@ -136,7 +136,9 @@ export default function Aurora({
     const renderer = new Renderer({
       alpha: true,
       premultipliedAlpha: true,
-      antialias: true,
+      // A full-screen shader gradient gains nothing from MSAA; skipping it
+      // saves GPU work every frame.
+      antialias: false,
     });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
@@ -179,20 +181,70 @@ export default function Aurora({
     window.addEventListener("resize", resize);
     resize();
 
+    // Only recompute the colour-stop RGBs when they actually change, instead of
+    // allocating a new array (+ 3 Color objects) on every single frame.
+    let stopsKey = propsRef.current.colorStops.join("|");
+    let stopsRgb = propsRef.current.colorStops.map(toRgb);
+    program.uniforms.uColorStops.value = stopsRgb;
+
     let raf = 0;
-    const update = (t: number) => {
-      raf = requestAnimationFrame(update);
+    let running = false;
+    let inView = true;
+    let docVisible = typeof document !== "undefined" ? !document.hidden : true;
+
+    const frame = (t: number) => {
+      raf = requestAnimationFrame(frame);
       const p = propsRef.current;
       program.uniforms.uTime.value = t * 0.001 * p.speed * 0.5;
       program.uniforms.uAmplitude.value = p.amplitude;
       program.uniforms.uBlend.value = p.blend;
-      program.uniforms.uColorStops.value = p.colorStops.map(toRgb);
+      const key = p.colorStops.join("|");
+      if (key !== stopsKey) {
+        stopsKey = key;
+        stopsRgb = p.colorStops.map(toRgb);
+        program.uniforms.uColorStops.value = stopsRgb;
+      }
       renderer.render({ scene: mesh });
     };
-    raf = requestAnimationFrame(update);
+
+    // Pause the loop whenever the hero is scrolled out of view or the tab is
+    // hidden — no point animating a background nobody can see (saves CPU/GPU
+    // and battery on long pages).
+    const start = () => {
+      if (!running) {
+        running = true;
+        raf = requestAnimationFrame(frame);
+      }
+    };
+    const stop = () => {
+      if (running) {
+        running = false;
+        cancelAnimationFrame(raf);
+      }
+    };
+    const sync = () => (inView && docVisible ? start() : stop());
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+        sync();
+      },
+      { threshold: 0 },
+    );
+    io.observe(ctn);
+
+    const onVisibility = () => {
+      docVisible = !document.hidden;
+      sync();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    sync();
 
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("resize", resize);
       if (gl.canvas.parentNode === ctn) ctn.removeChild(gl.canvas);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
