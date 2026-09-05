@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight, Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { editingCategories, styleIncludes } from "@/lib/data";
 import { resolvePageMetadata } from "@/lib/content";
 import { cn } from "@/lib/cn";
@@ -8,8 +7,8 @@ import { Icon } from "@/lib/icons";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
-import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { PageHero } from "@/components/sections/PageHero";
+import { CategoryCard } from "@/components/sections/CategoryCard";
 import { CtaBand } from "@/components/sections/CtaBand";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -71,38 +70,7 @@ export default function OurWorkPage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {editingCategories.map((c, i) => (
               <Reveal key={c.slug} delay={(i % 3) * 0.08}>
-                <Link
-                  href={`/portfolio?category=${c.slug}`}
-                  aria-label={`View ${c.name} projects`}
-                  className="group relative block aspect-[4/5] overflow-hidden rounded-[20px] border border-line/50 bg-dark"
-                >
-                  <MediaPlaceholder
-                    seed={c.seed}
-                    src={c.image}
-                    alt={c.name}
-                    className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                  <span className="absolute left-6 top-6 font-display text-sm text-white/60">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div className="absolute inset-x-0 bottom-0 p-6">
-                    <h3 className="font-display text-2xl font-medium text-white">
-                      {c.name}
-                    </h3>
-                    <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/70">
-                      {c.description}
-                    </p>
-                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white">
-                      View Projects
-                      <ArrowRight
-                        className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                    </span>
-                  </div>
-                </Link>
+                <CategoryCard category={c} index={i} />
               </Reveal>
             ))}
           </div>
