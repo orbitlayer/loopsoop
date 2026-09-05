@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/layout/Navbar";
+import { AnimatedNav } from "@/components/layout/AnimatedNav";
 import { Footer } from "@/components/layout/Footer";
 import { MotionProvider } from "@/components/providers/MotionProvider";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
@@ -49,7 +49,7 @@ export default async function SiteLayout({
       >
         Skip to content
       </a>
-      <Navbar />
+      <AnimatedNav />
       <main id="main" className="flex flex-1 flex-col">
         {children}
       </main>
