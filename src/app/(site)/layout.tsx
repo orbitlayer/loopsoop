@@ -5,6 +5,7 @@ import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 import { MaintenanceScreen } from "@/components/MaintenanceScreen";
 import { StructuredData } from "@/components/StructuredData";
 import { getSiteControls } from "@/lib/settings";
+import { getVisibleCategories } from "@/lib/categories";
 import { getSiteInfo } from "@/lib/content";
 import { whatsappLink } from "@/lib/data";
 import { getSession } from "@/lib/auth";
@@ -36,10 +37,11 @@ export default async function SiteLayout({
   }
 
   const info = await getSiteInfo();
+  const visibleCategories = await getVisibleCategories();
 
   return (
     <MotionProvider>
-      <StructuredData info={info} />
+      <StructuredData info={info} serviceCategories={visibleCategories} />
       {controls.maintenance && isAdmin && (
         <div className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-amber-500 px-4 py-1.5 text-center text-xs font-medium text-black shadow-lg shadow-black/20">
           Maintenance mode is ON - only you can see the site

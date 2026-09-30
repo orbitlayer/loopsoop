@@ -3,13 +3,13 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import {
   categories,
-  editingCategories,
   processSteps,
   statsMain,
   stylesShort,
   trustedHome,
 } from "@/lib/data";
 import { getFeaturedProjects } from "@/lib/portfolio";
+import { getVisibleCategories } from "@/lib/categories";
 import { getFaqs, resolvePageMetadata } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/lib/icons";
@@ -38,6 +38,7 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const featured = await getFeaturedProjects();
   const faqs = await getFaqs();
+  const visibleCategories = await getVisibleCategories();
 
   return (
     <>
@@ -144,7 +145,7 @@ export default async function HomePage() {
           </Reveal>
 
           <div className="mt-14 grid gap-4 sm:grid-cols-2">
-            {editingCategories.map((c, i) => (
+            {visibleCategories.map((c, i) => (
               <Reveal key={c.slug} delay={(i % 2) * 0.06}>
                 <Link
                   href={`/portfolio?category=${c.slug}`}

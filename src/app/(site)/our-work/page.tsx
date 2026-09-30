@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Check, ChevronDown } from "lucide-react";
-import { editingCategories, styleIncludes } from "@/lib/data";
+import { styleIncludes } from "@/lib/data";
+import { getVisibleCategories } from "@/lib/categories";
 import { resolvePageMetadata } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/lib/icons";
@@ -26,7 +27,8 @@ const checklist = [
   "Custom approach for your brand",
 ];
 
-export default function OurWorkPage() {
+export default async function OurWorkPage() {
+  const categories = await getVisibleCategories();
   return (
     <>
       <PageStructuredData
@@ -78,7 +80,7 @@ export default function OurWorkPage() {
           </Reveal>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {editingCategories.map((c, i) => (
+            {categories.map((c, i) => (
               <Reveal key={c.slug} delay={(i % 3) * 0.08}>
                 <CategoryCard category={c} index={i} />
               </Reveal>

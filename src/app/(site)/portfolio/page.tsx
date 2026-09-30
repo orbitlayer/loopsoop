@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { categorySlugToName, statsWork } from "@/lib/data";
 import { getPortfolioProjects } from "@/lib/portfolio";
+import { getVisibleCategoryNames } from "@/lib/categories";
 import { resolvePageMetadata } from "@/lib/content";
 import { WorkGrid } from "@/components/sections/WorkGrid";
 import { StatsBand } from "@/components/sections/StatsBand";
@@ -23,6 +24,7 @@ export default async function PortfolioPage({
   const { category } = await searchParams;
   const initialCategory = categorySlugToName(category) ?? "All Work";
   const { projects, error } = await getPortfolioProjects();
+  const filters = ["All Work", ...(await getVisibleCategoryNames())];
 
   return (
     <>
@@ -43,6 +45,7 @@ export default async function PortfolioPage({
         loadError={error}
         heading="Video Editing Portfolio"
         intro="From raw footage to real impact - explore Loopsoop's portfolio of long-form and short-form video edits crafted for brands, creators, startups and businesses."
+        filters={filters}
       />
 
       <section className="py-16 md:py-20">

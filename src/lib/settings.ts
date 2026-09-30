@@ -15,6 +15,8 @@ export const SETTING = {
   MAINTENANCE: "maintenance_mode",
   MAINTENANCE_MESSAGE: "maintenance_message",
   KILL_CONTACT: "kill_contact",
+  // JSON array of editing-category slugs hidden from the public site.
+  CATEGORIES_HIDDEN: "categories_hidden",
 } as const;
 
 export const DEFAULT_MAINTENANCE_MESSAGE =
@@ -40,7 +42,10 @@ function withTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
   });
 }
 
-export async function getAllSettings(): Promise<Record<string, string>> {
+// Memoised per request (React cache): several surfaces read settings on the
+// same request (layout controls, category visibility, footer), so they share a
+// single DB round-trip instead of querying site_settings each.
+export const getAllSettings = cache(async (): Promise<Record<string, string>> => {
   // The public site reads this on every request (the layout is force-dynamic).
   // Bound it so a slow/hung DB can't block page rendering: on timeout, error,
   // or a missing table we fall back to defaults and every control reads OFF.
@@ -53,7 +58,7 @@ export async function getAllSettings(): Promise<Record<string, string>> {
   const out: Record<string, string> = {};
   for (const r of rows) out[r.key] = r.value ?? "";
   return out;
-}
+});
 
 export async function setSetting(
   key: string,
@@ -65,6 +70,22 @@ export async function setSetting(
       "ON DUPLICATE KEY UPDATE `value` = VALUES(`value`), updated_by = VALUES(updated_by)",
     [key, value, updatedBy ?? null],
   );
+}
+
+/** Slugs of editing categories the admin has hidden from the public site.
+    Fail-safe: no setting / bad JSON / DB error → empty set (all categories show). */
+export async function getHiddenCategorySlugs(): Promise<Set<string>> {
+  const s = await getAllSettings();
+  const raw = s[SETTING.CATEGORIES_HIDDEN];
+  if (!raw) return new Set();
+  try {
+    const arr = JSON.parse(raw);
+    return new Set(
+      Array.isArray(arr) ? arr.filter((x): x is string => typeof x === "string") : [],
+    );
+  } catch {
+    return new Set();
+  }
 }
 
 export type SiteControls = {

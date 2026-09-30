@@ -64,6 +64,7 @@ export function WorkGrid({
   loadError = false,
   heading,
   intro,
+  filters = workFilters,
 }: {
   initialCategory?: string;
   className?: string;
@@ -71,6 +72,7 @@ export function WorkGrid({
   loadError?: boolean;
   heading?: string;
   intro?: string;
+  filters?: string[];
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -81,8 +83,8 @@ export function WorkGrid({
   const [arrivalCategory] = useState<string>(initialCategory);
   const orderedFilters =
     arrivalCategory === "All Work"
-      ? workFilters
-      : [arrivalCategory, ...workFilters.filter((f) => f !== arrivalCategory)];
+      ? filters
+      : [arrivalCategory, ...filters.filter((f) => f !== arrivalCategory)];
 
   const inCategory =
     active === "All Work"

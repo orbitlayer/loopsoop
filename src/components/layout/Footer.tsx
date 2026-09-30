@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mail } from "lucide-react";
 import { site } from "@/lib/data";
 import { getSiteInfo } from "@/lib/content";
+import { getHiddenCategorySlugs } from "@/lib/settings";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
@@ -25,15 +26,17 @@ const exploreLinks = [
 ];
 
 const serviceLinks = [
-  { label: "Documentary", href: "/portfolio?category=documentary" },
-  { label: "Commercial", href: "/portfolio?category=commercial" },
-  { label: "Motion Graphics", href: "/portfolio?category=corporate" },
-  { label: "Social Media", href: "/portfolio?category=social-media" },
-  { label: "Educational", href: "/portfolio?category=educational" },
+  { label: "Documentary", slug: "documentary" },
+  { label: "Commercial", slug: "commercial" },
+  { label: "Motion Graphics", slug: "corporate" },
+  { label: "Social Media", slug: "social-media" },
+  { label: "Educational", slug: "educational" },
 ];
 
 export async function Footer() {
   const { email } = await getSiteInfo();
+  const hidden = await getHiddenCategorySlugs();
+  const services = serviceLinks.filter((s) => !hidden.has(s.slug));
   const year = new Date().getFullYear();
 
   // `disabled` icons are shown but not linked yet (no live account).
@@ -102,10 +105,10 @@ export async function Footer() {
           <nav aria-label="Services" className="md:col-span-3">
             <h3 className="text-sm font-semibold text-white">Services</h3>
             <ul className="mt-5 space-y-3">
-              {serviceLinks.map((item) => (
-                <li key={item.label}>
+              {services.map((item) => (
+                <li key={item.slug}>
                   <Link
-                    href={item.href}
+                    href={`/portfolio?category=${item.slug}`}
                     className="text-sm text-dark-muted transition-colors hover:text-white"
                   >
                     {item.label}

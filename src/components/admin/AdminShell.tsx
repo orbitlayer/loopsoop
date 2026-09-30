@@ -11,6 +11,7 @@ import {
   Image as ImageIcon,
   Inbox,
   ScrollText,
+  Shapes,
   SlidersHorizontal,
   LogOut,
   ExternalLink,
@@ -44,6 +45,7 @@ const NAV: NavGroup[] = [
     group: "Website",
     items: [
       { key: "content", label: "Content", href: "/admin/content", icon: FileText },
+      { key: "categories", label: "Categories", href: "/admin/categories", icon: Shapes },
       { key: "seo", label: "SEO", href: "/admin/seo", icon: Globe },
       { key: "media", label: "Media", href: "/admin/media", icon: ImageIcon },
       { key: "portfolio", label: "Portfolio", href: "/admin/portfolio", icon: Clapperboard },

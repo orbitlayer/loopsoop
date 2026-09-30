@@ -15,7 +15,15 @@ import type { SiteInfo } from "@/lib/content";
  * asserting profiles that don't exist yet would be untruthful markup. Re-add a
  * `sameAs: [...]` of confirmed-live URLs once the accounts are published.
  */
-export function StructuredData({ info }: { info?: SiteInfo } = {}) {
+export function StructuredData({
+  info,
+  serviceCategories = editingCategories,
+}: {
+  info?: SiteInfo;
+  // The services listed in the OfferCatalog — defaults to all, but the layout
+  // passes only the categories currently visible on the site.
+  serviceCategories?: readonly { name: string; description: string }[];
+} = {}) {
   const email = info?.email ?? site.email;
   const telephone = info?.phoneHref ?? site.phoneHref;
   const graph = [
@@ -46,7 +54,7 @@ export function StructuredData({ info }: { info?: SiteInfo } = {}) {
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Video Editing & Graphic Design Services",
-        itemListElement: editingCategories.map((c) => ({
+        itemListElement: serviceCategories.map((c) => ({
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",
